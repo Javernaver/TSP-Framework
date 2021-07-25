@@ -1,41 +1,21 @@
-from enum import Enum
-from src.AlgorithmsOptions import AlgorithmsOptions
+from src.AlgorithmsOptions import AlgorithmsOptions, MHType
 import sys
 
-class MHType(Enum):
-    """Tipos de Metaheristicas disponibles
-
-    SA: Simulated Annealing
-    GA: Genetic Algorithm
-    """
-    SA = 'SA'
-    GA = 'GA'
-
-class TSPMove(Enum):
-    """Tipos de movimientos disponibles para el TSP 
-
-    TWO_OPT: Operador 2-opt
-    SWAP: Operador swap
-    """
-    TWO_OPT = 'TWO_OPT'
-    SWAP = 'SWAP'
 
 class Main():
     """
     Clase principal que implementa algoritmos metaheristicos para resolver el problema del vendedor viajero (TSP)
-
-    ...
-    
+    ...    
     Attributes
     ----------
     Methods
     -------
     __init__(argv=sys.argv)
-        Constructor que recibe los argumentos que puedan haber sido incluidos al ejecutar el script en la consola
+        Clase principal que recibe los argumentos que puedan haber sido incluidos al ejecutar el script en la consola
     """
     def __init__(self, argv=sys.argv) -> None:
         """
-        Constructor que recibe los argumentos que puedan haber sido incluidos al ejecutar el script en la consola
+        Clase principal que recibe los argumentos que puedan haber sido incluidos al ejecutar el script en la consola
 
         ...
 

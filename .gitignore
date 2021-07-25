@@ -1,0 +1,5 @@
+/dist
+/TSP_Framework.egg-info
+
+# python cache
+*.pyc
