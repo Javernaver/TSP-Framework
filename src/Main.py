@@ -5,7 +5,7 @@ import sys
 class Main():
     """
     Clase principal que implementa algoritmos metaheristicos para resolver el problema del vendedor viajero (TSP)
-    ...    
+
     Attributes
     ----------
     Methods
@@ -16,8 +16,6 @@ class Main():
     def __init__(self, argv=sys.argv) -> None:
         """
         Clase principal que recibe los argumentos que puedan haber sido incluidos al ejecutar el script en la consola
-
-        ...
 
         Parameters
         ----------

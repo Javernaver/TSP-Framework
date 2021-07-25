@@ -1,10 +1,10 @@
 from enum import Enum
+from src.SimulatedAnnealing.SimulatedAnnealing import SimulatedAnnealing
 from src.Utilities import bcolors
 import time
 import argparse
-import warnings
 
-from src.SimulatedAnnealing.SimulatedAnnealing import SimulatedAnnealing
+
 
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles
@@ -67,7 +67,6 @@ class AlgorithmsOptions():
 
     def readOptions(self, argv) -> None:
         if (len(argv) == 1):
-            warnings.warn('This is a default warning.')
             print(f"{bcolors.WARNING}Warning: usando instancia por defecto: {self.filename} {bcolors.ENDC}")
             print(f"{bcolors.WARNING}Si desea utilizar otra instancia debe proporcionarla (use -i o --instance <file_path>) {bcolors.ENDC}")
             print(f"{bcolors.WARNING}Use el argumento '-h' o '--help' para mayor informacion {bcolors.ENDC}")
@@ -154,6 +153,7 @@ class AlgorithmsOptions():
         
 
     def validateOptions(self) -> None:
+        """ Validar que algunos paramaetros para los algotimos sean coerentes"""
         
         if (self.max_evaluations <= 0 and self.t_min <= 0):
             print(f"{bcolors.FAIL}Error: temperatura minima o evaluaciones maximas deben ser > 0, valor: {self.max_evaluations} {bcolors.ENDC}")
