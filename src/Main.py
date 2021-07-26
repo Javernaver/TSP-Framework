@@ -23,5 +23,7 @@ class Main():
             Lista con los argumentos que pueda tener al inicializar la clase
 
         """
+        
+        # configurar opciones generales
         opciones = AlgorithmsOptions(argv)
         
