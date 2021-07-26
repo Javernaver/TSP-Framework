@@ -56,8 +56,8 @@ class AlgorithmsOptions():
     -------
     __init__(args, **keyargs)
         Clase para configurar y leer todas las opciones que pueda tener una metaheristica recibidas como atributo
-    readOptions(argv)
-        Clase que lee las opciones introducidas como atributo
+    readOptions(argv, keyargs)
+        Clase que lee las opciones introducidas como atributo y por definicion
     validateOptions()
         Validar que algunos paramaetros para los algoritmos sean coerentes
     """
@@ -102,7 +102,7 @@ class AlgorithmsOptions():
         # Leer argumentos que vengan por parametro o por definicion
         self.readOptions(argv, kwargs)
 
-        # Setear semillas en el generador de numeros aleatorio
+        # Setear semilla en el generador de numeros aleatorio
         u.seed = self.seed
 
         # Mostrar Opciones 
@@ -159,14 +159,14 @@ class AlgorithmsOptions():
                 self.metaheuristic = MHType.SA
             elif val == 'GA':
                 self.metaheuristic = MHType.GA
-            else: print(f"{bcolors.FAIL}Error: Metaheristica no reconocida en: -mh o --metaheristic {bcolors.ENDC}")  
+            else: print(f"{bcolors.FAIL}Error: Metaheuristica no reconocida (-mh o --metaheristic) {bcolors.ENDC}")  
         
         # Numero maximo de evaluaciones
         if args.evaluations or 'evaluations' in kwargs:
             try:
                 self.evaluations = int(args.evaluations) if args.evaluations else int(kwargs['evaluations'])
             except: 
-                print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero en: -e o --evaluations {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e o --evaluations) {bcolors.ENDC}")
 
         # Seleccion del movimiento para la metaheristica
         if args.move or 'move' in kwargs:
@@ -175,9 +175,9 @@ class AlgorithmsOptions():
                 self.move = TSPMove.TWO_OPT
             elif val == 'swap':
                 self.move = TSPMove.SWAP
-            else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido en: -mhm o --move {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm o --move) {bcolors.ENDC}")
 
-        # Procesar los argumentos de simulated annealing
+        # Procesar los argumentos de Simulated Annealing
         # Seleccion del esquema de enfriamiento
         if args.cooling or 'cooling' in kwargs:
             val = args.cooling.lower() if args.cooling else kwargs['cooling'].lower()
@@ -187,28 +187,28 @@ class AlgorithmsOptions():
                 self.cooling = SimulatedAnnealing.CoolingType.LOG
             elif val == 'linear':
                 self.cooling = SimulatedAnnealing.CoolingType.LINEAR    
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en COOLING: -tc o --cooling {bcolors.ENDC}")    
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en COOLING (-tc o --cooling) {bcolors.ENDC}")    
 
         # Parametro alpha
         if args.alpha or 'alpha' in kwargs:
             try:
                 self.alpha = float(args.alpha) if args.alpha else float(kwargs['alpha'])
             except: 
-                print(f"{bcolors.FAIL}Error: El valor de alpha debe ser un numero en: -a o --alpha {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de alpha debe ser un numero en (-a o --alpha) {bcolors.ENDC}")
         
         # Temperatura inicial
         if args.tini or 'tini' in kwargs:
             try:
                 self.t0 = float(args.tini) if args.tini else float(kwargs['tini'])
             except:
-                print(f"{bcolors.FAIL}Error: El valor de la temperatura inicial debe ser un numero en: -t0 o --tini {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de la temperatura inicial debe ser un numero (-t0 o --tini) {bcolors.ENDC}")
 
         # Temperatura minima
         if args.tmin or 'tmin' in kwargs:
             try:
                 self.tmin = float(args.tmin) if args.tmin else float(kwargs['tmin'])
             except:
-                print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero en: -tmin o --tmin {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
 
         # Validar logica de opciones
         self.validateOptions()
