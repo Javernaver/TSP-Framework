@@ -124,7 +124,7 @@ class AlgorithmsOptions():
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-s", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
         parser.add_argument("-o", "--output", help="Nombre del archivo de salida para la solucion")
-        parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heristica [ 2opt | swap ]")
+        parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
 
         # Argumentos de Simulated Annealing
@@ -168,7 +168,7 @@ class AlgorithmsOptions():
             except: 
                 print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e o --evaluations) {bcolors.ENDC}")
 
-        # Seleccion del movimiento para la metaheristica
+        # Seleccion del movimiento para la metaheuristica
         if args.move or 'move' in kwargs:
             val = args.move.lower() if args.move else kwargs['move'].lower()
             if val == '2opt':

@@ -1,4 +1,5 @@
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType
+from src.TSP import TSP
 import sys
 
 
@@ -6,8 +7,6 @@ class Main():
     """
     Clase principal que implementa algoritmos metaheristicos para resolver el problema del vendedor viajero (TSP)
 
-    Attributes
-    ----------
     Methods
     -------
     __init__(argv=sys.argv)
@@ -24,6 +23,8 @@ class Main():
 
         """
         
-        # configurar opciones generales
+        # leer e inicializar las opciones 
         opciones = AlgorithmsOptions(argv)
-        
+
+        # leer e interpretar el problema TSP leido desde la instancia definida
+        problema = TSP(opciones.instance)
