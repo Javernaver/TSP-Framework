@@ -5,8 +5,6 @@ import src.Utilities as u
 import time
 import argparse
 
-
-
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles
 
@@ -110,7 +108,7 @@ class AlgorithmsOptions():
     
 
     def readOptions(self, argv, kwargs) -> None:
-        """Clase que lee las opciones introducidas como atributo"""
+        """ Leer las opciones introducidas como atributo y como definicion """
         # Si no se introdujeron argumentos
         if (len(argv) == 1 or not argv):
             print(f"{bcolors.WARNING}Warning: usando instancia por defecto: {self.instance} {bcolors.ENDC}")
@@ -138,73 +136,73 @@ class AlgorithmsOptions():
 
         # Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos
         # Semilla 
-        if args.seed or 'seed' in kwargs:
+        if (args.seed or 'seed' in kwargs):
             try:
                 self.seed = int(args.seed) if args.seed else int(kwargs['seed'])
             except: 
                 print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s o --seed){bcolors.ENDC}")
 
         # Archivo de salida
-        if args.output or 'output' in kwargs:
+        if (args.output or 'output' in kwargs):
             self.output = args.output if args.output else kwargs['output']
 
         # Archivo de instancia
-        if args.instance or 'instance' in kwargs:
+        if (args.instance or 'instance' in kwargs):
             self.instance = args.instance if args.instance else kwargs['instance']
 
         # Seleccion de Metaheristica
-        if args.metaheuristic or 'metaheuristic' in kwargs:
+        if (args.metaheuristic or 'metaheuristic' in kwargs):
             val = args.metaheuristic.upper() if args.metaheuristic else kwargs['metaheuristic'].upper()
-            if val == 'SA':
+            if (val == 'SA'):
                 self.metaheuristic = MHType.SA
-            elif val == 'GA':
+            elif (val == 'GA'):
                 self.metaheuristic = MHType.GA
             else: print(f"{bcolors.FAIL}Error: Metaheuristica no reconocida (-mh o --metaheristic) {bcolors.ENDC}")  
         
         # Numero maximo de evaluaciones
-        if args.evaluations or 'evaluations' in kwargs:
+        if (args.evaluations or 'evaluations' in kwargs):
             try:
                 self.evaluations = int(args.evaluations) if args.evaluations else int(kwargs['evaluations'])
             except: 
                 print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e o --evaluations) {bcolors.ENDC}")
 
         # Seleccion del movimiento para la metaheuristica
-        if args.move or 'move' in kwargs:
+        if (args.move or 'move' in kwargs):
             val = args.move.lower() if args.move else kwargs['move'].lower()
-            if val == '2opt':
+            if (val == '2opt'):
                 self.move = TSPMove.TWO_OPT
-            elif val == 'swap':
+            elif (val == 'swap'):
                 self.move = TSPMove.SWAP
             else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm o --move) {bcolors.ENDC}")
 
         # Procesar los argumentos de Simulated Annealing
         # Seleccion del esquema de enfriamiento
-        if args.cooling or 'cooling' in kwargs:
+        if (args.cooling or 'cooling' in kwargs):
             val = args.cooling.lower() if args.cooling else kwargs['cooling'].lower()
-            if val == 'geometric':
+            if (val == 'geometric'):
                 self.cooling = SimulatedAnnealing.CoolingType.GEOMETRIC
-            elif val == 'log':
+            elif (val == 'log'):
                 self.cooling = SimulatedAnnealing.CoolingType.LOG
-            elif val == 'linear':
+            elif (val == 'linear'):
                 self.cooling = SimulatedAnnealing.CoolingType.LINEAR    
             else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en COOLING (-tc o --cooling) {bcolors.ENDC}")    
 
         # Parametro alpha
-        if args.alpha or 'alpha' in kwargs:
+        if (args.alpha or 'alpha' in kwargs):
             try:
                 self.alpha = float(args.alpha) if args.alpha else float(kwargs['alpha'])
             except: 
                 print(f"{bcolors.FAIL}Error: El valor de alpha debe ser un numero en (-a o --alpha) {bcolors.ENDC}")
         
         # Temperatura inicial
-        if args.tini or 'tini' in kwargs:
+        if (args.tini or 'tini' in kwargs):
             try:
                 self.t0 = float(args.tini) if args.tini else float(kwargs['tini'])
             except:
                 print(f"{bcolors.FAIL}Error: El valor de la temperatura inicial debe ser un numero (-t0 o --tini) {bcolors.ENDC}")
 
         # Temperatura minima
-        if args.tmin or 'tmin' in kwargs:
+        if (args.tmin or 'tmin' in kwargs):
             try:
                 self.tmin = float(args.tmin) if args.tmin else float(kwargs['tmin'])
             except:
@@ -217,13 +215,13 @@ class AlgorithmsOptions():
     def validateOptions(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
         
-        if self.max_evaluations <= 0 or self.tmin <= 0 or self.t0 <= 0:
+        if (self.max_evaluations <= 0 or self.tmin <= 0 or self.t0 <= 0):
             print(f"{bcolors.FAIL}Error: Las temperatura minima, la temperatura inicial y las evaluaciones maximas deben ser > 0, tmin: {self.tmin} t0: {self.t0} evaluaciones: {self.max_evaluations} {bcolors.ENDC}")
             exit()
-        if self.alpha <= 0 or self.alpha > 1:
+        if (self.alpha <= 0 or self.alpha > 1):
             print(f"{bcolors.FAIL}Error: alfa debe ser > 0 y <= 1, valor: {self.alpha} {bcolors.ENDC}")
             exit()
-        if self.t0 <= self.tmin:
+        if (self.t0 <= self.tmin):
             print(f"{bcolors.FAIL}Error: t0 debe ser > tmin, valor tmin: {self.tmin} valor t0: {self.t0}{bcolors.ENDC}")
             exit()
 
@@ -241,7 +239,7 @@ class AlgorithmsOptions():
         print(f"{bcolors.OKBLUE}Evaluaciones maximas: {bcolors.ENDC}{self.max_evaluations}")
 
         # Opciones para Simulated Annealing
-        if self.metaheuristic == MHType.SA:
+        if (self.metaheuristic == MHType.SA):
             print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA SIMULATED ANNEALING\n {bcolors.ENDC}")        
             print(f"{bcolors.OKBLUE}Parametro alfa para el enfriamiento: {bcolors.ENDC}{self.alpha}")
             print(f"{bcolors.OKBLUE}Temperatura inicial: {bcolors.ENDC}{self.t0}")
