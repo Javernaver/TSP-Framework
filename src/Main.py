@@ -27,4 +27,5 @@ class Main():
         opciones = AlgorithmsOptions(argv)
 
         # leer e interpretar el problema TSP leido desde la instancia definida
-        problema = TSP(opciones.instance)
+        problema = TSP(opciones)
+     

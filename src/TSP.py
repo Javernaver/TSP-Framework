@@ -1,7 +1,7 @@
 from src.Utilities import bcolors
 from src.TSPlibReader import TSPlibReader
 from src import Utilities
-from functools import reduce
+import random
 
 class TSP():
 
@@ -17,20 +17,33 @@ class TSP():
     # Instancia TSP
     tsplib_instance = None
 
-    def __init__(self, instance) -> None:
-        
+    # Opciones
+    opciones = None
+
+    def __init__(self, opciones) -> None:
+
+        # leer opciones
+        self.opciones = opciones
+
         # leer instancia desde un archivo TSPlib
-        self.tsplib_instance = TSPlibReader(instance)
+        self.tsplib_instance = TSPlibReader(self.opciones.instance)
+
+        # definir semilla para el generador aleatorio
+        random.seed(self.opciones.seed)
 
         # obtener matriz de distancia
         self.distancia = self.tsplib_instance.distance
+
         # obtener vecinos mas cercanos
         self.nn_list = self.tsplib_instance.nn_list
         
         # obtener tamano de la instancia 
         self.nodos = self.tsplib_instance.n
-        print(self.compute_tour_length([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0]))
+        #print(self.compute_tour_length([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0]))
+        #self.print_solution_and_cost([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0])
+        print(self.greedy_nearest_n(8))
         #self.print_distances()
+
 
     def getSize(self) -> int:
         """ Obtener numero de nodos"""
@@ -92,3 +105,54 @@ class TSP():
         print()
         return False
         
+    def print_solution_and_cost(self, tour) -> None:
+        """ Muestra la solucion y costo """
+
+        print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
+        for i in range(self.nodos+1):
+            print(f"{bcolors.OKCYAN}{tour[i]}{bcolors.ENDC}", end=' ')
+        print(f"{bcolors.BOLD}\nCosto: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
+
+    def random_tour(self) -> list[int]:
+        """ Generar una solucion aleatoria """
+
+        # crear lista con tour a reordenar
+        tour = list(range(self.nodos))
+        # reordenar aleatoriamente el tour con la semilla
+        random.shuffle(tour)
+        # asignar que el ultimo nodo sea igual al primero
+        tour.append(tour[0])
+
+        return tour
+    
+    def greedy_nearest_n(self, start) -> list[int]:
+        """ Generar una solucion del tsp usando la heuristica del nodo mas cercano comenzando del nodo start """
+
+        tour = [0] * self.nodos
+        selected = [False] * self.nodos
+
+        # Si el nodo inicial es menor que 0
+        if (start < 0):
+            start = random.randint(0, self.nodos-1)
+        tour[0] = start
+        selected[start] = True
+
+        # Ciclo para los nodos del tour
+        for i in range(1,self.nodos):            
+            for j in range(self.nodos):
+                if (not selected[self.nn_list[tour[i-1]][j]]):
+                    tour[i] = self.nn_list[tour[i-1]][j]
+                    selected[self.nn_list[tour[i-1]][j]] = True
+                    break
+        tour.append(tour[0])
+        return tour
+    
+    def deterministic_tour(self) -> list[int]:
+        """ Generar una solucion deterministica """
+
+        # Crear lista deterministica
+        tour = list(range(self.nodos))
+        # Retornar al inicio
+        tour.append(tour[0])
+
+        return tour

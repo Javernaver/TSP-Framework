@@ -44,8 +44,7 @@ def sort2 (v, v2, left, right):
         return
     swap2(v, v2, left, int((left + right) / 2))
     last = left
-    k = left + 1
-    for k in range(right + 1):
+    for k in range(left + 1, right + 1):
         if(v[k] < v[left]):
             #last = last + 1
             swap2(v, v2, ++last, k)
