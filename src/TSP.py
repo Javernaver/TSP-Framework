@@ -29,7 +29,7 @@ class TSP():
         
         # obtener tamano de la instancia 
         self.nodos = self.tsplib_instance.n
-
+        print(self.compute_tour_length([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0]))
         #self.print_distances()
 
     def getSize(self) -> int:
@@ -44,16 +44,51 @@ class TSP():
                 print(f"{bcolors.OKCYAN}{valor} {bcolors.ENDC}",end=" ")
             if fila: print()      
 
-    def get_distance (self, i, j) -> list[list]:
+    def get_distance(self, i, j) -> list[list]:
         """ Obtener distancia entre los nodos por su indice i y j"""
         return self.distancia[i][j]
 
     def compute_tour_length(self, tour) -> int:
         """ Computar y retornar el costo de un tour """
-        return 0
+        tour_length = 0
+        for i in range(self.nodos):
+            tour_length += self.distancia[tour[i]][tour[i + 1]]
+        return tour_length
 
-    def tsp_check_tour(tour) -> bool:
+    def tsp_check_tour(self, tour) -> bool:
         """ Revisa la correctitud de una solucion del TSP """
-        pass
+        
+        error = False
+        used = [0] * self.nodos
 
-  
+        # Si no se recibio el tour 
+        if (not tour):
+            print(f"{bcolors.FAIL}Error: permutacion no esta inicializada! {bcolors.ENDC}")
+            exit()
+
+        for i in range(self.nodos):
+            if used[tour[i]] != 0:
+                print(f"{bcolors.FAIL}Error: la solucion tiene dos veces el valor {tour[i]} (ultima posicion: {i}) {bcolors.ENDC}")
+                error = True
+            else:
+                used[tour[i]] = 1
+
+        if (not error):
+            for i in range(self.nodos):
+                if (used[i] == 0):
+                    print(f"{bcolors.FAIL}Error: posicion {i} en la solucion no esta ocupada{bcolors.ENDC}")
+                    error = True
+        if (not error):
+            if (tour[0] != tour[self.nodos]):
+                print(f"{bcolors.FAIL}Error: la permutacion no es un tour cerrado.{bcolors.ENDC}")
+                error = True;
+            
+        if (not error):
+            return True
+
+        print(f"{bcolors.FAIL}Error: vector solucion:{bcolors.ENDC} ", end='')
+        for i in range(self.nodos):
+            print(f"{bcolors.FAIL}{tour[i]}{bcolors.ENDC}", end=" ")
+        print()
+        return False
+        
