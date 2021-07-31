@@ -1,3 +1,4 @@
+from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType
 from src.TSP import TSP
 import sys
@@ -28,4 +29,7 @@ class Main():
 
         # leer e interpretar el problema TSP leido desde la instancia definida
         problema = TSP(opciones)
+
+        solucion_inicial = Tour(sol_inicial=opciones.initial_solution, problema=problema)
+        print(solucion_inicial.actual, solucion_inicial.costo)
      
