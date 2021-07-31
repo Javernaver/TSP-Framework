@@ -1,5 +1,6 @@
 from enum import Enum
-from src.SimulatedAnnealing.SimulatedAnnealing import SimulatedAnnealing
+from src.Tour import InitialSolution
+from src.SimulatedAnnealing.SimulatedAnnealing import CoolingType
 from src.Utilities import bcolors
 import src.Utilities as u
 import time
@@ -78,6 +79,9 @@ class AlgorithmsOptions():
 
     # Evaluaciones maximas
     max_evaluations = 1000;
+
+    # Solucion Inicial
+    initial_solution = InitialSolution.RANDOM
     
     # OPCIONES PARA SIMULATED ANNEALING 
     # Parametro alfa para el enfriamiento
@@ -90,7 +94,7 @@ class AlgorithmsOptions():
     tmin = 900.0;
     
     # Tipo de enfriamiento
-    cooling = SimulatedAnnealing.CoolingType.GEOMETRIC;
+    cooling = CoolingType.GEOMETRIC;
 
     def __init__(self, argv=[], **kwargs) -> None:
 
@@ -107,7 +111,7 @@ class AlgorithmsOptions():
         self.printOptions()
     
 
-    def readOptions(self, argv, kwargs) -> None:
+    def readOptions(self, argv, kwargs: dict) -> None:
         """ Leer las opciones introducidas como atributo y como definicion """
         # Si no se introdujeron argumentos
         if (len(argv) == 1 or not argv):
@@ -124,6 +128,7 @@ class AlgorithmsOptions():
         parser.add_argument("-o", "--output", help="Nombre del archivo de salida para la solucion")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
+        parser.add_argument("-is", "--insol", help="Solucion inicial [ RANDOM | NEAREST_N | DETERMINISTIC ]")
 
         # Argumentos de Simulated Annealing
         parser.add_argument("-a", "--alpha", help="Parametro alfa para el esquema geometrico ]0,1]")
@@ -175,16 +180,28 @@ class AlgorithmsOptions():
                 self.move = TSPMove.SWAP
             else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm o --move) {bcolors.ENDC}")
 
+        # Solucion inicial
+        if (args.insol or 'insol' in kwargs):
+            val = args.insol.upper() if args.insol else kwargs['insol'].upper()
+            if (val == 'RANDOM'):
+                self.initial_solution = InitialSolution.RANDOM
+            elif (val == 'NEAREST_N'):
+                self.initial_solution = InitialSolution.NEAREST_N
+            elif (val == 'DETERMINISTIC'):
+                self.initial_solution = InitialSolution.DETERMINISTIC
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is o --inso) {bcolors.ENDC}")    
+
+
         # Procesar los argumentos de Simulated Annealing
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
             val = args.cooling.lower() if args.cooling else kwargs['cooling'].lower()
             if (val == 'geometric'):
-                self.cooling = SimulatedAnnealing.CoolingType.GEOMETRIC
+                self.cooling = CoolingType.GEOMETRIC
             elif (val == 'log'):
-                self.cooling = SimulatedAnnealing.CoolingType.LOG
+                self.cooling = CoolingType.LOG
             elif (val == 'linear'):
-                self.cooling = SimulatedAnnealing.CoolingType.LINEAR    
+                self.cooling = CoolingType.LINEAR    
             else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en COOLING (-tc o --cooling) {bcolors.ENDC}")    
 
         # Parametro alpha
@@ -237,6 +254,7 @@ class AlgorithmsOptions():
         print(f"{bcolors.OKBLUE}Tipo del movimiento para la metaheuristica: {bcolors.ENDC}{self.move.value}")
         print(f"{bcolors.OKBLUE}Semilla para el generador de numero aleatorios: {bcolors.ENDC}{self.seed}")
         print(f"{bcolors.OKBLUE}Evaluaciones maximas: {bcolors.ENDC}{self.max_evaluations}")
+        print(f"{bcolors.OKBLUE}Solucion Inicial: {bcolors.ENDC}{self.initial_solution.value}")
 
         # Opciones para Simulated Annealing
         if (self.metaheuristic == MHType.SA):
