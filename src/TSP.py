@@ -1,9 +1,34 @@
+from src.AlgorithmsOptions import AlgorithmsOptions
 from src.Utilities import bcolors
 from src.TSPlibReader import TSPlibReader
 from src import Utilities
+
 import random
 
 class TSP():
+    """
+    Clase que lee una instancia, evalua soluciones del TSP y provee metodos para crear soluciones
+
+    Attributes
+    ----------
+    nodos : int
+        Numero de Nodos
+    distancia : list[list]
+        Matriz con la distacia
+    nn_list : int
+        Matriz con vecinos mas cercanos
+    tsplib_instance : TSPlibReader
+        Instancia TSP
+    opciones : AlgorithmsOptions
+        Opciones
+    
+
+    Methods
+    -------
+    __init__(args, opciones)
+        Clase constructora, lee todas las opciones que pueda tener el problema
+   
+    """
 
     # Numero de Nodos
     nodos = 0
@@ -12,10 +37,10 @@ class TSP():
     distancia = [[]]
 
     # Matriz con vecinos mas cercanos 
-    nn_list = [[]]
+    vecinos = [[]]
 
     # Instancia TSP
-    tsplib_instance = None
+    instancia = None
 
     # Opciones
     opciones = None
@@ -26,22 +51,22 @@ class TSP():
         self.opciones = opciones
 
         # leer instancia desde un archivo TSPlib
-        self.tsplib_instance = TSPlibReader(self.opciones.instance)
+        self.instancia = TSPlibReader(self.opciones.instance)
 
         # definir semilla para el generador aleatorio
         random.seed(self.opciones.seed)
 
         # obtener matriz de distancia
-        self.distancia = self.tsplib_instance.distance
+        self.distancia = self.instancia.distance
 
         # obtener vecinos mas cercanos
-        self.nn_list = self.tsplib_instance.nn_list
+        self.vecinos = self.instancia.nn_list
         
         # obtener tamano de la instancia 
-        self.nodos = self.tsplib_instance.n
+        self.nodos = self.instancia.n
         #print(self.compute_tour_length([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0]))
         #self.print_solution_and_cost([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0])
-        print(self.greedy_nearest_n(8))
+
         #self.print_distances()
 
 
@@ -68,7 +93,7 @@ class TSP():
             tour_length += self.distancia[tour[i]][tour[i + 1]]
         return tour_length
 
-    def tsp_check_tour(self, tour) -> bool:
+    def tsp_check_tour(self, tour: list) -> bool:
         """ Revisa la correctitud de una solucion del TSP """
         
         error = False
@@ -140,9 +165,9 @@ class TSP():
         # Ciclo para los nodos del tour
         for i in range(1,self.nodos):            
             for j in range(self.nodos):
-                if (not selected[self.nn_list[tour[i-1]][j]]):
-                    tour[i] = self.nn_list[tour[i-1]][j]
-                    selected[self.nn_list[tour[i-1]][j]] = True
+                if (not selected[self.vecinos[tour[i-1]][j]]):
+                    tour[i] = self.vecinos[tour[i-1]][j]
+                    selected[self.vecinos[tour[i-1]][j]] = True
                     break
         tour.append(tour[0])
         return tour
@@ -150,7 +175,7 @@ class TSP():
     def deterministic_tour(self) -> list[int]:
         """ Generar una solucion deterministica """
 
-        # Crear lista deterministica
+        # Crear lista deterministica (rango secuencial 0 al numero de nodos)
         tour = list(range(self.nodos))
         # Retornar al inicio
         tour.append(tour[0])
