@@ -1,7 +1,6 @@
+import random
 
-
-seed : int
-
+seed = 0
 
 class bcolors:
     HEADER = '\033[95m'

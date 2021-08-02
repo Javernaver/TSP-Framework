@@ -1,8 +1,6 @@
 from enum import Enum
-from src.Tour import InitialSolution
-from src.SimulatedAnnealing.SimulatedAnnealing import CoolingType
 from src.Utilities import bcolors
-import src.Utilities as u
+import src.Utilities as util
 import time
 import argparse
 
@@ -23,6 +21,27 @@ class TSPMove(Enum):
     """
     TWO_OPT = 'TWO_OPT'
     SWAP = 'SWAP'
+
+class InitialSolution(Enum):
+    """ Metodos disponibles para crear una solucion inicial
+    RANDOM: Solucion aleatoria
+    NEAREST_N: Solucion creada con la heuristica del vecino mas cercano
+    DETERMINISTIC: Solucion creada deterministicamente para testing, en este caso es secuencial
+    """
+    RANDOM = 'RANDOM'
+    NEAREST_N = 'NEAREST_N'
+    DETERMINISTIC = 'DETERMINISTIC'
+
+class CoolingType(Enum):
+    """Esquemas de enfriamiento disponibles 
+
+    GEOMETRIC: t = t * alpha
+    LINEAR: t = t * (1 - (evaluation / max_evaluations))
+    LOG: t = t * alpha * 1/ln(evaluation + 1)
+    """
+    GEOMETRIC = 'GEOMETRIC'
+    LINEAR = 'LINEAR'
+    LOG = 'LOG'
 
 class AlgorithmsOptions():
     """
@@ -105,13 +124,14 @@ class AlgorithmsOptions():
         self.readOptions(argv, kwargs)
 
         # Setear semilla en el generador de numeros aleatorio
-        u.seed = self.seed
-
+        util.seed = self.seed
+        # definir semilla para el generador aleatorio
+        util.random.seed(self.seed)
         # Mostrar Opciones 
         self.printOptions()
     
 
-    def readOptions(self, argv, kwargs: dict) -> None:
+    def readOptions(self, argv: list, kwargs: dict) -> None:
         """ Leer las opciones introducidas como atributo y como definicion """
         # Si no se introdujeron argumentos
         if (len(argv) == 1 or not argv):

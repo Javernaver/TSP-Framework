@@ -1,9 +1,7 @@
 from src.AlgorithmsOptions import AlgorithmsOptions
 from src.Utilities import bcolors
 from src.TSPlibReader import TSPlibReader
-from src import Utilities
-
-import random
+import src.Utilities as util
 
 class TSP():
     """
@@ -45,16 +43,13 @@ class TSP():
     # Opciones
     opciones = None
 
-    def __init__(self, opciones) -> None:
+    def __init__(self, opciones: AlgorithmsOptions) -> None:
 
         # leer opciones
         self.opciones = opciones
 
         # leer instancia desde un archivo TSPlib
         self.instancia = TSPlibReader(self.opciones.instance)
-
-        # definir semilla para el generador aleatorio
-        random.seed(self.opciones.seed)
 
         # obtener matriz de distancia
         self.distancia = self.instancia.distance
@@ -82,11 +77,11 @@ class TSP():
                 print(f"{bcolors.OKCYAN}{valor} {bcolors.ENDC}",end=" ")
             if fila: print()      
 
-    def get_distance(self, i, j) -> list[list]:
+    def get_distance(self, i: int, j: int) -> list[list]:
         """ Obtener distancia entre los nodos por su indice i y j"""
         return self.distancia[i][j]
 
-    def compute_tour_length(self, tour) -> int:
+    def compute_tour_length(self, tour: list) -> int:
         """ Computar y retornar el costo de un tour """
         tour_length = 0
         for i in range(self.nodos):
@@ -130,7 +125,7 @@ class TSP():
         print()
         return False
         
-    def print_solution_and_cost(self, tour) -> None:
+    def print_solution_and_cost(self, tour: list) -> None:
         """ Muestra la solucion y costo """
 
         print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
@@ -144,13 +139,13 @@ class TSP():
         # crear lista con tour a reordenar
         tour = list(range(self.nodos))
         # reordenar aleatoriamente el tour con la semilla
-        random.shuffle(tour)
+        util.random.shuffle(tour)
         # asignar que el ultimo nodo sea igual al primero
         tour.append(tour[0])
 
         return tour
     
-    def greedy_nearest_n(self, start) -> list[int]:
+    def greedy_nearest_n(self, start: int) -> list[int]:
         """ Generar una solucion del tsp usando la heuristica del nodo mas cercano comenzando del nodo start """
 
         tour = [0] * self.nodos
@@ -158,7 +153,7 @@ class TSP():
 
         # Si el nodo inicial es menor que 0
         if (start < 0):
-            start = random.randint(0, self.nodos-1)
+            start = util.random.randint(0, self.nodos-1)
         tour[0] = start
         selected[start] = True
 
