@@ -1,15 +1,4 @@
-from enum import Enum
-
-class CoolingType(Enum):
-    """Esquemas de enfriamiento disponibles 
-
-    GEOMETRIC: t = t * alpha
-    LINEAR: t = t * (1 - (evaluation / max_evaluations))
-    LOG: t = t * alpha * 1/ln(evaluation + 1)
-    """
-    GEOMETRIC = 'GEOMETRIC'
-    LINEAR = 'LINEAR'
-    LOG = 'LOG'
+from src.AlgorithmsOptions import AlgorithmsOptions
 
 class SimulatedAnnealing():
 

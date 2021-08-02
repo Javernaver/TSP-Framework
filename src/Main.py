@@ -1,6 +1,7 @@
 from src.Tour import Tour
-from src.AlgorithmsOptions import AlgorithmsOptions, MHType
+from src.AlgorithmsOptions import AlgorithmsOptions, MHType, TSPMove
 from src.TSP import TSP
+from src.SimulatedAnnealing.SimulatedAnnealing import SimulatedAnnealing
 import sys
 
 
@@ -29,7 +30,9 @@ class Main():
 
         # leer e interpretar el problema TSP leido desde la instancia definida
         problema = TSP(opciones)
+        #print(problema.random_tour())
 
         solucion_inicial = Tour(sol_inicial=opciones.initial_solution, problema=problema)
-        print(solucion_inicial.actual, solucion_inicial.costo)
-     
+        #print(solucion_inicial.actual, solucion_inicial.costo)
+        #solucion_inicial.randomNeighbor(TSPMove.TWO_OPT)
+        #print(solucion_inicial.actual, solucion_inicial.costo)
