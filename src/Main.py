@@ -26,13 +26,19 @@ class Main():
         """
         
         # leer e inicializar las opciones 
-        opciones = AlgorithmsOptions(argv)
+        options = AlgorithmsOptions(argv)
 
         # leer e interpretar el problema TSP leido desde la instancia definida
-        problema = TSP(opciones)
+        problem = TSP(options)
         #print(problema.random_tour())
 
-        solucion_inicial = Tour(sol_inicial=opciones.initial_solution, problema=problema)
+        initial_solution = Tour(initial_sol=options.initial_solution, problem=problem)
         #print(solucion_inicial.actual, solucion_inicial.costo)
         #solucion_inicial.randomNeighbor(TSPMove.TWO_OPT)
         #print(solucion_inicial.actual, solucion_inicial.costo)
+
+        # Ejecutar Metaheuristica
+        if (options.metaheuristic == MHType.SA):
+            # Crear solver
+            solver = SimulatedAnnealing(problem, options)
+            

@@ -33,7 +33,7 @@ class InitialSolution(Enum):
     DETERMINISTIC = 'DETERMINISTIC'
 
 class CoolingType(Enum):
-    """Esquemas de enfriamiento disponibles 
+    """Esquemas de enfriamiento disponibles para Simulated Annealing
 
     GEOMETRIC: t = t * alpha
     LINEAR: t = t * (1 - (evaluation / max_evaluations))
@@ -153,8 +153,8 @@ class AlgorithmsOptions():
         # Argumentos de Simulated Annealing
         parser.add_argument("-a", "--alpha", help="Parametro alfa para el esquema geometrico ]0,1]")
         parser.add_argument("-t0", "--tini", help="Temperatura inicial ]0,DOUBLE_MAX]")
-        parser.add_argument("-tmin", "--tmin", help="Temperatura minima ]0,DOUBLE_MAX]")
-        parser.add_argument("-tc", "--cooling", help="Esquema de enfriamiento de la temperatura [ geometric | log | linear ]")
+        parser.add_argument("-tm", "--tmin", help="Temperatura minima ]0,DOUBLE_MAX]")
+        parser.add_argument("-c", "--cooling", help="Esquema de enfriamiento de la temperatura [ geometric | log | linear ]")
 
 
         args = parser.parse_args()
