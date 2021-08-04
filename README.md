@@ -12,27 +12,27 @@ General
 
 * **TSPlibReader.py:** Clase que implementa funciones para leer las instancias de TSP en el formato de la librería de instancias TSPlib.
 
-* **TSP.py:**Clase que representa la instancia de TSP. Contiene los siguientes métodos:
+* **TSP.py:** Clase que representa la instancia de TSP. Contiene los siguientes métodos:
 
-	* **compute_tour_length:** calcula el costo de un tour
+	* **compute_tour_length:** Calcula el costo de un tour
 
-	* **tsp_check_tour:** revisa si un tour es correcto
+	* **tsp_check_tour:** Revisa si un tour es correcto
 
-	* **random_tour:** genera un tour aleatorio
+	* **random_tour:** Genera un tour aleatorio
 
-	* **greedy_nearest_n:** genera un tour utilizando la heurística del vecino más cercano
+	* **greedy_nearest_n:** Genera un tour utilizando la heurística del vecino más cercano
 
 * **Tour.py:** Clase que implementa una solución del TSP. El constructor de clase permite definir si la solución inicial es construída aleatoriamente, utilizando la heurística del vecino más cercano o una solución secuencial. Contiene las siguientes variables y métodos:
 
-	* **current:** solución del TSP que se representa con un arreglo de enteros de tamaño n+1, donde n son los nodos (ciudades) y la última ciudad del tour corresponde siempre a la primera ciudad. 
+	* **current:** Solución del TSP que se representa con un arreglo de enteros de tamaño n+1, donde n son los nodos (ciudades) y la última ciudad del tour corresponde siempre a la primera ciudad. 
 
 	* **cost:** Costo del tour de la solución
 
 	* **swap**: Método que aplica el movimiento swap a dos nodos en el tour actual
 
-	* **twoOptSwap:** método que aplica el movimiento 2-opt a dos nodos en el tour actual
+	* **twoOptSwap:** Método que aplica el movimiento 2-opt a dos nodos en el tour actual
 
-	* **randomNeighbor:** método que aplica aleatoriamente a dos nodos el movimiento definido en move_type (TSPMove.TWO_OPT o TSPMove.SWAP)
+	* **randomNeighbor:** Método que aplica aleatoriamente a dos nodos el movimiento definido en move_type (TSPMove.TWO_OPT o TSPMove.SWAP)
 
   
 * **Main.py:** Clase principal que ejecuta el software
@@ -42,15 +42,15 @@ General
 
 Algoritmos
 
-* **SimulatedAnnealing.py:** clase que implementa el método de búsqueda de Simulated Annealing
+* **SimulatedAnnealing.py:** Clase que implementa el método de búsqueda de Simulated Annealing
 
-	* **search:** método que inicia la búsqueda de Simulated Annealing comenzando de una solución inicial
+	* **search:** Método que inicia la búsqueda de Simulated Annealing comenzando de una solución inicial
 
-	* **terminationCondition:** método que revisa si la condición de término (temperatura mínima o número de evaluaciones) se ha cumplido
+	* **terminationCondition:** Método que revisa si la condición de término (temperatura mínima o número de evaluaciones) se ha cumplido
 
-	* **getAcceptanceProbability:** método que calcula la probabilidad de aceptar una solución
+	* **getAcceptanceProbability:** Método que calcula la probabilidad de aceptar una solución
 
-	* **reduceTemperature:** método que reduce el valor de la temperatura siguiendo un esquema de enfriamiento seleccionado
+	* **reduceTemperature:** Método que reduce el valor de la temperatura siguiendo un esquema de enfriamiento seleccionado
   
 
 ## Argumentos
