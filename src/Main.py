@@ -29,10 +29,10 @@ class Main():
         options = AlgorithmsOptions(argv)
 
         # leer e interpretar el problema TSP leido desde la instancia definida
-        problem = TSP(options)
+        problem = TSP(options.instance)
         #print(problema.random_tour())
 
-        initial_solution = Tour(initial_sol=options.initial_solution, problem=problem)
+        initial_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
         #print(solucion_inicial.actual, solucion_inicial.costo)
         #solucion_inicial.randomNeighbor(TSPMove.TWO_OPT)
         #print(solucion_inicial.actual, solucion_inicial.costo)
@@ -41,4 +41,5 @@ class Main():
         if (options.metaheuristic == MHType.SA):
             # Crear solver
             solver = SimulatedAnnealing(problem, options)
-            
+            # Ejecutar la busqueda
+            solver.search(initial_solution)

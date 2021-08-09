@@ -1,4 +1,3 @@
-from src.AlgorithmsOptions import AlgorithmsOptions
 from src.Utilities import bcolors
 from src.TSPlibReader import TSPlibReader
 import src.Utilities as util
@@ -38,18 +37,13 @@ class TSP():
     neighbours = [[]]
 
     # Instancia TSPlibReader
-    instance = TSPlibReader
+    instance :TSPlibReader
 
-    # Opciones
-    options = AlgorithmsOptions
 
-    def __init__(self, options: AlgorithmsOptions) -> None:
-
-        # leer opciones
-        self.options = options
+    def __init__(self, filename: str) -> None:
 
         # leer instancia desde un archivo TSPlib
-        self.instance = TSPlibReader(self.options.instance)
+        self.instance = TSPlibReader(filename)
 
         # obtener matriz de distancia
         self.distances = self.instance.distance

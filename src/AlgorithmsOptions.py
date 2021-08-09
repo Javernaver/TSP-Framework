@@ -187,7 +187,7 @@ class AlgorithmsOptions():
         # Numero maximo de evaluaciones
         if (args.evaluations or 'evaluations' in kwargs):
             try:
-                self.evaluations = int(args.evaluations) if args.evaluations else int(kwargs['evaluations'])
+                self.max_evaluations = int(args.evaluations) if args.evaluations else int(kwargs['evaluations'])
             except: 
                 print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e o --evaluations) {bcolors.ENDC}")
 

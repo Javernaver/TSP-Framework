@@ -6,7 +6,7 @@ import src.Utilities as util
 class Tour():
 
     # Instancia del problema
-    problem = TSP
+    problem :TSP
     # Solucion actual
     current = []
     cost = 0
@@ -16,23 +16,16 @@ class Tour():
         if ('problem' in kwargs):
             self.problem = kwargs['problem']
         
-        if ('initial_sol' in kwargs):
-            if (kwargs['initial_sol'] == InitialSolution.RANDOM):
+        if ('type_initial_sol' in kwargs):
+            if (kwargs['type_initial_sol'] == InitialSolution.RANDOM):
                 self.current = self.problem.random_tour()
-            elif (kwargs['initial_sol'] == InitialSolution.NEAREST_N):
+            elif (kwargs['type_initial_sol'] == InitialSolution.NEAREST_N):
                 self.current = self.problem.greedy_nearest_n(-1)
-            elif (kwargs['initial_sol'] == InitialSolution.DETERMINISTIC):
+            elif (kwargs['type_initial_sol'] == InitialSolution.DETERMINISTIC):
                 self.current = self.problem.deterministic_tour()
             else:
                 self.current = self.problem.random_tour()
         
-        if (not self.problem.tsp_check_tour(self.current)):
-            print(f"{bcolors.FAIL}Error: Error al inicializar la solucion inicial {bcolors.ENDC}")
-            exit()
-
-        # Determinar costo de la solucion inicial
-        self.cost = self.problem.compute_tour_length(self.current)
-
         # Si viene otra instancia de la clase como parametro definido
         if ('tour' in kwargs):
             # actualizar problema
@@ -42,16 +35,23 @@ class Tour():
             # actualizar costo
             self.cost = kwargs['tour'].cost
 
-    def copiar(self, tour: list) -> None:
+        if (not self.problem.tsp_check_tour(self.current)):
+            print(f"{bcolors.FAIL}Error: Error al inicializar la solucion inicial {bcolors.ENDC}")
+            exit()
+
+        # Determinar costo de la solucion inicial
+        self.cost = self.problem.compute_tour_length(self.current)
+
+    def duplicate(self, tour) -> None:
         """ Copia una solicion recibida por parametro actualizando la solucion actual """
-        self.current = tour.copy()
+        self.current = tour.current.copy()
         self.cost = tour.cost
 
-    def escribir(self) -> None:
+    def printSol(self) -> None:
         """ Escribir solucion y costo """
         self.problem.print_solution_and_cost(self.current)
 
-    def escribirCosto(self) -> None:
+    def printCost(self) -> None:
         """ Escribe el costo de un tour """
         print(f"Costo: {self.cost}", end='')
 
