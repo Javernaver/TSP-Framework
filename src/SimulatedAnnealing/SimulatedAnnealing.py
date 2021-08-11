@@ -46,7 +46,7 @@ class SimulatedAnnealing():
         # variable para calculos de probabilidad 
         prob = 0.0
         # numero de evaluacion
-        evaluations = 0;
+        evaluations = 1;
 
         # variable del tour actual 
         current_tour = Tour(tour=initial_solution);
@@ -62,7 +62,7 @@ class SimulatedAnnealing():
         while (self.terminationCondition(temperature, evaluations)):
             # Generar un vecino aleatoriamente
             neighbor_tour.randomNeighbor(self.move_type)
-            print(f"{bcolors.BOLD}\n Evaluacion: {evaluations+1} temperatura: {temperature:.2f}{bcolors.ENDC} -->", end='')
+            print(f"{bcolors.BOLD}\n Evaluacion: {evaluations} temperatura: {temperature:.2f}{bcolors.ENDC} -->", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
@@ -104,7 +104,7 @@ class SimulatedAnnealing():
 		
         # Criterio de termino de las evaluciones
         if (self.options.max_evaluations > 0):
-            if (evaluations >= self.options.max_evaluations):
+            if (evaluations > self.options.max_evaluations):
                 return False
         
         return True
@@ -126,6 +126,6 @@ class SimulatedAnnealing():
         elif (self.cooling == CoolingType.LINEAR):
             t_new = self.options.t0 * (1 - (evaluation / self.options.max_evaluations))
         elif (self.cooling == CoolingType.LOG):
-            t_new = (self.options.t0 * self.options.alpha) / log(evaluation+2)
+            t_new = (self.options.t0 * self.options.alpha) * (1 / log(evaluation+1))
 
         return t_new
