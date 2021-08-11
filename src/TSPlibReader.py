@@ -108,7 +108,7 @@ class TSPlibReader():
         archivo.close()
         return nodeptr
 
-    def round_distance (i, j):
+    def round_distance (self, i, j):
         # Funcion: computa la distancia Euclidiana (redondea al siguiente entero) entre dos nodos
         # Input: indices de dos nodos
         # Output: distancia entre dos nodos
@@ -121,7 +121,7 @@ class TSPlibReader():
         distancia = round(math.sqrt(pow(diferencia_x,2) + pow(diferencia_y,2)),2)
         return round(distancia)
 
-    def ceil_distance (i, j):
+    def ceil_distance (self, i, j):
         # Funcion: computa la distancia Euclidiana (usando funcion techo) entre dos nodos
         # Input: indices de dos nodos
         # Output: distancia entre dos nodos
@@ -226,28 +226,20 @@ class TSPlibReader():
         # Input: ninguno
         # Output: guarda los vecinos mas cercanos en una matriz en la variable nn_list
 
-        
-        i = int
-        node = int
-        nn = int
-        distance_vector = []
-        help_vector = []
-        m_nnear = [[]]
+        distance_vector = [0] * self.n
+        help_vector = [0] * self.n
+        nn = self.n - 1
+        m_nnear = [[0] * nn] * self.n
 
-        nn = (self.n - 1)
         for node in range(self.n): # Computar cnd-sets para todos los nodos
             for i in range(self.n): # Copiar distancias desde nodo hacia otros nodos
-                if (node == 0):
-                    distance_vector.append(self.distance[node][i])
-                    help_vector.append(i)
-                else:
-                    distance_vector[i] = self.distance[node][i]
-                    help_vector[i] = i
-            distance_vector[node] = sys.maxsize # Ciudad no es el vecino mas cercano
+                distance_vector[i] = self.distance[node][i]
+                help_vector[i] = i
+            distance_vector[node] = 2147483647 # Ciudad no es el vecino mas cercano
             Utilities.sort2(distance_vector, help_vector, 0, self.n-1)
             for i in range(nn):
-                m_nnear.append([])
-                m_nnear[node].append(help_vector[i])
+                m_nnear[node][i] = help_vector[i]
+
         
         self.nn_list = m_nnear.copy()
 
