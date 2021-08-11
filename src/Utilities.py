@@ -1,5 +1,6 @@
 import random
-
+import sys
+sys.setrecursionlimit(3000)
 seed = 0
 
 class bcolors:
@@ -20,13 +21,8 @@ def swap2 (v, v2, i, j):
     # Comentarios: los elementos en la posicion i y j de las dos matrices
     #              se intercambian
 
-    aux = int
-    aux = v[i]
-    v[i] = v[j]
-    v[j] = aux
-    aux = v2[i]
-    v2[i] = v2[j]
-    v2[j] = aux
+    v[i], v[j] = v[j], v[i]
+    v2[i], v2[j] = v2[j], v2[i]
 
 def sort2 (v, v2, left, right):
     # Funcion: rutina recursiva (quicksort) para ordenar un arreglo.
@@ -46,7 +42,7 @@ def sort2 (v, v2, left, right):
     for k in range(left + 1, right + 1):
         if(v[k] < v[left]):
             #last = last + 1
-            swap2(v, v2, ++last, k)
+            swap2(v, v2, ++last, k)         
     swap2(v, v2, left, last)
     sort2(v, v2, left, last)
     sort2(v, v2, last + 1, right)
