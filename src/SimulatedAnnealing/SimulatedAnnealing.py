@@ -18,35 +18,50 @@ class SimulatedAnnealing():
     # Mejor tour 
     best_tour :Tour
 
+    # numero de evaluacion
+    evaluations = 1
+
     # Opciones
     options :AlgorithmsOptions
 
-    def __init__(self, problem: TSP, options: AlgorithmsOptions) -> None:
+    def __init__(self, options: AlgorithmsOptions = AlgorithmsOptions(), problem: TSP = None) -> None:
         
+        # Si el atributo opcional de el problema tsp no esta incluido
+        if not problem:
+            self.problem = TSP(options.instance)
+        else:
+            self.problem = problem
+
         self.options = options
-        self.problem = problem
         self.cooling = options.cooling
         self.move_type = options.move
         self.alpha = options.alpha
+        print (self.problem.print_distances)
+
         self.best_tour = Tour(problem=self.problem, type_initial_sol=InitialSolution.RANDOM)
 
         print(f"{bcolors.HEADER}\nIniciando Simulated Annealing...{bcolors.ENDC}")
 
     def print_best_solution(self) -> None:
         """ Escribir la mejor solucion """
+        print()
         self.best_tour.printSol()
+        print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
 
-    def search(self, initial_solution :Tour) -> None:
+    def search(self, initial_solution :Tour = None) -> None:
         """ Esta funcion ejecuta la busqueda de simulated annealing desde la solucion inicial
         (initial_solution, el resultadofinal puede ser encontrado en best_tour) """
+
+        # Si el atributo opcional de la solucion inicial no esta incluido
+        if not initial_solution:
+            initial_solution = Tour(type_initial_sol=self.options.initial_solution, problem=self.problem)
 
         # variable de temperatura
         temperature = self.options.t0
         
         # variable para calculos de probabilidad 
         prob = 0.0
-        # numero de evaluacion
-        evaluations = 1;
+        
 
         # variable del tour actual 
         current_tour = Tour(tour=initial_solution);
@@ -59,16 +74,16 @@ class SimulatedAnnealing():
         self.best_tour.printSol()
 
         # Bucle principal del algoritmo
-        while (self.terminationCondition(temperature, evaluations)):
+        while (self.terminationCondition(temperature, self.evaluations)):
             # Generar un vecino aleatoriamente
             neighbor_tour.randomNeighbor(self.move_type)
-            print(f"{bcolors.BOLD}\n Evaluacion: {evaluations} temperatura: {temperature:.2f}{bcolors.ENDC} -->", end='')
+            print(f"{bcolors.BOLD}\n Evaluacion: {self.evaluations} temperatura: {temperature:.2f}{bcolors.ENDC} -->", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
                 current_tour.duplicate(neighbor_tour)
-                print(f"{bcolors.OKGREEN} Mejor costo: {current_tour.cost}{bcolors.ENDC}", end='')
+                print(f"{bcolors.OKGREEN} Mejor costo encontrado: {current_tour.cost}{bcolors.ENDC}", end='')
             else:
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
@@ -76,10 +91,10 @@ class SimulatedAnnealing():
                 if (util.random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.duplicate(neighbor_tour)
-                    print(f"{bcolors.FAIL} Se acepta peor costo: {neighbor_tour.cost}{bcolors.ENDC}", end='')
+                    print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
                 else:
                     # No se acepta la solucion
-                    print(f"{bcolors.FAIL} No se acepta peor costo: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} - Solucion actual costo: {current_tour.cost}{bcolors.ENDC}", end='')
+                    print(f"{bcolors.FAIL} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} - Solucion actual costo: {current_tour.cost}{bcolors.ENDC}", end='')
                     neighbor_tour.duplicate(current_tour)
 
 			
@@ -90,8 +105,8 @@ class SimulatedAnnealing():
 
                     
             # reducir la temperatura 
-            temperature = self.reduceTemperature(temperature, evaluations)
-            evaluations += 1
+            temperature = self.reduceTemperature(temperature, self.evaluations)
+            self.evaluations += 1
         print()   
 		
 

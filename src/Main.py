@@ -1,9 +1,10 @@
+from src.Utilities import bcolors
 from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType, TSPMove
 from src.TSP import TSP
 from src.SimulatedAnnealing.SimulatedAnnealing import SimulatedAnnealing
 import sys
-
+from timeit import default_timer as timer
 
 class Main():
     """
@@ -24,7 +25,8 @@ class Main():
             Lista con los argumentos que pueda tener al inicializar la clase
 
         """
-        
+        # tiempo inicial de ejecucion
+        start = timer()
         # leer e inicializar las opciones 
         options = AlgorithmsOptions(argv)
 
@@ -32,7 +34,7 @@ class Main():
         problem = TSP(options.instance)
         #print(problema.random_tour())
 
-        initial_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
+        first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
         #print(solucion_inicial.actual, solucion_inicial.costo)
         #solucion_inicial.randomNeighbor(TSPMove.TWO_OPT)
         #print(solucion_inicial.actual, solucion_inicial.costo)
@@ -40,6 +42,11 @@ class Main():
         # Ejecutar Metaheuristica
         if (options.metaheuristic == MHType.SA):
             # Crear solver
-            solver = SimulatedAnnealing(problem, options)
+            solver = SimulatedAnnealing(options, problem)
             # Ejecutar la busqueda
-            solver.search(initial_solution)
+            solver.search(first_solution)
+            solver.print_best_solution()
+
+        # tiempo final de ejecucion
+        end = timer()
+        print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.2f} segundos{bcolors.ENDC}")
