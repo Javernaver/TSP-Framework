@@ -42,7 +42,7 @@ class SimulatedAnnealing():
         self.alpha = options.alpha
         
 
-        self.best_tour = Tour(problem=self.problem, type_initial_sol=InitialSolution.RANDOM)
+        self.best_tour = Tour(problem=self.problem, type_initial_sol=self.options.initial_solution)
 
         print(f"{bcolors.HEADER}\nIniciando Simulated Annealing...{bcolors.ENDC}")
 
@@ -52,13 +52,13 @@ class SimulatedAnnealing():
         self.best_tour.printSol()
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
 
-    def search(self, initial_solution :Tour = None) -> None:
+    def search(self, first_solution :Tour = None) -> None:
         """ Esta funcion ejecuta la busqueda de simulated annealing desde la solucion inicial
         (initial_solution, el resultadofinal puede ser encontrado en best_tour) """
 
         # Si el atributo opcional de la solucion inicial no esta incluido
-        if not initial_solution:
-            initial_solution = Tour(type_initial_sol=self.options.initial_solution, problem=self.problem)
+        if not first_solution:
+            first_solution = Tour(type_initial_sol=self.options.initial_solution, problem=self.problem)
 
         # variable de temperatura
         temperature = self.options.t0
@@ -68,11 +68,11 @@ class SimulatedAnnealing():
         
 
         # variable del tour actual 
-        current_tour = Tour(tour=initial_solution);
+        current_tour = Tour(tour=first_solution);
         # variable del tour vecino generado 
-        neighbor_tour = Tour(tour=initial_solution);
+        neighbor_tour = Tour(tour=first_solution);
         # solucion inicial se guarda como la mejor hasta el momento 
-        self.best_tour.duplicate(initial_solution);
+        self.best_tour.duplicate(first_solution);
 
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()

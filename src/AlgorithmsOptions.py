@@ -85,7 +85,7 @@ class AlgorithmsOptions():
     output = "solucion.txt"
 	
     # Archivo de la instancia 
-    instance = "instances/att48.tsp"
+    instance = "instances/burma14.tsp"
     
     # Semilla para el generador de numero aleatorios 
     seed = 0
