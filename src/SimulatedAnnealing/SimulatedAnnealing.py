@@ -24,19 +24,23 @@ class SimulatedAnnealing():
     # Opciones
     options :AlgorithmsOptions
 
-    def __init__(self, options: AlgorithmsOptions = AlgorithmsOptions(), problem: TSP = None) -> None:
+    def __init__(self, options: AlgorithmsOptions = None, problem: TSP = None) -> None:
         
+        # Si por el objeto con las opciones no es enviado al iniciar la clase
+        if not options:
+            self.options = AlgorithmsOptions()
+        else:
+            self.options = options
         # Si el atributo opcional de el problema tsp no esta incluido
         if not problem:
             self.problem = TSP(options.instance)
         else:
             self.problem = problem
 
-        self.options = options
         self.cooling = options.cooling
         self.move_type = options.move
         self.alpha = options.alpha
-        print (self.problem.print_distances)
+        
 
         self.best_tour = Tour(problem=self.problem, type_initial_sol=InitialSolution.RANDOM)
 
@@ -94,7 +98,7 @@ class SimulatedAnnealing():
                     print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
                 else:
                     # No se acepta la solucion
-                    print(f"{bcolors.FAIL} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} - Solucion actual costo: {current_tour.cost}{bcolors.ENDC}", end='')
+                    print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} - Solucion actual costo: {current_tour.cost}{bcolors.ENDC}", end='')
                     neighbor_tour.duplicate(current_tour)
 
 			
