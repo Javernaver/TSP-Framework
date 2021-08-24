@@ -82,35 +82,35 @@ class AlgorithmsOptions():
     
     # OPCIONES GENERALES
     # Archivo para imprimir la solucion
-    output = "solucion.txt";
+    output = "solucion.txt"
 	
     # Archivo de la instancia 
-    instance = "instances/eil51.tsp";
+    instance = "instances/att48.tsp"
     
     # Semilla para el generador de numero aleatorios 
-    seed = 0;
+    seed = 0
     
     # Tipo de metaheuristica a ejecutar 
-    metaheuristic = MHType.SA;
+    metaheuristic = MHType.SA
     
     # Tipo del movimiento para la metaheuristica 
-    move = TSPMove.SWAP;
+    move = TSPMove.SWAP
 
     # Evaluaciones maximas
-    max_evaluations = 1000;
+    max_evaluations = 1000
 
     # Solucion Inicial
-    initial_solution = InitialSolution.RANDOM
+    initial_solution = InitialSolution.DETERMINISTIC
     
     # OPCIONES PARA SIMULATED ANNEALING 
     # Parametro alfa para el enfriamiento
-    alpha = 0.98;
+    alpha = 0.98
     
     # Temperatura inicial 
-    t0 = 1000.0;
+    t0 = 1000.0
     
     # Temperatura minima 
-    tmin = 900.0;
+    tmin = 900.0
     
     # Tipo de enfriamiento
     cooling = CoolingType.GEOMETRIC;
@@ -283,3 +283,5 @@ class AlgorithmsOptions():
             print(f"{bcolors.OKBLUE}Temperatura inicial: {bcolors.ENDC}{self.t0}")
             print(f"{bcolors.OKBLUE}Temperatura minima: {bcolors.ENDC}{self.tmin}")
             print(f"{bcolors.OKBLUE}Tipo de enfriamiento: {bcolors.ENDC}{self.cooling.value}")
+            
+        print()
