@@ -14,7 +14,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def swap2 (v, v2, i, j):
+def swap2 (v :list, v2 :list, i :int, j :int) -> None:
     # Funcion: rutina auxiliar para ordenar un arreglo de enteros
     # Input: dos arreglos, dos indices
     # Output: dos arreglos ordenados
@@ -24,25 +24,22 @@ def swap2 (v, v2, i, j):
     v[i], v[j] = v[j], v[i]
     v2[i], v2[j] = v2[j], v2[i]
 
-def sort2 (v, v2, left, right):
+def sort2 (v :list, v2 :list, left :int, right :int):
     # Funcion: rutina recursiva (quicksort) para ordenar un arreglo.
     #          El segundo arreglo hace la misma secuencia de intercambio
     # Input: dos arreglos, dos indices
     # Output: ordenamiento de dos arreglos
     # Comentarios: los elementos en la posicion i y j de las dos matrices
     #              se intercambian
-
-    k = int
-    last = int
-
+    
     if (left >= right):
         return
     swap2(v, v2, left, int((left + right) / 2))
     last = left
     for k in range(left + 1, right + 1):
         if(v[k] < v[left]):
-            #last = last + 1
-            swap2(v, v2, ++last, k)         
+            last = last + 1
+            swap2(v, v2, last, k)         
     swap2(v, v2, left, last)
     sort2(v, v2, left, last)
     sort2(v, v2, last + 1, right)

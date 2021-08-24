@@ -47,10 +47,10 @@ class TSPlibReader():
             exit()
         # Obtener la matriz de distancias
         self.compute_distances()
-        print('computadas las distancias')
+        print('Computadas las distancias')
         # Generar listas de vecinos ordenados
         self.compute_nn_lists()
-      
+        print('Computados los vecinos')
         print(f"# instancia {self.name} tiene {self.n} nodos")
 
     def read_etsp (self, tsp_file_name):
@@ -59,8 +59,8 @@ class TSPlibReader():
         # Output: arreglo de coordenas
         # Comentario: archivo de instancia debe estar en formato TSPLIB
         buf = ''
-        global distance_type 
-        global nodeptr 
+       
+        nodeptr = []
 
         i = 0
 
@@ -95,13 +95,13 @@ class TSPlibReader():
                     if(linea.startswith("EDGE_WEIGHT_TYPE")):
                         buf = linea[linea.find(":")+2 : len(linea)-1]
                         if(buf == "EUC_2D"):
-                            distance_type = Distance_type.EUC_2D
+                            self.distance_type = Distance_type.EUC_2D
                         elif(buf == "CEIL_2D"):
-                            distance_type = Distance_type.CEIL_2D
+                            self.distance_type = Distance_type.CEIL_2D
                         elif(buf == "GEO"):
-                            distance_type = Distance_type.GEO
+                            self.distance_type = Distance_type.GEO
                         elif(buf == "ATT"):
-                            distance_type = Distance_type.ATT
+                            self.distance_type = Distance_type.ATT
                         else:
                             print(f"EDGE_WEIGHT_TYPE {buf} no implementado en la clase.")
                             exit()
@@ -133,8 +133,8 @@ class TSPlibReader():
         #              la funcion round, rendondea al entero mas cercano
         #              en caso de ser 1.5 -> 2 y 2.5 -> 2
         
-        diferencia_x = nodeptr[i].x - nodeptr[j].x
-        diferencia_y = nodeptr[i].y - nodeptr[j].y
+        diferencia_x = self.nodeptr[i].x - self.nodeptr[j].x
+        diferencia_y = self.nodeptr[i].y - self.nodeptr[j].y
         distancia = math.sqrt(pow(diferencia_x,2) + pow(diferencia_y,2)) 
         return round(distancia)
 
@@ -169,10 +169,10 @@ class TSPlibReader():
         q2 = float
         q3 = float
         dd = int
-        x1 = nodeptr[i].x
-        x2 = nodeptr[j].x
-        y1 = nodeptr[i].y
-        y2 = nodeptr[j].y
+        x1 = self.nodeptr[i].x
+        x2 = self.nodeptr[j].x
+        y1 = self.nodeptr[i].y
+        y2 = self.nodeptr[j].y
         RRR = 6378.388
 
         deg = Utilities.dtrunc(x1)
@@ -202,8 +202,8 @@ class TSPlibReader():
         # Output: distancia entre dos nodos
         # Comentarios: para un definicion de como calcular esta distancia vea TSPLIB
 
-        diferencia_x = Decimal(f"{nodeptr[i].x}") - Decimal(f"{nodeptr[j].x}")
-        diferencia_y = Decimal(f"{nodeptr[i].y}") - Decimal(f"{nodeptr[j].y}")
+        diferencia_x = Decimal(f"{self.nodeptr[i].x}") - Decimal(f"{self.nodeptr[j].x}")
+        diferencia_y = Decimal(f"{self.nodeptr[i].y}") - Decimal(f"{self.nodeptr[j].y}")
         rij = math.sqrt(float(pow(diferencia_x,2) + pow(diferencia_y,2)) / 10.0)
         tij = Utilities.dtrunc(rij)
 
@@ -220,16 +220,16 @@ class TSPlibReader():
         
         for i in range(self.n):
             for j in range(self.n):
-                if (distance_type == Distance_type.EUC_2D):
+                if (self.distance_type == Distance_type.EUC_2D):
                     matrix.append([])
                     matrix[i].append(self.round_distance(i,j))
-                elif (distance_type == Distance_type.CEIL_2D):
+                elif (self.distance_type == Distance_type.CEIL_2D):
                     matrix.append([])
                     matrix[i].append(self.ceil_distance(i,j))
-                elif (distance_type == Distance_type.GEO):
+                elif (self.distance_type == Distance_type.GEO):
                     matrix.append([])
                     matrix[i].append(self.geo_distance(i,j))
-                elif (distance_type == Distance_type.ATT):
+                elif (self.distance_type == Distance_type.ATT):
                     matrix.append([])
                     matrix[i].append(self.att_distance(i,j))
 
