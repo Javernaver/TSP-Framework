@@ -4,6 +4,7 @@ sys.setrecursionlimit(3000)
 seed = 0
 
 class bcolors:
+    """ Clase cuyo objetivo es cambiar de color los output por consola """
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
@@ -24,7 +25,7 @@ def swap2 (v :list, v2 :list, i :int, j :int) -> None:
     v[i], v[j] = v[j], v[i]
     v2[i], v2[j] = v2[j], v2[i]
 
-def sort2 (v :list, v2 :list, left :int, right :int):
+def sort2 (v :list, v2 :list, left :int, right :int) -> None:
     # Funcion: rutina recursiva (quicksort) para ordenar un arreglo.
     #          El segundo arreglo hace la misma secuencia de intercambio
     # Input: dos arreglos, dos indices
@@ -44,7 +45,7 @@ def sort2 (v :list, v2 :list, left :int, right :int):
     sort2(v, v2, left, last)
     sort2(v, v2, last + 1, right)
 
-def dtrunc (x):
+def dtrunc (x :float) -> float:
     #Funcion: truncar un numero float
     #Output: numero float sin parte decimal
 

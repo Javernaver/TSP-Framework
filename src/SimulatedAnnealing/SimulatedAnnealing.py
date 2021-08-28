@@ -64,8 +64,7 @@ class SimulatedAnnealing():
         temperature = self.options.t0
         
         # variable para calculos de probabilidad 
-        prob = 0.0
-        
+        prob = 0.0        
 
         # variable del tour actual 
         current_tour = Tour(tour=first_solution);
@@ -98,7 +97,7 @@ class SimulatedAnnealing():
                     print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
                 else:
                     # No se acepta la solucion
-                    print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} - Solucion actual costo: {current_tour.cost}{bcolors.ENDC}", end='')
+                    print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} --> Costo solucion actual: {current_tour.cost}{bcolors.ENDC}", end='')
                     neighbor_tour.duplicate(current_tour)
 
 			
@@ -106,16 +105,15 @@ class SimulatedAnnealing():
             if (current_tour.cost < self.best_tour.cost):
                 print(f"{bcolors.OKGREEN} --> ¡Mejor solucion actualizada! {bcolors.ENDC}", end='')
                 self.best_tour.duplicate(current_tour)
-
                     
-            # reducir la temperatura 
+            # reducir la temperatura y aumentar las evaluaciones
             temperature = self.reduceTemperature(temperature, self.evaluations)
             self.evaluations += 1
         print()   
 		
 
     def terminationCondition(self, termperature :float, evaluations :int) -> bool:
-        """ Funcion para terminar el ciclo principal de Simulated Annealing """
+        """ Funcion que contiene la condicion de termino para el ciclo principal de Simulated Annealing """
         # Criterio de termino de la temperatura
         if (self.options.tmin > 0):
             if (termperature <= self.options.tmin):

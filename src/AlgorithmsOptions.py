@@ -175,7 +175,7 @@ class AlgorithmsOptions():
         if (args.instance or 'instance' in kwargs):
             self.instance = args.instance if args.instance else kwargs['instance']
 
-        # Seleccion de Metaheristica
+        # Seleccion de Metaheuristica
         if (args.metaheuristic or 'metaheuristic' in kwargs):
             val = args.metaheuristic.upper() if args.metaheuristic else kwargs['metaheuristic'].upper()
             if (val == 'SA'):
