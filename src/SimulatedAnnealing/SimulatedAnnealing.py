@@ -4,6 +4,7 @@ from src.AlgorithmsOptions import AlgorithmsOptions, TSPMove, CoolingType, Initi
 from src.TSP import TSP
 from src.Tour import Tour
 from math import e, log
+from timeit import default_timer as timer
 
 class SimulatedAnnealing():
     
@@ -41,7 +42,6 @@ class SimulatedAnnealing():
         self.move_type = options.move
         self.alpha = options.alpha
         
-
         self.best_tour = Tour(problem=self.problem, type_initial_sol=self.options.initial_solution)
 
         print(f"{bcolors.HEADER}\nIniciando Simulated Annealing...{bcolors.ENDC}")
@@ -49,6 +49,7 @@ class SimulatedAnnealing():
     def print_best_solution(self) -> None:
         """ Escribir la mejor solucion """
         print()
+        print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol()
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
 
@@ -76,17 +77,23 @@ class SimulatedAnnealing():
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
 
+        # tiempo inicial de iteraciones
+        start = timer()
+        print(f"{bcolors.BOLD}\n Evaluacion | temperatura | tiempo | detalle{bcolors.ENDC}", end='')
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations)):
             # Generar un vecino aleatoriamente
             neighbor_tour.randomNeighbor(self.move_type)
-            print(f"{bcolors.BOLD}\n Evaluacion: {self.evaluations} temperatura: {temperature:.2f}{bcolors.ENDC} -->", end='')
+
+            # tiempo actual de iteracion
+            end = timer()
+            print(f"{bcolors.BOLD}\n {self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
                 current_tour.duplicate(neighbor_tour)
-                print(f"{bcolors.OKGREEN} Mejor costo encontrado: {current_tour.cost}{bcolors.ENDC}", end='')
+                print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
             else:
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
@@ -103,7 +110,7 @@ class SimulatedAnnealing():
 			
 			# Revisar si la nueva solucion es la mejor hasta el momento
             if (current_tour.cost < self.best_tour.cost):
-                print(f"{bcolors.OKGREEN} --> ¡Mejor solucion actualizada! {bcolors.ENDC}", end='')
+                print(f"{bcolors.OKGREEN} --> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
                 self.best_tour.duplicate(current_tour)
                     
             # reducir la temperatura y aumentar las evaluaciones
