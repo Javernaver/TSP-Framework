@@ -79,7 +79,7 @@ class SimulatedAnnealing():
 
         # tiempo inicial de iteraciones
         start = timer()
-        print(f"{bcolors.BOLD}\n Evaluacion | temperatura | tiempo | detalle{bcolors.ENDC}", end='')
+        print(f"{bcolors.BOLD}\nEvaluacion | temperatura | tiempo | detalle{bcolors.ENDC}", end='')
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations)):
             # Generar un vecino aleatoriamente
@@ -87,7 +87,7 @@ class SimulatedAnnealing():
 
             # tiempo actual de iteracion
             end = timer()
-            print(f"{bcolors.BOLD}\n {self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
+            print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
@@ -153,3 +153,6 @@ class SimulatedAnnealing():
             t_new = (self.options.t0 * self.options.alpha) * (1 / log(evaluation+1))
 
         return t_new
+
+    def printSolFile(self, filename :str) -> None:
+        self.best_tour.printToFile(filename) 

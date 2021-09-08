@@ -2,7 +2,7 @@ from src.Utilities import bcolors
 from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType, TSPMove
 from src.TSP import TSP
-from src.SimulatedAnnealing.SimulatedAnnealing import SimulatedAnnealing
+from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
 import sys
 from timeit import default_timer as timer
 
@@ -45,8 +45,10 @@ class Main():
             solver = SimulatedAnnealing(options, problem)
             # Ejecutar la busqueda
             solver.search(first_solution)
+            # Guardar la solucion en archivo
+            solver.printSolFile(options.output)
+            # Escribir la solucion por consola
             solver.print_best_solution()
-
         # tiempo final de ejecucion
         end = timer()
         print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.2f} segundos{bcolors.ENDC}")
