@@ -8,5 +8,5 @@ setup(
     author_email="javier.delcanto.m@mail.pucv.cl, jorge.polanco.sanmartin@gmail.com",
     url="",
     scripts=['tspf.py'],
-    packages=["src", "src.SimulatedAnnealing", "src.GeneticAlgorithm"]
+    packages=["src", "src.Algorithms"]
 )
