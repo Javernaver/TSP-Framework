@@ -46,12 +46,12 @@ class TSPlibReader():
             print("Error: No se tiene acceso al archivo.")
             exit()
         # Obtener la matriz de distancias
+        print('Calculando las distancias...')
         self.compute_distances()
-        print('Computadas las distancias')
         # Generar listas de vecinos ordenados
+        print('Calculando los vecinos...')
         self.compute_nn_lists()
-        print('Computados los vecinos')
-        print(f"# instancia {self.name} tiene {self.n} nodos")
+        print(f"instancia {self.name} tiene {self.n} nodos")
 
     def read_etsp (self, tsp_file_name):
         # Funcion: lectura y parsing de instancia TSPlib
@@ -75,7 +75,7 @@ class TSPlibReader():
             print(f"Error: No se puede leer el archivo {tsp_file_name}")
             exit()
             
-        print(f"# Leyendo archivo TSPlib {tsp_file_name} ... ")
+        print(f"Leyendo archivo TSPlib {tsp_file_name} ... ")
         archivo = open(tsp_file_name, "r")
         linea = archivo.readline()
         while linea:
