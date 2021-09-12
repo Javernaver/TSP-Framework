@@ -5,6 +5,8 @@ from src.TSP import TSP
 from src.Tour import Tour
 from math import e, log
 from timeit import default_timer as timer
+import csv
+from datetime import datetime
 
 class SimulatedAnnealing():
     
@@ -52,6 +54,7 @@ class SimulatedAnnealing():
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol()
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
+        self.updateTrajectory()
 
     def search(self, first_solution :Tour = None) -> None:
         """ Esta funcion ejecuta la busqueda de simulated annealing desde la solucion inicial
@@ -155,4 +158,21 @@ class SimulatedAnnealing():
         return t_new
 
     def printSolFile(self, filename :str) -> None:
-        self.best_tour.printToFile(filename) 
+        """ Guarda la solucion en archivo de texto"""
+        self.best_tour.printToFile(filename)
+
+    def updateTrajectory(self) -> None:
+        """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
+        with open("trajectory/SATrajectory.csv", "a", newline="\n") as csvfile:
+            
+            fields = ["solution","cost","instance","date","alpha","t0","tmin","cooling","seed","move","max_evaluations","initial_solution"]
+            writer = csv.DictWriter(csvfile, fieldnames=fields)
+            # Si la posicion de el archivo es cero se escriben los headers
+            if not csvfile.tell():
+                writer.writeheader()
+
+            # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+            sol = " ".join([str(elem) for elem in self.best_tour.current])
+
+            # escribir la mejor solucion y todas las caracteristicas de su ejecucion
+            writer.writerow({"solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, "date": datetime.today(), "alpha": self.options.alpha, "t0": self.options.t0, "tmin": self.options.tmin, "cooling": self.options.cooling.value, "seed": self.options.seed, "move": self.options.move.value, "max_evaluations": self.options.max_evaluations, "initial_solution": self.options.initial_solution.value})
