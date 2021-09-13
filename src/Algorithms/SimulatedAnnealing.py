@@ -1,12 +1,12 @@
-from src.Utilities import bcolors
-import src.Utilities as util
-from src.AlgorithmsOptions import AlgorithmsOptions, TSPMove, CoolingType, InitialSolution
+from src.Utilities import bcolors, random
+from src.AlgorithmsOptions import AlgorithmsOptions, TSPMove, CoolingType
 from src.TSP import TSP
 from src.Tour import Tour
 from math import e, log
 from timeit import default_timer as timer
 import csv
 from datetime import datetime
+from pathlib import Path
 
 class SimulatedAnnealing():
     
@@ -34,7 +34,7 @@ class SimulatedAnnealing():
             self.options = AlgorithmsOptions()
         else:
             self.options = options
-        # Si el atributo opcional de el problema tsp no esta incluido
+        # Si el objeto con el problema tsp no esta incluido
         if not problem:
             self.problem = TSP(options.instance)
         else:
@@ -82,7 +82,9 @@ class SimulatedAnnealing():
 
         # tiempo inicial de iteraciones
         start = timer()
-        print(f"{bcolors.BOLD}\nEvaluacion | temperatura | tiempo | detalle{bcolors.ENDC}", end='')
+        if not self.options.silent:
+            print(f"{bcolors.BOLD}\nEvaluacion | Temperatura | Tiempo | Detalle{bcolors.ENDC}", end='')
+        else: print(f"{bcolors.BOLD}\nEjecutando Simulated Annealing...{bcolors.ENDC}")
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations)):
             # Generar un vecino aleatoriamente
@@ -90,30 +92,35 @@ class SimulatedAnnealing():
 
             # tiempo actual de iteracion
             end = timer()
-            print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
+            if not self.options.silent:
+                print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
                 current_tour.duplicate(neighbor_tour)
-                print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
+                if not self.options.silent:
+                    print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
             else:
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
 
-                if (util.random.random() <= prob):
+                if (random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.duplicate(neighbor_tour)
-                    print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
+                    if not self.options.silent:
+                        print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
                 else:
                     # No se acepta la solucion
-                    print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} --> Costo solucion actual: {current_tour.cost}{bcolors.ENDC}", end='')
+                    if not self.options.silent:
+                        print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} --> Costo solucion actual: {current_tour.cost}{bcolors.ENDC}", end='')
                     neighbor_tour.duplicate(current_tour)
 
 			
 			# Revisar si la nueva solucion es la mejor hasta el momento
             if (current_tour.cost < self.best_tour.cost):
-                print(f"{bcolors.OKGREEN} --> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
+                if not self.options.silent:
+                    print(f"{bcolors.OKGREEN} --> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
                 self.best_tour.duplicate(current_tour)
                     
             # reducir la temperatura y aumentar las evaluaciones
@@ -163,6 +170,9 @@ class SimulatedAnnealing():
 
     def updateTrajectory(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
+        # crea la carpeta en caso de que no exista (python 3.5+)
+        Path("trajectory/").mkdir(exist_ok=True)
+        # usar el archivo en modo append
         with open("trajectory/SATrajectory.csv", "a", newline="\n") as csvfile:
             
             fields = ["solution","cost","instance","date","alpha","t0","tmin","cooling","seed","move","max_evaluations","initial_solution"]

@@ -102,6 +102,10 @@ class AlgorithmsOptions():
     # Solucion Inicial
     initial_solution = InitialSolution.DETERMINISTIC
     
+    # Modo silencioso
+    silent = False
+
+
     # OPCIONES PARA SIMULATED ANNEALING 
     # Parametro alfa para el enfriamiento
     alpha = 0.98
@@ -142,9 +146,10 @@ class AlgorithmsOptions():
         parser = argparse.ArgumentParser()
         # Declarar y definir argumentos
         # Argumentos generales
+        parser.add_argument("-s", "--silent", help="Ejecuta sin mostrar los cambios en cada ciclo de los algoritmos", action="store_true")
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
-        parser.add_argument("-s", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
+        parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
         parser.add_argument("-o", "--output", help="Nombre del archivo de salida para la solucion")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
@@ -211,7 +216,9 @@ class AlgorithmsOptions():
                 self.initial_solution = InitialSolution.DETERMINISTIC
             else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is o --inso) {bcolors.ENDC}")    
 
-
+        if (args.silent):
+            self.silent = True
+            
         # Procesar los argumentos de Simulated Annealing
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
