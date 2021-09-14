@@ -244,16 +244,16 @@ class AlgorithmsOptions():
         args = parser.parse_args()
 
         # Procesar argumentos generales
-        self.generalArgs(args, kwargs)
+        self.argsGeneral(args, kwargs)
         # Procesar argumentos de Simulated Annealing
-        self.saArgs(args, kwargs)
+        self.argsSA(args, kwargs)
         # Procesar argumentos de Algoritmo Genetico
-        self.gaArgs(args, kwargs)        
+        self.argsGA(args, kwargs)        
         # Validar logica de opciones
         self.validateOptions()
         
 
-    def generalArgs(self, args :any, kwargs :dict) -> None:
+    def argsGeneral(self, args :any, kwargs :dict) -> None:
         """Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos"""
 
         # Semilla 
@@ -319,7 +319,7 @@ class AlgorithmsOptions():
             self.silent = True
 
 
-    def saArgs(self, args :any, kwargs :dict) -> None:
+    def argsSA(self, args :any, kwargs :dict) -> None:
         """Procesar los argumentos de Simulated Annealing"""
 
         # Seleccion del esquema de enfriamiento
@@ -355,7 +355,7 @@ class AlgorithmsOptions():
                 print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
 
 
-    def gaArgs(self, args :any, kwargs :dict) -> None:
+    def argsGA(self, args :any, kwargs :dict) -> None:
         """Procesar los argumentos de Algoritmo Genetico"""
 
         # Tamaño de la poblacion
