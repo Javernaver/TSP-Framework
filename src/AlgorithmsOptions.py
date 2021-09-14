@@ -6,7 +6,6 @@ import argparse
 
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles
-
     SA: Simulated Annealing
     GA: Genetic Algorithm
     """
@@ -15,7 +14,6 @@ class MHType(Enum):
 
 class TSPMove(Enum):
     """Tipos de movimientos disponibles para el TSP 
-
     TWO_OPT: Operador 2-opt
     SWAP: Operador swap
     """
@@ -34,7 +32,6 @@ class InitialSolution(Enum):
 
 class CoolingType(Enum):
     """Esquemas de enfriamiento disponibles para Simulated Annealing
-
     GEOMETRIC: t = t * alpha
     LINEAR: t = t * (1 - (evaluation / max_evaluations))
     LOG: t = t * alpha * 1/ln(evaluation + 1)
@@ -42,6 +39,46 @@ class CoolingType(Enum):
     GEOMETRIC = 'GEOMETRIC'
     LINEAR = 'LINEAR'
     LOG = 'LOG'
+
+class SelectionType(Enum):
+    """Tipos de seleccion de individuos
+        RANDOM: Seleccion aleatoria
+	    BEST: Seleccion de los mejores (elitismo)
+	    ROULETTE: Seleccion proporcional al fitness
+	    TOURNAMENT: Seleccion de torneos k=3
+    """
+    RANDOM = 'RANDOM'
+    BEST = 'BEST'
+    ROULETTE = 'ROULETTE'
+    TOURNAMENT = 'TOURNAMENT'
+
+class CrossoverType(Enum):
+    """Tipos de cruzamiento disponibles
+        PMX: (partially-mapped crossover) hace swap adaptando los tours
+	    O1X: (order 1 crossover) 
+	    OPX: (one point crossover) se realiza cruzamiento en un punto 
+	         utilizando una lista de referencia 
+    """
+    PMX = 'PMX'
+    OX = 'OX'
+    OPX = 'OPX'
+
+
+class MutationType(Enum):
+    """Tipos de mutacion disponibles
+    TWO_OPT: mutacion que aplica un movimiento 2-opt aleatoriamente
+    SWAP: mutacion que aplica un movimiento swap aleatoriamente
+    """
+    TWO_OPT = 'TWO_OPT'
+    SWAP = 'SWAP'
+
+class SelectionStrategy(Enum):
+    """Estrategias de seleccion de individuos
+    MU_LAMBDA: estrategia (mu, lambda)
+    MUPLUSLAMBDA: estrategia (mu+lambda)
+    """
+    MULAMBDA = 'MULAMBDA'
+    MUPLUSLAMBDA = 'MUPLUSLAMBDA'
 
 class AlgorithmsOptions():
     """
@@ -69,55 +106,87 @@ class AlgorithmsOptions():
         Temperatura minima para SA
     cooling : Enum
         Tipo de enfriamiento para SA
-
+    pop_size : int
+        Tamaño de la poblacion 
+    offspring_size : int
+        Cantidad de hijos      
+    pselection_type : Enum
+        Seleccion de padres       
+    crossover_type : Enum
+        Cruzamiento
+    mutation_type : Enum
+        Mutacion
+    mutation_prob : float
+        Probabilidad de mutacion
+    selection_strategy : Enum
+        Estrategia de seleccion de la nueva poblacion
+    gselection_type : Enum
+        Seleccion de la nueva poblacion
     Methods
     -------
-    __init__(args, **keyargs)
+    __init__(args :list, **keyargs :dict)
         Clase para configurar y leer todas las opciones que pueda tener una metaheristica recibidas como atributo
-    readOptions(argv, keyargs)
+    readOptions(argv :list, keyargs :dict)
         Clase que lee las opciones introducidas como atributo y por definicion
     validateOptions()
         Validar que algunos paramaetros para los algoritmos sean coerentes
+    generalArgs(args :any, kwargs :dict)
+        Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos
+    saArgs(args :any, kwargs :dict)
+        Procesar los argumentos de Simulated Annealing
+    gaArgs(args :any, kwargs :dict)
+        Procesar los argumentos de Algoritmo Genetico
+    printOptions()
+        Mostrar las opciones y parametros finales
     """
     
     # OPCIONES GENERALES
     # Archivo para imprimir la solucion
-    output = "solucion.txt"
-	
+    output = "solucion.txt"	
     # Archivo de la instancia 
-    instance = "instances/burma14.tsp"
-    
+    instance = "instances/burma14.tsp"    
     # Semilla para el generador de numero aleatorios 
-    seed = 0
-    
+    seed = 0    
     # Tipo de metaheuristica a ejecutar 
-    metaheuristic = MHType.SA
-    
+    metaheuristic = MHType.SA    
     # Tipo del movimiento para la metaheuristica 
     move = TSPMove.SWAP
-
     # Evaluaciones maximas
     max_evaluations = 1000
-
+    # Numero de iteraciones maximas
+    max_iterations = 20
     # Solucion Inicial
     initial_solution = InitialSolution.DETERMINISTIC
-    
     # Modo silencioso
     silent = False
-
 
     # OPCIONES PARA SIMULATED ANNEALING 
     # Parametro alfa para el enfriamiento
     alpha = 0.98
-    
     # Temperatura inicial 
     t0 = 1000.0
-    
     # Temperatura minima 
-    tmin = 900.0
-    
+    tmin = 900.0    
     # Tipo de enfriamiento
     cooling = CoolingType.GEOMETRIC;
+
+    # OPCIONES PARA ALGORITMO GENETICO 
+    # Tamaño de la poblacion 
+    pop_size = 10
+	# Cantidad de hijos
+    offspring_size = 20
+    # Seleccion de padres
+    pselection_type = SelectionType.RANDOM
+    # Cruzamiento
+    crossover_type = CrossoverType.OX
+    # Mutacion
+    mutation_type = MutationType.SWAP
+    # probabilidad de mutacion 
+    mutation_prob = 0.2
+    # Estrategia de seleccion de la nueva poblacion
+    selection_strategy = SelectionStrategy.MULAMBDA
+    # Seleccion de la nueva poblacion
+    gselection_type = SelectionType.RANDOM
 
     def __init__(self, argv=[], **kwargs) -> None:
 
@@ -145,26 +214,48 @@ class AlgorithmsOptions():
         
         parser = argparse.ArgumentParser()
         # Declarar y definir argumentos
-        # Argumentos generales
+        # Definir argumentos generales
         parser.add_argument("-s", "--silent", help="Ejecuta sin mostrar los cambios en cada ciclo de los algoritmos", action="store_true")
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
-        parser.add_argument("-o", "--output", help="Nombre del archivo de salida para la solucion")
+        parser.add_argument("-out", "--output", help="Nombre del archivo de salida para la solucion")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
+        parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
         parser.add_argument("-is", "--insol", help="Solucion inicial [ RANDOM | NEAREST_N | DETERMINISTIC ]")
 
-        # Argumentos de Simulated Annealing
+        # Definir argumentos de Simulated Annealing
         parser.add_argument("-a", "--alpha", help="Parametro alfa para el esquema geometrico ]0,1]")
         parser.add_argument("-t0", "--tini", help="Temperatura inicial ]0,DOUBLE_MAX]")
         parser.add_argument("-tm", "--tmin", help="Temperatura minima ]0,DOUBLE_MAX]")
         parser.add_argument("-c", "--cooling", help="Esquema de enfriamiento de la temperatura [ geometric | log | linear ]")
 
-
+        # Definir argumentos de Algoritmo Genetico
+        parser.add_argument("-p", "--psize", help="Tamaño de la poblacion ]0,INT_MAX]")
+        parser.add_argument("-o", "--osize", help="Cantidad de hijos a generar ]0,INT_MAX]")
+        parser.add_argument("-ps", "--pselection", help="Operador de seleccion de padres [ random | best | roulette | tournament ]")
+        parser.add_argument("-cr", "--crossover", help="Operador de crossover [ox, opx, pmx]")
+        parser.add_argument("-mu", "--mutation", help="Operador de mutacion [swap | two_opt]")
+        parser.add_argument("-mp", "--mprobability", help="Probabilidad de mutacion [0.0,1.0]")
+        parser.add_argument("-gs", "--gselection", help="Operador de seleccion de poblacion [ random | best | roulette | tournament ]")
+        parser.add_argument("-g", "--gstrategy", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda]")
+        # Procesar argumentos
         args = parser.parse_args()
 
-        # Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos
+        # Procesar argumentos generales
+        self.generalArgs(args, kwargs)
+        # Procesar argumentos de Simulated Annealing
+        self.saArgs(args, kwargs)
+        # Procesar argumentos de Algoritmo Genetico
+        self.gaArgs(args, kwargs)        
+        # Validar logica de opciones
+        self.validateOptions()
+        
+
+    def generalArgs(self, args :any, kwargs :dict) -> None:
+        """Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos"""
+
         # Semilla 
         if (args.seed or 'seed' in kwargs):
             try:
@@ -196,6 +287,13 @@ class AlgorithmsOptions():
             except: 
                 print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e o --evaluations) {bcolors.ENDC}")
 
+        # Numero maximo de iteraciones
+        if (args.iterations or 'iterations' in kwargs):
+            try:
+                self.max_iterations = int(args.iterations) if args.iterations else int(kwargs['iterations'])
+            except: 
+                print(f"{bcolors.FAIL}Error: El numero de iteraciones debe ser un numero entero (-it o --iterations) {bcolors.ENDC}")
+
         # Seleccion del movimiento para la metaheuristica
         if (args.move or 'move' in kwargs):
             val = args.move.lower() if args.move else kwargs['move'].lower()
@@ -216,10 +314,14 @@ class AlgorithmsOptions():
                 self.initial_solution = InitialSolution.DETERMINISTIC
             else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is o --inso) {bcolors.ENDC}")    
 
+        # Modo de salida reducido para no mostrar todos los cambios en los ciclos de los algoritmos
         if (args.silent):
             self.silent = True
-            
-        # Procesar los argumentos de Simulated Annealing
+
+
+    def saArgs(self, args :any, kwargs :dict) -> None:
+        """Procesar los argumentos de Simulated Annealing"""
+
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
             val = args.cooling.lower() if args.cooling else kwargs['cooling'].lower()
@@ -252,13 +354,92 @@ class AlgorithmsOptions():
             except:
                 print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
 
-        # Validar logica de opciones
-        self.validateOptions()
+
+    def gaArgs(self, args :any, kwargs :dict) -> None:
+        """Procesar los argumentos de Algoritmo Genetico"""
+
+        # Tamaño de la poblacion
+        if (args.psize or 'psize' in kwargs):
+            try:
+                self.pop_size = int(args.psize) if args.psize else int(kwargs['psize'])
+            except: 
+                print(f"{bcolors.FAIL}Error: El tamaño de la poblacion debe ser un numero entero (-p o --psize){bcolors.ENDC}")
+
+        # Cantidad de hijos a generar
+        if (args.osize or 'osize' in kwargs):
+            try:
+                self.offspring_size = int(args.osize) if args.osize else int(kwargs['osize'])
+            except: 
+                print(f"{bcolors.FAIL}Error: La cantidad de hijos debe ser un numero entero (-o o --osize){bcolors.ENDC}")
+
+        # Seleccion de padres
+        if (args.pselection or 'pselection' in kwargs):
+            val = args.pselection.lower() if args.pselection else kwargs['pselection'].lower()
+            if (val == 'random'):
+                self.pselection_type = SelectionType.RANDOM
+            elif (val == 'best'):
+                self.pselection_type = SelectionType.BEST
+            elif (val == 'roulette'):
+                self.pselection_type = SelectionType.ROULETTE
+            elif (val == 'tournament'):
+                self.pselection_type = SelectionType.TOURNAMENT   
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Seleccion de padres (-ps o --pselection) {bcolors.ENDC}")
         
+        # Operador de Cruzamiento
+        if (args.crossover or 'crossover' in kwargs):
+            val = args.crossover.lower() if args.crossover else kwargs['crossover'].lower()
+            if (val == 'ox'):
+                self.crossover_type = CrossoverType.OX
+            elif (val == 'opx'):
+                self.crossover_type = CrossoverType.OPX
+            elif (val == 'pmx'):
+                self.crossover_type = CrossoverType.PMX
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Operador de Cruzamiento (-o o --crossover) {bcolors.ENDC}")
+
+        # Operador de mutacion
+        if (args.mutation or 'mutation' in kwargs):
+            val = args.mutation.lower() if args.mutation else kwargs['mutation'].lower()
+            if (val == '2opt'):
+                self.mutation_type = MutationType.TWO_OPT
+            elif (val == 'swap'):
+                self.mutation_type = MutationType.SWAP
+            else: print(f"{bcolors.FAIL}Error: Tipo de mutacion no reconocido (-mu o --mutation) {bcolors.ENDC}")
+
+        # Probabilidad de mutacion
+        if (args.mprobability or 'mprobability' in kwargs):
+            try:
+                self.mutation_prob = float(args.mprobability) if args.mprobability else float(kwargs['mprobability'])
+            except: 
+                print(f"{bcolors.FAIL}Error: El valor de probabilidad de mutacion debe ser un numero en (-mp o --mprobability) {bcolors.ENDC}")
+        
+        # Operador de seleccion de poblacion
+        if (args.gselection or 'gselection' in kwargs):
+            val = args.gselection.lower() if args.gselection else kwargs['gselection'].lower()
+            if (val == 'random'):
+                self.gselection_type = SelectionType.RANDOM
+            elif (val == 'best'):
+                self.gselection_type = SelectionType.BEST
+            elif (val == 'roulette'):
+                self.gselection_type = SelectionType.ROULETTE
+            elif (val == 'tournament'):
+                self.gselection_type = SelectionType.TOURNAMENT   
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Seleccion de poblacion (-gs o --gselection) {bcolors.ENDC}")
+
+        # Estrategia de seleccion de padres
+        if (args.gstrategy or 'gstrategy' in kwargs):
+            val = args.gstrategy.lower() if args.gstrategy else kwargs['gstrategy'].lower()
+            if (val == 'mu,lambda'):
+                self.selection_strategy = SelectionStrategy.MULAMBDA
+            elif (val == 'mu+lambda'):
+                self.selection_strategy = SelectionStrategy.MUPLUSLAMBDA
+            else: print(f"{bcolors.FAIL}Error: Tipo de seleccion de padres no reconocido (-g o --gstrategy) {bcolors.ENDC}")
+
 
     def validateOptions(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
-        
+        if (self.max_evaluations <= 0 and self.max_iterations <= 0):
+            print(f"{bcolors.FAIL}Error: iteraciones o evaluaciones maximas deben ser > 0 Iteraciones: {self.max_iterations} Evaluaciones: {self.max_evaluations}{bcolors.ENDC}")
+            exit()
         if (self.max_evaluations <= 0 or self.tmin <= 0 or self.t0 <= 0):
             print(f"{bcolors.FAIL}Error: Las temperatura minima, la temperatura inicial y las evaluaciones maximas deben ser > 0, tmin: {self.tmin} t0: {self.t0} evaluaciones: {self.max_evaluations} {bcolors.ENDC}")
             exit()
@@ -268,10 +449,19 @@ class AlgorithmsOptions():
         if (self.t0 <= self.tmin):
             print(f"{bcolors.FAIL}Error: t0 debe ser > tmin, valor tmin: {self.tmin} valor t0: {self.t0}{bcolors.ENDC}")
             exit()
-
+        if (self.mutation_prob > 1.0 or self.mutation_prob < 0.0 ):
+            print(f"{bcolors.FAIL}Error: la probabilidad de mutacion debe ser [0.0, 1.0]: {self.mutation_prob}{bcolors.ENDC}")
+            exit()
+        if (self.selection_strategy == SelectionStrategy.MULAMBDA and self.pop_size > self.offspring_size):
+            print(f"{bcolors.FAIL}Error: con (mu,lambda) la poblacion (-p/psize) debe ser >= que los hijos (-o/osize){bcolors.ENDC}")
+            exit()
+        if (self.pop_size <= 1):
+            print(f"{bcolors.FAIL}Error: tamaño de la poblacion (-p/psize) debe ser > 1{bcolors.ENDC}")
+            exit()
+            
                    
     def printOptions(self) -> None:
-        """ Mostrar las opciones finales al inicializar la clase """
+        """ Mostrar las opciones y parametros finales """
 
         # Opciones generales
         print(f"{bcolors.HEADER}\n\t\tOPCIONES GENERALES\n {bcolors.ENDC}")        
@@ -281,6 +471,7 @@ class AlgorithmsOptions():
         print(f"{bcolors.OKBLUE}Tipo del movimiento para la metaheuristica: {bcolors.ENDC}{self.move.value}")
         print(f"{bcolors.OKBLUE}Semilla para el generador de numero aleatorios: {bcolors.ENDC}{self.seed}")
         print(f"{bcolors.OKBLUE}Evaluaciones maximas: {bcolors.ENDC}{self.max_evaluations}")
+        print(f"{bcolors.OKBLUE}Iteraciones maximas: {bcolors.ENDC}{self.max_iterations}")
         print(f"{bcolors.OKBLUE}Solucion Inicial: {bcolors.ENDC}{self.initial_solution.value}")
 
         # Opciones para Simulated Annealing
@@ -290,5 +481,15 @@ class AlgorithmsOptions():
             print(f"{bcolors.OKBLUE}Temperatura inicial: {bcolors.ENDC}{self.t0}")
             print(f"{bcolors.OKBLUE}Temperatura minima: {bcolors.ENDC}{self.tmin}")
             print(f"{bcolors.OKBLUE}Tipo de enfriamiento: {bcolors.ENDC}{self.cooling.value}")
+        elif (self.metaheuristic == MHType.GA):
+            print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA ALGORITMO GENETICO\n {bcolors.ENDC}")        
+            print(f"{bcolors.OKBLUE}Tamaño de la poblacion: {bcolors.ENDC}{self.pop_size}")
+            print(f"{bcolors.OKBLUE}Cantidad de hijos: {bcolors.ENDC}{self.offspring_size}")
+            print(f"{bcolors.OKBLUE}Seleccion de padres: {bcolors.ENDC}{self.pselection_type.value}")
+            print(f"{bcolors.OKBLUE}Tipo de cruzamiento: {bcolors.ENDC}{self.crossover_type.value}")
+            print(f"{bcolors.OKBLUE}Tipo de mutacion: {bcolors.ENDC}{self.mutation_type.value}")
+            print(f"{bcolors.OKBLUE}Probabilidad de mutacion: {bcolors.ENDC}{self.mutation_prob}")
+            print(f"{bcolors.OKBLUE}Estrategia de seleccion para las nuevas poblaciones: {bcolors.ENDC}{self.selection_strategy.value}")
+            print(f"{bcolors.OKBLUE}Tipo de seleccion de la nueva poblacion: {bcolors.ENDC}{self.gselection_type.value}")
             
         print()
