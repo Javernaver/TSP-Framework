@@ -176,7 +176,7 @@ class Tour():
             new_tour[i] = self.current[i]
         
         # invertir el orden del tour entre [s,e] 
-        aux = 0;
+        aux = 0
         for i in range(s,e+1):
             new_tour[i] = self.current[e-aux] # intercambiar nodos
             aux += 1
