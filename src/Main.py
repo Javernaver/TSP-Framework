@@ -49,6 +49,8 @@ class Main():
             solver.printSolFile(options.output)
             # Escribir la solucion por consola
             solver.print_best_solution()
+        elif (options.metaheuristic == MHType.GA):
+            pass
         # tiempo final de ejecucion
         end = timer()
         print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.2f} segundos{bcolors.ENDC}")
