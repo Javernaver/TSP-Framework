@@ -1,12 +1,12 @@
+import csv
+from timeit import default_timer as timer
+from datetime import datetime
+from math import e, log
+from pathlib import Path
 from src.Utilities import bcolors, random
 from src.AlgorithmsOptions import AlgorithmsOptions, TSPMove, CoolingType
 from src.TSP import TSP
 from src.Tour import Tour
-from math import e, log
-from timeit import default_timer as timer
-import csv
-from datetime import datetime
-from pathlib import Path
 
 class SimulatedAnnealing():
     
@@ -20,9 +20,10 @@ class SimulatedAnnealing():
     alpha = 0.0
     # Mejor tour 
     best_tour :Tour
-
-    # numero de evaluacion
+    # numero de evaluaciones
     evaluations = 1
+    # tiempo de ejecucion de Simulated Annealing
+    total_time = 0.0
 
     # Opciones
     options :AlgorithmsOptions
@@ -36,13 +37,13 @@ class SimulatedAnnealing():
             self.options = options
         # Si el objeto con el problema tsp no esta incluido
         if not problem:
-            self.problem = TSP(options.instance)
+            self.problem = TSP(self.options.instance)
         else:
             self.problem = problem
 
-        self.cooling = options.cooling
-        self.move_type = options.move
-        self.alpha = options.alpha
+        self.cooling = self.options.cooling
+        self.move_type = self.options.move
+        self.alpha = self.options.alpha
         
         self.best_tour = Tour(problem=self.problem, type_initial_sol=self.options.initial_solution)
 
@@ -54,6 +55,7 @@ class SimulatedAnnealing():
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol()
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de ejecucion de Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.2f} segundos{bcolors.ENDC}")
         self.updateTrajectory()
 
     def search(self, first_solution :Tour = None) -> None:
@@ -80,13 +82,15 @@ class SimulatedAnnealing():
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
 
-        # tiempo inicial de iteraciones
+        # tiempo inicial para iteraciones y condicion de termino por tiempo
         start = timer()
+        end = timer()
         if not self.options.silent:
             print(f"{bcolors.BOLD}\nEvaluacion | Temperatura | Tiempo | Detalle{bcolors.ENDC}", end='')
         else: print(f"{bcolors.BOLD}\nEjecutando Simulated Annealing...{bcolors.ENDC}")
+
         # Bucle principal del algoritmo
-        while (self.terminationCondition(temperature, self.evaluations)):
+        while (self.terminationCondition(temperature, self.evaluations, end-start)):
             # Generar un vecino aleatoriamente
             neighbor_tour.randomNeighbor(self.move_type)
 
@@ -126,10 +130,13 @@ class SimulatedAnnealing():
             # reducir la temperatura y aumentar las evaluaciones
             temperature = self.reduceTemperature(temperature, self.evaluations)
             self.evaluations += 1
+        
+        # actualizar tiempo total de busqueda de Simulated Annealing
+        self.total_time = timer() - start
         print()   
 		
 
-    def terminationCondition(self, termperature :float, evaluations :int) -> bool:
+    def terminationCondition(self, termperature :float, evaluations :int, time :float) -> bool:
         """ Funcion que contiene la condicion de termino para el ciclo principal de Simulated Annealing """
         # Criterio de termino de la temperatura
         if (self.options.tmin > 0):
@@ -139,6 +146,11 @@ class SimulatedAnnealing():
         # Criterio de termino de las evaluciones
         if (self.options.max_evaluations > 0):
             if (evaluations > self.options.max_evaluations):
+                return False
+        
+        # Criterio de termino por tiempo
+        if (self.options.max_time > 0):
+            if (time > self.options.max_time):
                 return False
         
         return True

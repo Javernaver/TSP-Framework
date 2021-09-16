@@ -155,6 +155,8 @@ class AlgorithmsOptions():
     max_evaluations = 1000
     # Numero de iteraciones maximas
     max_iterations = 20
+    # Tiempo de ejecucion maximo
+    max_time = 60.0
     # Solucion Inicial
     initial_solution = InitialSolution.DETERMINISTIC
     # Modo silencioso
@@ -224,6 +226,7 @@ class AlgorithmsOptions():
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
         parser.add_argument("-is", "--insol", help="Solucion inicial [ RANDOM | NEAREST_N | DETERMINISTIC ]")
+        parser.add_argument("-mt", "--maxtime", help="Limite de tiempo de ejecucion en segundos")
 
         # Definir argumentos de Simulated Annealing
         parser.add_argument("-a", "--alpha", help="Parametro alfa para el esquema geometrico ]0,1]")
@@ -239,7 +242,7 @@ class AlgorithmsOptions():
         parser.add_argument("-mu", "--mutation", help="Operador de mutacion [swap | two_opt]")
         parser.add_argument("-mp", "--mprobability", help="Probabilidad de mutacion [0.0,1.0]")
         parser.add_argument("-gs", "--gselection", help="Operador de seleccion de poblacion [ random | best | roulette | tournament ]")
-        parser.add_argument("-g", "--gstrategy", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda]")
+        parser.add_argument("-g", "--gstrategy", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda ]")
         # Procesar argumentos
         args = parser.parse_args()
 
@@ -255,6 +258,13 @@ class AlgorithmsOptions():
 
     def argsGeneral(self, args :any, kwargs :dict) -> None:
         """Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos"""
+
+        # Maximo tiempo de ejecucion 
+        if (args.maxtime or 'maxtime' in kwargs):
+            try:
+                self.max_time = float(args.maxtime) if args.maxtime else float(kwargs['maxtime'])
+            except: 
+                print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s o --seed){bcolors.ENDC}")
 
         # Semilla 
         if (args.seed or 'seed' in kwargs):
@@ -473,6 +483,7 @@ class AlgorithmsOptions():
         print(f"{bcolors.OKBLUE}Evaluaciones maximas: {bcolors.ENDC}{self.max_evaluations}")
         print(f"{bcolors.OKBLUE}Iteraciones maximas: {bcolors.ENDC}{self.max_iterations}")
         print(f"{bcolors.OKBLUE}Solucion Inicial: {bcolors.ENDC}{self.initial_solution.value}")
+        print(f"{bcolors.OKBLUE}Limite de tiempo de ejecucion: {bcolors.ENDC}{self.max_time} segundos")
 
         # Opciones para Simulated Annealing
         if (self.metaheuristic == MHType.SA):
