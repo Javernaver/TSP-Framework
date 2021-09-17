@@ -1,3 +1,4 @@
+from src.Algorithms.GeneticAlgorithm import GeneticAlgorithm
 from src.Utilities import bcolors
 from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType, TSPMove
@@ -50,7 +51,11 @@ class Main():
             # Escribir la solucion por consola
             solver.print_best_solution()
         elif (options.metaheuristic == MHType.GA):
-            pass
+            # Crear solver
+            solver = GeneticAlgorithm(options, problem)
+            # Ejecutar la busqueda
+            solver.search()
+
         # tiempo final de ejecucion
         end = timer()
         print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.2f} segundos{bcolors.ENDC}")
