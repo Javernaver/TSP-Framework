@@ -4,7 +4,7 @@ from datetime import datetime
 from math import e, log
 from pathlib import Path
 from src.Utilities import bcolors, random
-from src.AlgorithmsOptions import AlgorithmsOptions, TSPMove, CoolingType
+from src.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, TSPMove, CoolingType
 from src.TSP import TSP
 from src.Tour import Tour
 
@@ -45,7 +45,7 @@ class SimulatedAnnealing():
         self.move_type = self.options.move
         self.alpha = self.options.alpha
         
-        self.best_tour = Tour(problem=self.problem, type_initial_sol=self.options.initial_solution)
+        self.best_tour = Tour(problem=self.problem, type_initial_sol=InitialSolution.DETERMINISTIC)
 
         print(f"{bcolors.HEADER}\nIniciando Simulated Annealing...{bcolors.ENDC}")
 
@@ -59,8 +59,7 @@ class SimulatedAnnealing():
         self.updateTrajectory()
 
     def search(self, first_solution :Tour = None) -> None:
-        """ Esta funcion ejecuta la busqueda de simulated annealing desde la solucion inicial
-        (initial_solution, el resultadofinal puede ser encontrado en best_tour) """
+        """ Ejecuta la busqueda de Simulated Annealing desde una solucion inicial """
 
         # Si el atributo opcional de la solucion inicial no esta incluido
         if not first_solution:
@@ -187,8 +186,8 @@ class SimulatedAnnealing():
         # usar el archivo en modo append
         with open("trajectory/SATrajectory.csv", "a", newline="\n") as csvfile:
             
-            fields = ["solution","cost","instance","date","alpha","t0","tmin","cooling","seed","move","max_evaluations","initial_solution"]
-            writer = csv.DictWriter(csvfile, fieldnames=fields)
+            fields = ["solution","cost","instance","date","alpha","t0","tmin","cooling","seed","move","max_evaluations","max_time","initial_solution"]
+            writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fields)
             # Si la posicion de el archivo es cero se escriben los headers
             if not csvfile.tell():
                 writer.writeheader()
@@ -197,4 +196,4 @@ class SimulatedAnnealing():
             sol = " ".join([str(elem) for elem in self.best_tour.current])
 
             # escribir la mejor solucion y todas las caracteristicas de su ejecucion
-            writer.writerow({"solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, "date": datetime.today(), "alpha": self.options.alpha, "t0": self.options.t0, "tmin": self.options.tmin, "cooling": self.options.cooling.value, "seed": self.options.seed, "move": self.options.move.value, "max_evaluations": self.options.max_evaluations, "initial_solution": self.options.initial_solution.value})
+            writer.writerow({"solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, "date": datetime.today(), "alpha": self.options.alpha, "t0": self.options.t0, "tmin": self.options.tmin, "cooling": self.options.cooling.value, "seed": self.options.seed, "move": self.options.move.value, "max_evaluations": self.options.max_evaluations, "max_time": self.options.max_time, "initial_solution": self.options.initial_solution.value})

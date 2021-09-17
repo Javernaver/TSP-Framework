@@ -226,7 +226,7 @@ class AlgorithmsOptions():
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
         parser.add_argument("-is", "--insol", help="Solucion inicial [ RANDOM | NEAREST_N | DETERMINISTIC ]")
-        parser.add_argument("-mt", "--maxtime", help="Limite de tiempo de ejecucion en segundos")
+        parser.add_argument("-t", "--time", help="Limite de tiempo de ejecucion en segundos")
 
         # Definir argumentos de Simulated Annealing
         parser.add_argument("-a", "--alpha", help="Parametro alfa para el esquema geometrico ]0,1]")
@@ -248,23 +248,26 @@ class AlgorithmsOptions():
 
         # Procesar argumentos generales
         self.argsGeneral(args, kwargs)
-        # Procesar argumentos de Simulated Annealing
-        self.argsSA(args, kwargs)
-        # Procesar argumentos de Algoritmo Genetico
-        self.argsGA(args, kwargs)        
+        
+        if self.metaheuristic == MHType.SA:
+            # Procesar argumentos de Simulated Annealing
+            self.argsSA(args, kwargs)
+        elif self.metaheuristic == MHType.GA:
+            # Procesar argumentos de Algoritmo Genetico
+            self.argsGA(args, kwargs)        
         # Validar logica de opciones
         self.validateOptions()
         
 
-    def argsGeneral(self, args :any, kwargs :dict) -> None:
+    def argsGeneral(self, args :argparse.Namespace, kwargs :dict) -> None:
         """Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos"""
 
         # Maximo tiempo de ejecucion 
-        if (args.maxtime or 'maxtime' in kwargs):
+        if (args.time or 'time' in kwargs):
             try:
-                self.max_time = float(args.maxtime) if args.maxtime else float(kwargs['maxtime'])
+                self.max_time = float(args.time) if args.time else float(kwargs['time'])
             except: 
-                print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s o --seed){bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El tiempo maximo debe ser un numero (-t o --time){bcolors.ENDC}")
 
         # Semilla 
         if (args.seed or 'seed' in kwargs):
@@ -329,7 +332,7 @@ class AlgorithmsOptions():
             self.silent = True
 
 
-    def argsSA(self, args :any, kwargs :dict) -> None:
+    def argsSA(self, args :argparse.Namespace, kwargs :dict) -> None:
         """Procesar los argumentos de Simulated Annealing"""
 
         # Seleccion del esquema de enfriamiento
@@ -365,7 +368,7 @@ class AlgorithmsOptions():
                 print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
 
 
-    def argsGA(self, args :any, kwargs :dict) -> None:
+    def argsGA(self, args :argparse.Namespace, kwargs :dict) -> None:
         """Procesar los argumentos de Algoritmo Genetico"""
 
         # Tamaño de la poblacion

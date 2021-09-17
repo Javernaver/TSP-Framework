@@ -1,6 +1,5 @@
-from src.Utilities import bcolors
+from src.Utilities import bcolors, random
 from src.TSPlibReader import TSPlibReader
-import src.Utilities as util
 
 class TSP():
     """
@@ -114,8 +113,8 @@ class TSP():
             return True
 
         print(f"{bcolors.FAIL}Error: vector solucion:{bcolors.ENDC} ", end='')
-        for i in range(self.nodes):
-            print(f"{bcolors.FAIL}{tour[i]}{bcolors.ENDC}", end=" ")
+        for elem in tour:
+            print(f"{bcolors.FAIL}{elem}{bcolors.ENDC}", end=" ")
         print()
         return False
         
@@ -123,8 +122,8 @@ class TSP():
         """ Muestra la solucion y costo """
 
         print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
-        for i in range(self.nodes+1):
-            print(f"{bcolors.OKCYAN}{tour[i]}{bcolors.ENDC}", end=' ')
+        for elem in tour:
+            print(f"{bcolors.OKCYAN}{elem}{bcolors.ENDC}", end=' ')
         print(f"{bcolors.BOLD}\nCosto: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
 
     def random_tour(self) -> list:
@@ -133,7 +132,7 @@ class TSP():
         # crear lista con tour a reordenar
         tour = list(range(self.nodes))
         # reordenar aleatoriamente el tour
-        util.random.shuffle(tour)
+        random.shuffle(tour)
         # asignar que el ultimo nodo sea igual al primero
         tour.append(tour[0])
 
@@ -147,7 +146,7 @@ class TSP():
 
         # Si el nodo inicial es menor que 0
         if (start < 0):
-            start = util.random.randint(0, self.nodes-1)
+            start = random.randint(0, self.nodes-1)
         tour[0] = start
         selected[start] = True
 
