@@ -11,39 +11,35 @@ from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, Selectio
 
 class GeneticAlgorithm():
 
-    # Problema 
-    problem: TSP	
-    # Parametro tamaño de la poblacion 
-    pop_size = 10	
-    # Cantidad de hijos
-    offspring_size = 20	
-    # Seleccion de padres 
-    pselection_type = SelectionType.RANDOM	
-    # Cruzamiento 
-    crossover_type = CrossoverType.OX	
-    # Mutacion 
-    mutation_type = MutationType.SWAP	
-    # Probabilidad de mutacion 
-    mutation_prob = 0.2
-    # Estrategia de seleccion de la nueva poblacion 
-    selection_strategy = SelectionStrategy.MULAMBDA
-    # Tipo de seleccion de la poblacion
-    gselection_type = SelectionType.RANDOM
+    problem: TSP # Problema 	
+    
+    pop_size = 10 # Parametro tamaño de la poblacion 	
+    
+    offspring_size = 20	# Cantidad de hijos
+     
+    pselection_type = SelectionType.RANDOM # Seleccion de padres
+    
+    crossover_type = CrossoverType.OX # Cruzamiento 	
+     
+    mutation_type = MutationType.SWAP # Mutacion	
+     
+    mutation_prob = 0.2 # Probabilidad de mutacion
+     
+    selection_strategy = SelectionStrategy.MULAMBDA # Estrategia de seleccion de la nueva poblacion
+    
+    gselection_type = SelectionType.RANDOM # Tipo de seleccion de la poblacion
+    
+    elitism = 0 # Soluciones seleccionadas por elitismo 
 
-    # Soluciones seleccionadas por elitismo 
-    elitism = 0
+    best_tour :Tour # Mejor tour 
+    
+    total_time = 0.0 # tiempo de ejecucion de Algoritmo Genetico
+    
+    iterations = 1 # numero de iteraciones
+    
+    evaluations = 1 # numero de evaluaciones
 
-    # Mejor tour 
-    best_tour :Tour
-    # tiempo de ejecucion de Algoritmo Genetico
-    total_time = 0.0
-    # numero de iteraciones
-    iterations = 1
-    # numero de evaluaciones
-    evaluations = 1
-
-    # Opciones
-    options :AlgorithmsOptions
+    options: AlgorithmsOptions # Opciones
 
     def __init__(self, options: AlgorithmsOptions = None, problem: TSP = None) -> None:
         # Si por el objeto con las opciones no es enviado al iniciar la clase
@@ -85,11 +81,12 @@ class GeneticAlgorithm():
         
         parents = []
         # Inicializar poblacion
-        print(f"{bcolors.BOLD}Generando poblacion inicial ...{bcolors.ENDC}{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Generando poblacion inicial...{bcolors.ENDC}{bcolors.ENDC}")
         
         population = Population(pop_size=self.pop_size, problem=self.problem)
-        #for i in population.pop:
-         #   print(i.cost)
+        population.orderPopulation()
+        for i in population.pop:
+            print(i.cost)
 
     def updateTrajectory(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
