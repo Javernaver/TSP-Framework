@@ -5,11 +5,10 @@ import src.Utilities as util
 
 class Tour():
 
-    # Instancia del problema
-    problem :TSP
-    # Solucion actual
-    current = []
-    cost = 0
+    problem :TSP # Instancia del problema
+    
+    current = [] # Solucion actual
+    cost = 0 # costo solucion actual
 
     def __init__(self, **kwargs) -> None:
 
@@ -42,8 +41,8 @@ class Tour():
         # Determinar costo de la solucion inicial
         self.cost = self.problem.compute_tour_length(self.current)
 
-    def duplicate(self, tour) -> None:
-        """ Copia una solicion recibida por parametro actualizando la solucion actual """
+    def copy(self, tour: 'Tour') -> None:
+        """ Copia una solucion de otra instancia del objeto recibida por parametro actualizando la solucion actual """
         self.current = tour.current.copy()
         self.cost = tour.cost
 
@@ -208,7 +207,7 @@ class Tour():
         else:
             self.swap(n1, n2)
 
-    def printToFile(self, filename :str) -> None:
+    def printToFile(self, filename: str) -> None:
         """ Guardar la solucion para una instacia y ejecucion en un archivo recibido por parametro """
         if not filename:
             return

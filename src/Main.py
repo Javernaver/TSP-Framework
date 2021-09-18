@@ -26,8 +26,8 @@ class Main():
             Lista con los argumentos que pueda tener al inicializar la clase
 
         """
-        # tiempo inicial de ejecucion
-        start = timer()
+        
+        start = timer() # tiempo inicial de ejecucion
         # leer e inicializar las opciones 
         options = AlgorithmsOptions(argv)
 
@@ -55,7 +55,6 @@ class Main():
             solver = GeneticAlgorithm(options, problem)
             # Ejecutar la busqueda
             solver.search()
-
-        # tiempo final de ejecucion
-        end = timer()
+ 
+        end = timer() # tiempo final de ejecucion
         print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.2f} segundos{bcolors.ENDC}")

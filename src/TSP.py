@@ -25,18 +25,14 @@ class TSP():
         Clase constructora, lee todas las opciones que pueda tener el problema
    
     """
+ 
+    nodes = 0 # Numero de Nodos
 
-    # Numero de Nodos
-    nodes = 0
+    distances = [[]] # Matriz con las distacias
 
-    # Matriz con las distacias
-    distances = [[]]
+    neighbours = [[]] # Matriz con vecinos mas cercanos 
 
-    # Matriz con vecinos mas cercanos 
-    neighbours = [[]]
-
-    # Instancia TSPlibReader
-    instance :TSPlibReader
+    instance: TSPlibReader # Instancia TSPlibReader que lee el archivo y calcula las distancias
 
 
     def __init__(self, filename: str) -> None:
@@ -52,8 +48,6 @@ class TSP():
         
         # obtener tamano de la instancia 
         self.nodes = self.instance.n
-        #print(self.compute_tour_length([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0]))
-        #self.print_solution_and_cost([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 11, 13, 0])
 
         #self.print_distances()
 
@@ -119,28 +113,24 @@ class TSP():
         return False
         
     def print_solution_and_cost(self, tour: list) -> None:
-        """ Muestra la solucion y costo """
-
+        """ Muestra la solucion y costo de un tour """
         print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
         for elem in tour:
             print(f"{bcolors.OKCYAN}{elem}{bcolors.ENDC}", end=' ')
         print(f"{bcolors.BOLD}\nCosto: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
 
     def random_tour(self) -> list:
-        """ Generar una solucion aleatoria """
-
+        """ Genera una solucion aleatoria """
         # crear lista con tour a reordenar
         tour = list(range(self.nodes))
         # reordenar aleatoriamente el tour
         random.shuffle(tour)
         # asignar que el ultimo nodo sea igual al primero
         tour.append(tour[0])
-
         return tour
     
     def greedy_nearest_n(self, start: int) -> list:
-        """ Generar una solucion del tsp usando la heuristica del nodo mas cercano comenzando del nodo start """
-
+        """ Genera una solucion del tsp usando la heuristica del nodo mas cercano comenzando del nodo start """
         tour = [0] * self.nodes
         selected = [False] * self.nodes
 
@@ -161,8 +151,7 @@ class TSP():
         return tour
     
     def deterministic_tour(self) -> list:
-        """ Generar una solucion deterministica """
-
+        """ Genera una solucion deterministica """
         # Crear lista deterministica (rango secuencial 0 al numero de nodos)
         tour = list(range(self.nodes))
         # Retornar al inicio

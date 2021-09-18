@@ -141,54 +141,54 @@ class AlgorithmsOptions():
     """
     
     # OPCIONES GENERALES
-    # Archivo para imprimir la solucion
-    output = "solucion.txt"	
-    # Archivo de la instancia 
-    instance = "instances/burma14.tsp"    
-    # Semilla para el generador de numero aleatorios 
-    seed = 0    
-    # Tipo de metaheuristica a ejecutar 
-    metaheuristic = MHType.SA    
-    # Tipo del movimiento para la metaheuristica 
-    move = TSPMove.SWAP
-    # Evaluaciones maximas
-    max_evaluations = 1000
-    # Numero de iteraciones maximas
-    max_iterations = 20
-    # Tiempo de ejecucion maximo
-    max_time = 60.0
-    # Solucion Inicial
-    initial_solution = InitialSolution.DETERMINISTIC
-    # Modo silencioso
-    silent = False
+    
+    output = "solucion.txt"	# Archivo para imprimir la solucion
+    
+    instance = "instances/burma14.tsp" # Archivo de la instancia    
+    
+    seed = 0 # Semilla para el generador de numero aleatorios    
+     
+    metaheuristic = MHType.SA # Tipo de metaheuristica a ejecutar   
+     
+    move = TSPMove.SWAP # Tipo del movimiento para la metaheuristica
+    
+    max_evaluations = 1000 # Evaluaciones maximas
+    
+    max_iterations = 20 # Numero de iteraciones maximas
+    
+    max_time = 60.0 # Tiempo de ejecucion maximo
+    
+    initial_solution = InitialSolution.DETERMINISTIC # Solucion Inicial
+    
+    silent = False # Modo silencioso
 
     # OPCIONES PARA SIMULATED ANNEALING 
-    # Parametro alfa para el enfriamiento
-    alpha = 0.98
-    # Temperatura inicial 
-    t0 = 1000.0
-    # Temperatura minima 
-    tmin = 900.0    
-    # Tipo de enfriamiento
-    cooling = CoolingType.GEOMETRIC;
+    
+    alpha = 0.98 # Parametro alfa para el enfriamiento
+    
+    t0 = 1000.0 # Temperatura inicial 
+    
+    tmin = 900.0 # Temperatura minima    
+    
+    cooling = CoolingType.GEOMETRIC # Tipo de enfriamiento
 
     # OPCIONES PARA ALGORITMO GENETICO 
-    # Tamaño de la poblacion 
-    pop_size = 10
-	# Cantidad de hijos
-    offspring_size = 20
-    # Seleccion de padres
-    pselection_type = SelectionType.RANDOM
-    # Cruzamiento
-    crossover_type = CrossoverType.OX
-    # Mutacion
-    mutation_type = MutationType.SWAP
-    # probabilidad de mutacion 
-    mutation_prob = 0.2
-    # Estrategia de seleccion de la nueva poblacion
-    selection_strategy = SelectionStrategy.MULAMBDA
-    # Seleccion de la nueva poblacion
-    gselection_type = SelectionType.RANDOM
+    
+    pop_size = 10 # Tamaño de la poblacion 
+	
+    offspring_size = 20 # Cantidad de hijos
+    
+    pselection_type = SelectionType.RANDOM # Seleccion de padres
+    
+    crossover_type = CrossoverType.OX # Cruzamiento
+    
+    mutation_type = MutationType.SWAP # Mutacion
+    
+    mutation_prob = 0.2 # probabilidad de mutacion 
+    
+    selection_strategy = SelectionStrategy.MULAMBDA # Estrategia de seleccion de la nueva poblacion
+    
+    gselection_type = SelectionType.RANDOM # Seleccion de la nueva poblacion
 
     def __init__(self, argv=[], **kwargs) -> None:
 
@@ -259,9 +259,8 @@ class AlgorithmsOptions():
         self.validateOptions()
         
 
-    def argsGeneral(self, args :argparse.Namespace, kwargs :dict) -> None:
+    def argsGeneral(self, args: argparse.Namespace, kwargs :dict) -> None:
         """Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos"""
-
         # Maximo tiempo de ejecucion 
         if (args.time or 'time' in kwargs):
             try:
@@ -332,9 +331,8 @@ class AlgorithmsOptions():
             self.silent = True
 
 
-    def argsSA(self, args :argparse.Namespace, kwargs :dict) -> None:
+    def argsSA(self, args: argparse.Namespace, kwargs :dict) -> None:
         """Procesar los argumentos de Simulated Annealing"""
-
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
             val = args.cooling.lower() if args.cooling else kwargs['cooling'].lower()
@@ -368,9 +366,8 @@ class AlgorithmsOptions():
                 print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
 
 
-    def argsGA(self, args :argparse.Namespace, kwargs :dict) -> None:
+    def argsGA(self, args: argparse.Namespace, kwargs :dict) -> None:
         """Procesar los argumentos de Algoritmo Genetico"""
-
         # Tamaño de la poblacion
         if (args.psize or 'psize' in kwargs):
             try:
@@ -475,7 +472,6 @@ class AlgorithmsOptions():
                    
     def printOptions(self) -> None:
         """ Mostrar las opciones y parametros finales """
-
         # Opciones generales
         print(f"{bcolors.HEADER}\n\t\tOPCIONES GENERALES\n {bcolors.ENDC}")        
         print(f"{bcolors.OKBLUE}Archivo de instancia: {bcolors.ENDC}{self.instance}")
@@ -495,7 +491,7 @@ class AlgorithmsOptions():
             print(f"{bcolors.OKBLUE}Temperatura inicial: {bcolors.ENDC}{self.t0}")
             print(f"{bcolors.OKBLUE}Temperatura minima: {bcolors.ENDC}{self.tmin}")
             print(f"{bcolors.OKBLUE}Tipo de enfriamiento: {bcolors.ENDC}{self.cooling.value}")
-        elif (self.metaheuristic == MHType.GA):
+        elif (self.metaheuristic == MHType.GA): # Opciones para Algoritmo Genetico
             print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA ALGORITMO GENETICO\n {bcolors.ENDC}")        
             print(f"{bcolors.OKBLUE}Tamaño de la poblacion: {bcolors.ENDC}{self.pop_size}")
             print(f"{bcolors.OKBLUE}Cantidad de hijos: {bcolors.ENDC}{self.offspring_size}")
