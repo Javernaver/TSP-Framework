@@ -4,14 +4,17 @@ from src.Utilities import bcolors
 import src.Utilities as util
 
 class Tour():
-
-    problem :TSP # Instancia del problema
-    
-    current = [] # Solucion actual
-    cost = 0 # costo solucion actual
-
+ 
     def __init__(self, **kwargs) -> None:
 
+        # Atributos de instancia
+        self.problem: TSP # Instancia del problema
+    
+        self.current = [] # Solucion actual
+
+        self.cost = 0 # costo solucion actual
+
+        # Ssi trae el problema TSP
         if ('problem' in kwargs):
             self.problem = kwargs['problem']
         

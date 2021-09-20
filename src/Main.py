@@ -1,7 +1,7 @@
 from src.Algorithms.GeneticAlgorithm import GeneticAlgorithm
 from src.Utilities import bcolors
 from src.Tour import Tour
-from src.AlgorithmsOptions import AlgorithmsOptions, MHType, TSPMove
+from src.AlgorithmsOptions import AlgorithmsOptions, MHType
 from src.TSP import TSP
 from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
 import sys

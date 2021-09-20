@@ -43,9 +43,9 @@ class CoolingType(Enum):
 class SelectionType(Enum):
     """Tipos de seleccion de individuos
         RANDOM: Seleccion aleatoria
-	    BEST: Seleccion de los mejores (elitismo)
-	    ROULETTE: Seleccion proporcional al fitness
-	    TOURNAMENT: Seleccion de torneos k=3
+        BEST: Seleccion de los mejores (elitismo)
+        ROULETTE: Seleccion proporcional al fitness
+        TOURNAMENT: Seleccion de torneos k=3
     """
     RANDOM = 'RANDOM'
     BEST = 'BEST'
@@ -55,9 +55,8 @@ class SelectionType(Enum):
 class CrossoverType(Enum):
     """Tipos de cruzamiento disponibles
         PMX: (partially-mapped crossover) hace swap adaptando los tours
-	    O1X: (order 1 crossover) 
-	    OPX: (one point crossover) se realiza cruzamiento en un punto 
-	         utilizando una lista de referencia 
+        O1X: (order 1 crossover) 
+        OPX: (one point crossover) se realiza cruzamiento en un punto utilizando una lista de referencia 
     """
     PMX = 'PMX'
     OX = 'OX'
@@ -124,17 +123,17 @@ class AlgorithmsOptions():
         Seleccion de la nueva poblacion
     Methods
     -------
-    __init__(args :list, **keyargs :dict)
-        Clase para configurar y leer todas las opciones que pueda tener una metaheristica recibidas como atributo
+    __init__(args: list, **keyargs: dict)
+        Constructor de clase para configurar y leer todas las opciones que pueda tener una metaheristica recibidas como atributo
     readOptions(argv :list, keyargs :dict)
         Clase que lee las opciones introducidas como atributo y por definicion
     validateOptions()
         Validar que algunos paramaetros para los algoritmos sean coerentes
-    generalArgs(args :any, kwargs :dict)
+    generalArgs(args :any, kwargs: dict)
         Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos
-    saArgs(args :any, kwargs :dict)
+    saArgs(args :any, kwargs: dict)
         Procesar los argumentos de Simulated Annealing
-    gaArgs(args :any, kwargs :dict)
+    gaArgs(args :any, kwargs: dict)
         Procesar los argumentos de Algoritmo Genetico
     printOptions()
         Mostrar las opciones y parametros finales

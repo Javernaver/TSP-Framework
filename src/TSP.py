@@ -25,29 +25,17 @@ class TSP():
         Clase constructora, lee todas las opciones que pueda tener el problema
    
     """
- 
-    nodes = 0 # Numero de Nodos
-
-    distances = [[]] # Matriz con las distacias
-
-    neighbours = [[]] # Matriz con vecinos mas cercanos 
-
-    instance: TSPlibReader # Instancia TSPlibReader que lee el archivo y calcula las distancias
-
 
     def __init__(self, filename: str) -> None:
 
-        # leer instancia desde un archivo TSPlib
-        self.instance = TSPlibReader(filename)
+        # Atributos de instancia
+        self.instance = TSPlibReader(filename) # Instancia TSPlibReader que lee el archivo y calcula las distancias
 
-        # obtener matriz de distancia
-        self.distances = self.instance.distance
+        self.distances = self.instance.distance # Matriz con las distacias
 
-        # obtener vecinos mas cercanos
-        self.neighbours = self.instance.nn_list
+        self.neighbours = self.instance.nn_list # Matriz con vecinos mas cercanos 
         
-        # obtener tamano de la instancia 
-        self.nodes = self.instance.n
+        self.nodes = self.instance.n # Numero de Nodos
 
         #self.print_distances()
 

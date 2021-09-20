@@ -10,23 +10,26 @@ from src.Tour import Tour
 
 class SimulatedAnnealing():
         
-    problem: TSP # Problema TSP
     
-    cooling: CoolingType # Esquema de enfriamiento
-    
-    move_type :TSPMove # Tipo de movimiento
-    
-    alpha = 0.0 # Parametro alfa para el esquema de enfriamiento geometrico
-     
-    best_tour: Tour # Mejor tour
-    
-    evaluations = 1 # numero de evaluaciones
-    
-    total_time = 0.0 # tiempo de ejecucion de Simulated Annealing
-
-    options :AlgorithmsOptions # Opciones
-
     def __init__(self, options: AlgorithmsOptions = None, problem: TSP = None) -> None:
+
+
+        # Atributos de instancia
+        self.problem: TSP # Problema TSP
+    
+        self.cooling: CoolingType # Esquema de enfriamiento
+        
+        self.move_type: TSPMove # Tipo de movimiento
+        
+        self.alpha = 0.0 # Parametro alfa para el esquema de enfriamiento geometrico
+        
+        self.best_tour: Tour # Mejor tour
+        
+        self.evaluations = 1 # numero de evaluaciones
+        
+        self.total_time = 0.0 # tiempo de ejecucion de Simulated Annealing
+
+        self.options: AlgorithmsOptions # Opciones
         
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
@@ -76,18 +79,18 @@ class SimulatedAnnealing():
         self.best_tour.printSol()
 
         # tiempo inicial para iteraciones y condicion de termino por tiempo
-        start = timer()
-        end = timer()
+        start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
             print(f"{bcolors.BOLD}\nEvaluacion | Temperatura | Tiempo | Detalle{bcolors.ENDC}", end='')
         else: print(f"{bcolors.BOLD}\nEjecutando Simulated Annealing...{bcolors.ENDC}")
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations, end-start)):
+            
+            end = timer() # tiempo actual de iteracion
             # Generar un vecino aleatoriamente
             neighbor_tour.randomNeighbor(self.move_type)
 
-            end = timer() # tiempo actual de iteracion
             if not self.options.silent:
                 print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
 
@@ -100,7 +103,7 @@ class SimulatedAnnealing():
             else:
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
-               # print (prob, random.random())
+                
                 if (random.uniform(0,1) <= prob):
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
@@ -128,7 +131,8 @@ class SimulatedAnnealing():
 		
 
     def terminationCondition(self, termperature: float, evaluations: int, time: float) -> bool:
-        """ Funcion que contiene la condicion de termino para el ciclo principal de Simulated Annealing """
+        """ Condicion de termino para el ciclo principal de Simulated Annealing, 
+        basado en los criterios de temperatura, evaluaciones y tiempo, devuelve verdadero o falso si se debe continuar o no"""
         # Criterio de termino de la temperatura
         if (self.options.tmin > 0):
             if (termperature <= self.options.tmin):

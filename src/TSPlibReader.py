@@ -21,7 +21,6 @@ class Distance_type(Enum):
 
 class TSPlibReader():
 
- 
     # Arreglo de estructuras que contiene las coordenadas, Tipo Point
     nodeptr = []
     # Variable que indica el tipo de distancia
