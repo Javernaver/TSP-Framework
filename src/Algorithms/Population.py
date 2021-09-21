@@ -1,4 +1,4 @@
-from src.AlgorithmsOptions import SelectionType
+from src.AlgorithmsOptions import CrossoverType, SelectionType
 from src.Utilities import bcolors, random
 from src.Tour import Tour
 from src.TSP import TSP
@@ -72,7 +72,6 @@ class Population():
             self.pop.append(indivi)
             self.pop_size += 1
         elif isinstance(indivi, list): # si es una lista de individuos
-            print(self.best_index, len(self.pop), indivi)
             self.pop.extend(indivi)
             self.pop_size += len(indivi)
 
@@ -119,14 +118,38 @@ class Population():
             return self.pop[self.best_index]
         return None
 
+    def getIndividuals(self, index: list) -> list:
+        """Retorna individuos segun una lista con indices
+
+            Parameters
+            ----------
+            index : list
+                lista con los indices de los individuos
+         
+            Returns
+            -------
+            list
+                lista con los individuos requeridos
+        """
+        selected = []
+        for i in range(len(index)):
+            selected.append(self.pop[index[i]])
+
+        return selected
+
     def generateRouletteWheel(self, candidates: list) -> list:
         """ Retorna la torta de probabilidades asociadas al fitness de las soluciones entregadas, la seleccion es 
         proporcional al fitness
         Ruleta para minimizacion: p(x1) = (min + max - f(x1)) / sum(f(x))
 
+        Parameters
+        ----------
+        candidates : list
+            lista con los candidatos que participan de la ruleta 
+
         Returns
         -------
-            list[float]
+            list
                 lista que posee las probabilidades acumuladas para la seleccion de soluciones
         """
         su = 0.0
@@ -151,11 +174,16 @@ class Population():
     """ METODOS DE SELECCION DE PADRES (2) """
 
     def selectParents(self, stype: SelectionType) -> list:
-        """ Selecciona 2 padres segun el tipo de seleccion recibido por parametro 
+        """ Selecciona 2 padres segun el tipo de seleccion
+
+            Parameters
+            ----------
+            stype : SelectionType
+                tipo de seleccion
          
             Returns
             -------
-            list[int]
+            list
                 lista con los indices de los padres seleccionados
         """
         parents = []
@@ -174,7 +202,12 @@ class Population():
         return parents
 
     def selectIBest(self, size: int = 2) -> list:
-        """Selecciona la cantidad de individuos recibida por parametros (por defecto 2) en base al fitness, siendo una seleccion elitista
+        """Selecciona la cantidad de individuos recibida por parametros en base al fitness, siendo una seleccion elitista
+
+            Parameters
+            ----------
+            size : int, optional
+                tamaño de individuos a seleccionar (por defecto 2)
             
             Returns
             -------
@@ -201,8 +234,13 @@ class Population():
 
     
     def selectIRandom(self, size: int = 2) -> list:
-        """Selecciona individuos aleatoriamente (por defecto 2)
-         
+        """Selecciona individuos aleatoriamente
+
+            Parameters
+            ----------
+            size : int, optional
+                tamaño de individuos a seleccionar (por defecto 2)
+
             Returns
             -------
             list
@@ -228,7 +266,12 @@ class Population():
         return sel
 
     def selectIRoulette(self, size: int = 2) -> list:
-        """Selecciona los individuos padres en base a la ruleta (por defecto 2)
+        """Selecciona los individuos padres en base a la ruleta
+
+            Parameters
+            ----------
+            size : int, optional
+                tamaño de individuos a seleccionar (por defecto 2)
 
             Returns
             -------
@@ -252,7 +295,7 @@ class Population():
             return sel
         # Anadir candidatos a ser seleccionados y sus ids
         candidates.extend(self.pop)
-        ids = list(range(len(self.pop)))
+        ids = list(range(len(candidates)))
 
         # Seleccionar individuos
         for _ in range(size):
@@ -270,7 +313,14 @@ class Population():
         return sel
 
     def selectITournament(self, tsize: int = 3, size: int = 2) -> list:
-        """Selecciona individuos en base al fitness (por defecto 2) en un torneo (por defecto 3 participantes)
+        """Selecciona individuos en base al fitness en un torneo
+
+            Parameters
+            ----------
+            tsize : int, optional
+                tamaño de los participantes del torneo (por defecto 3)
+            size : int, optional
+                tamaño de los individuos seleccionados o ganadores del torneo (por defecto 2)
 
             Returns
             -------
@@ -305,4 +355,208 @@ class Population():
             
         return sel
     	
-  
+    
+    """ METODOS DE CRUZAMIENTO """
+
+    def crossover(self, parents_id: list, ctype: CrossoverType) -> list:
+        """Aplica el operador cruzamiento
+
+            Parameters
+            ----------
+            parents_id : list
+                lista con los indices de los individuos padres seleccionados para cruzamiento
+            ctype : CrossoverType
+                tipo de cruzamiento
+
+            Returns
+            -------
+            list
+                lista con los individuos hijos generados
+
+        """
+        offspring = []
+        parents = []
+        # Obtener indivuduos padres con los ids
+        parents.extend( self.getIndividuals(parents_id) )
+
+        # Aplicar Crossover
+        if (ctype == CrossoverType.PMX):
+            offspring.extend( self.PMXCrossover(parents) )
+        elif (ctype == CrossoverType.OX):
+            offspring.extend( self.OXCrossover(parents) )
+        elif (ctype == CrossoverType.OPX):
+            offspring.extend( self.OPXCrossover(parents) )
+        else:
+            offspring.extend( self.OXCrossover(parents) )
+
+        return offspring
+
+
+    def PMXCrossover(self, parents: list) -> list:
+        """Aplica el operador PMX a los padres
+
+            Parameters
+            ----------
+            parents : list
+                lista con los 2 individuos padres seleccionados para cruzamiento
+
+            Returns
+            -------
+            list
+                lista con los 2 hijos resultantes del cruzamiento
+        """
+        size = self.problem.getSize() # tamaño del tour
+        offspring = []
+        p1 = parents[0] # padre 1
+        p2 = parents[1] # padre 2
+        o1 = Tour(tour=p1) # hijo 1
+        o2 = Tour(tour=p2) # hijo 2
+
+        cpoint = 0 # punto de cruzamiento
+        aux = 0
+        # Obtener punto de crossover aleatoriamente
+        cpoint = random.randint(0, size-1)
+        # Generar el primer hijo
+        for i in range(cpoint):
+            aux = o1.getPosition( p2.getNode(i) )
+            o1.swap(i, aux)
+
+        # Generar el segundo hijo
+        for i in range(cpoint, size):
+            aux = o2.getPosition( p1.getNode(i) )
+            o2.swap(i, aux)
+
+        offspring.append(o1)
+        offspring.append(o2)
+        return offspring
+    	
+
+    def OXCrossover(self, parents: list) -> list:
+        """Aplica el operador OX a los padres
+
+            Parameters
+            ----------
+            parents : list
+                lista con los 2 individuos padres seleccionados para cruzamiento
+
+            Returns
+            -------
+            list
+                lista con los 2 hijos resultantes del cruzamiento
+        """
+        size = self.problem.getSize() # tamaño del tour
+        p1 = parents[0] # padre 1
+        p2 = parents[1] # padre 2
+        aux1in = [] # auxiliar para las seccion extraida del padre 1
+        aux1out = [] # auxiliar para las seccion no extraida desde el padre 2 al hijo 1
+        aux2in = [] # auxiliar para las seccion extraida del padre 2
+        aux2out = [] # auxiliar para las seccion no extraida desde el padre 1 al hijo 2
+        h1 = [] # hijo 1
+        h2 = [] # hijo 2
+        offspring = [] # lista para almacenar los hijos
+
+        # Generar numeros aleatorios con los limites para las secciones del cruzamiento 
+        r1 = random.randint(0, size-1)
+        r2 = random.randint(0, size-1)
+        while (r1 >= r2): # repetir hasta que el limite 2 sea mayor que el limite 1
+            r1 = random.randint(0, size-1)
+            r2 = random.randint(0, size-1)
+        
+        # Guardar los rangos de secciones de los padres segun los indices generados guardandolos en listas auxiliares
+        aux1in = p1.current[r1:r2] 
+        aux2in = p2.current[r1:r2]
+
+        # Guardar los elementos distintos que no se quitaron del padre 2 al hijo 1 y vice versa 
+        for i in range(size):
+            if not p2.getNode(i) in aux1in:
+                aux1out.append( p2.getNode(i) )
+            if not p1.getNode(i) in aux2in:
+                aux2out.append( p1.getNode(i) )
+            
+        #print(p2.current, p1.current)
+        #print(aux1in, len(aux1in), aux1out, len(aux1out), aux2in, len(aux2in), aux2out, len(aux2out))
+
+        # Añadir y eliminar desde las listas con los elementos no extraidos a los hijos que se generaran la cantidad de veces donde comienzan estas
+        for _ in range(r1):
+            h1.append(aux1out[0])
+            aux1out.pop(0)
+            h2.append(aux2out[0])
+            aux2out.pop(0)       
+       
+        # Añadir a los hijos las secciones extraidas de los padres
+        h1.extend(aux1in)
+        h2.extend(aux2in)
+
+        # Añadir el resto de las listas con los elementos no extraidos a los hijos que se generaran 
+        h1.extend(aux1out)
+        h2.extend(aux2out)
+       
+        
+        # Completar las rutas para que se vuelva al comienzo y concretar el tour
+        h1.append(h1[0])
+        h2.append(h2[0])
+        # Guardar los hijos como lista de tours
+        offspring.append( Tour(current=h1, problem=self.problem) )
+        offspring.append( Tour(current=h2, problem=self.problem) )
+
+        #print( r1, r2 , h1 , len(h1), h2, len(h2))
+        return offspring
+
+    def OPXCrossover(self, parents: list) -> list:
+        """Aplica el operador OPX o cruzamiento en un punto a los padres.
+
+            Parameters
+            ----------
+            parents : list
+                lista con los 2 individuos padres seleccionados para cruzamiento
+
+            Returns
+            -------
+            list
+                lista con los 2 hijos resultantes del cruzamiento
+        """
+        size = self.problem.getSize() # tamaño del tour
+        p1 = parents[0] # padre 1
+        p2 = parents[1] # padre 2
+        h1 = [] # hijo 1
+        h2 = [] # hijo 2
+        aux1in = [] # auxiliar para las seccion extraida del padre 1
+        aux1out = [] # auxiliar para las seccion no extraida desde el padre 2 al hijo 1
+        aux2in = [] # auxiliar para las seccion extraida del padre 2
+        aux2out = [] # auxiliar para las seccion no extraida desde el padre 1 al hijo 2
+        offspring = [] # lista para almacenar los hijos
+        cpoint = 0 # punto de cruzamiento
+
+        # Generar punto de cruzamiento
+        cpoint = random.randint(0, size-1)
+        # Guardar los rangos desde el punto de cruzamiento del padre 2 al hijo 1 y del padre 1 al hijo 2
+        aux1in = p2.current[cpoint:] 
+        aux1in.pop() # eliminar el ultimo nodo que es igual al inicial del tour
+        aux2in = p1.current[cpoint:]
+        aux2in.pop() # eliminar el ultimo nodo que es igual al inicial del tour
+
+        # Guardar los elementos distintos que no se quitaron del padre 1 al hijo 1 y del padre 2 al hijo 2
+        for i in range(size):
+            if not p1.getNode(i) in aux1in:
+                aux1out.append( p1.getNode(i) )
+            if not p2.getNode(i) in aux2in:
+                aux2out.append( p2.getNode(i) )
+        
+        # Agregar los elementos distintos que se encontraron despues de la extraccion de la seccion de cruzamiento
+        h1.extend(aux1out)           
+        h2.extend(aux2out)
+        
+        # Agregar los elementos extraidos del cruzamiento
+        h1.extend(aux1in)
+        h2.extend(aux2in)
+        
+        # Completar las rutas para que se vuelva al comienzo y concretar el tour
+        h1.append(h1[0])
+        h2.append(h2[0])
+        # Guardar los hijos como lista de tours
+        offspring.append( Tour(current=h1, problem=self.problem) )
+        offspring.append( Tour(current=h2, problem=self.problem) )
+        
+        #print(p1.current, p2.current, cpoint)
+        #print(h1, len(h1), h2, len(h2))
+        return offspring

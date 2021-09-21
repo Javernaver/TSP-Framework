@@ -98,11 +98,6 @@ class GeneticAlgorithm():
         # Iniciar poblacion de hijos
         offspring = Population(problem=self.problem)
         #population.printPop()
-        
-        i =0 
-        for tour in population.pop:
-            print(tour.cost, i)
-            i+=1
 
         # Imprimir mejor solución encontrada 
         print(f"{bcolors.UNDERLINE}Mejor individuo de la poblacion{bcolors.ENDC}")
@@ -124,15 +119,13 @@ class GeneticAlgorithm():
         while (self.terminationCondition(self.iterations, self.evaluations, end-start)):
             
             end = timer() # tiempo actual de iteracion
-            i = 0
             # Aplicar cruzamiento para generar poblacion de hijos
             while (offspring.pop_size < self.offspring_size):
                 parents = population.selectParents(self.pselection_type)
+                offspring.add( population.crossover(parents, self.crossover_type) )
                 
-                print(parents, i)
-                i+=1
-                offspring.pop_size += 1
-                
+            # TODO: mutacion
+
 
           
             # Actualizar contadores de iteraciones y evaluaciones, luego limpiar la poblacion de hijos
