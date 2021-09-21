@@ -14,10 +14,11 @@ class Tour():
 
         self.cost = 0 # costo solucion actual
 
-        # Ssi trae el problema TSP
+        # Si trae el problema TSP
         if ('problem' in kwargs):
             self.problem = kwargs['problem']
         
+        # Tipo de solucion incial
         if ('type_initial_sol' in kwargs):
             if (kwargs['type_initial_sol'] == InitialSolution.RANDOM):
                 self.current = self.problem.random_tour()
@@ -36,6 +37,10 @@ class Tour():
             self.current = kwargs['tour'].current.copy()
             # actualizar costo
             self.cost = kwargs['tour'].cost
+
+        # Si viene la lista con el tour
+        if ('current' in kwargs):
+            self.current = kwargs['current'].copy()
 
         if (not self.problem.tsp_check_tour(self.current)):
             print(f"{bcolors.FAIL}Error: Error al inicializar la solucion inicial {bcolors.ENDC}")
@@ -224,3 +229,15 @@ class Tour():
             file.close()
         except IOError:
             print(f"{bcolors.FAIL}No se pudo guardar el archivo... {filename} Error: {IOError}{bcolors.ENDC}")
+
+
+    def getPosition(self, node: int) -> int:
+        """Retorna el indice de un nodo"""
+        try:
+            return self.current.index(node)
+        except:
+            return -1
+
+    def getNode(self, pos: int) -> int:
+        """Retorna el nodo de un indice recibido"""
+        return self.current[pos]
