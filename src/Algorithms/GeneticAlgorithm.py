@@ -123,9 +123,10 @@ class GeneticAlgorithm():
             while (offspring.pop_size < self.offspring_size):
                 parents = population.selectParents(self.pselection_type)
                 offspring.add( population.crossover(parents, self.crossover_type) )
-                
-            # TODO: mutacion
-
+            
+            # Aplicar mutacion
+            offspring.mutation(self.mutation_prob, self.mutation_type)
+            
 
           
             # Actualizar contadores de iteraciones y evaluaciones, luego limpiar la poblacion de hijos

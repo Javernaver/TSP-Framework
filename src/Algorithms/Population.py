@@ -1,4 +1,4 @@
-from src.AlgorithmsOptions import CrossoverType, SelectionType
+from src.AlgorithmsOptions import CrossoverType, MutationType, SelectionType
 from src.Utilities import bcolors, random
 from src.Tour import Tour
 from src.TSP import TSP
@@ -8,13 +8,13 @@ class Population():
     
     def __init__(self, **kwargs) -> None:
 
-        # instancia del tsp
+        # Instancia del problema TSP
         self.problem: TSP
         # Poblacion
         self.pop = []
-        # tamaño poblacion
+        # Tamaño de la poblacion
         self.pop_size = 0
-        # indice del mejor_individuo 
+        # Indice del mejor individuo 
         self.best_index = -1
 
 
@@ -560,3 +560,56 @@ class Population():
         #print(p1.current, p2.current, cpoint)
         #print(h1, len(h1), h2, len(h2))
         return offspring
+
+
+    """ METODOS DE MUTACION """
+
+    def mutation(self, mut_probability: float, mtype: MutationType) -> None:
+        """ Aplica el operador de mutacion
+
+            Parameters
+            ----------
+            mut_probability : float
+                probabilidad de mutacion 
+            mtype : MutationType
+                tipo de mutacion 
+        """
+        if (mtype == MutationType.SWAP):
+            self.swapMutation(mut_probability)
+        elif (mtype == MutationType.TWO_OPT):
+            self.twoOptMutation(mut_probability)
+        else:
+            self.swapMutation(mut_probability)
+
+        self.searchBest()
+
+
+    def swapMutation(self, mut_probability: float) -> None:
+        """Aplica swap aleatoriamente a toda la poblacion segun la probabilidad recibida
+
+            Parameters
+            ----------
+            mut_probability : float
+                probabilidad de mutacion
+        """
+        r = 0.0
+        for i in range(self.pop_size):
+            # obtener probabilidad de [0,1]
+            r = random.random()
+            if (mut_probability > r):
+                self.pop[i].randomSwap()  
+
+    def twoOptMutation(self, mut_probability: float) -> None:
+        """Aplica el movimiento 2opt aleatoriamente a toda la poblacion segun la probabilidad recibida
+
+            Parameters
+            ----------
+            mut_probability : float
+                probabilidad de mutacion
+        """
+        r = 0.0
+        for i in range(self.pop_size):
+            # obtener probabilidad de [0,1]
+            r = random.random()
+            if (mut_probability > r):
+                self.pop[i].randomTwoOptSwap()

@@ -1,7 +1,6 @@
 from src.TSP import TSP
 from src.AlgorithmsOptions import InitialSolution, TSPMove
-from src.Utilities import bcolors
-import src.Utilities as util
+from src.Utilities import bcolors, random
 
 class Tour():
  
@@ -102,12 +101,21 @@ class Tour():
 
         # Calcular nuevo costo
         if (s_prev != e):
-            cost = cost - self.problem.get_distance(tour[s_prev], tour[s]) - self.problem.get_distance(tour[e], tour[e_next]) + self.problem.get_distance(tour[s_prev], tour[e]) + self.problem.get_distance(tour[s], tour[e_next])
+            cost = cost - self.problem.get_distance(tour[s_prev], tour[s]) \
+                        - self.problem.get_distance(tour[e], tour[e_next]) \
+                        + self.problem.get_distance(tour[s_prev], tour[e]) \
+                        + self.problem.get_distance(tour[s], tour[e_next])
         else:
-            cost = cost - self.problem.get_distance(tour[s], tour[s_next]) - self.problem.get_distance(tour[e_prev], tour[e]) + self.problem.get_distance(tour[e], tour[s_next]) + self.problem.get_distance(tour[e_prev], tour[s])
+            cost = cost - self.problem.get_distance(tour[s], tour[s_next]) \
+                        - self.problem.get_distance(tour[e_prev], tour[e]) \
+                        + self.problem.get_distance(tour[e], tour[s_next]) \
+                        + self.problem.get_distance(tour[e_prev], tour[s])
         
         if (s_next != e_next and s_next != e and s_prev != e):
-            cost = cost - self.problem.get_distance(tour[s], tour[s_next]) - self.problem.get_distance(tour[e_prev], tour[e]) + self.problem.get_distance(tour[e], tour[s_next]) + self.problem.get_distance(tour[e_prev], tour[s])
+            cost = cost - self.problem.get_distance(tour[s], tour[s_next]) \
+                        - self.problem.get_distance(tour[e_prev], tour[e]) \
+                        + self.problem.get_distance(tour[e], tour[s_next]) \
+                        + self.problem.get_distance(tour[e_prev], tour[s])
         
         return cost
 
@@ -128,6 +136,19 @@ class Tour():
         # Actualizar costo y tour
         self.cost = self.delta_cost_swap(self.current, self.cost, n1, n2)
         self.current = tour.copy()
+
+    def randomSwap(self) -> None:
+        """Aplica el operador swap entre dos nodos aleatorios"""
+        # Inicializar numeros aleatorios para realizar el swap
+        n1 = random.randint(0, self.problem.getSize())
+        n2 = random.randint(0, self.problem.getSize())
+
+        while (n1 == n2): # si los numeros son iguales
+            n2 = random.randint(0, self.problem.getSize())
+
+        # realizar swap
+        self.swap(n1, n2)
+
 
     def delta_cost_two_opt(self, tour: list, cost: int, s: int, e: int) -> int:
         """ Recalcula el costo de un tour al alplicar el movimiento 2-opt    
@@ -161,7 +182,10 @@ class Tour():
             s_prev = self.problem.getSize()-1
 
         # Calcular nuevo costo
-        cost = cost - self.problem.get_distance(tour[s_prev], tour[s]) - self.problem.get_distance(tour[e], tour[e_next]) + self.problem.get_distance(tour[s_prev], tour[e]) + self.problem.get_distance(tour[s], tour[e_next])
+        cost = cost - self.problem.get_distance(tour[s_prev], tour[s]) \
+                    - self.problem.get_distance(tour[e], tour[e_next]) \
+                    + self.problem.get_distance(tour[s_prev], tour[e]) \
+                    + self.problem.get_distance(tour[s], tour[e_next])
 
         return cost
     
@@ -198,14 +222,27 @@ class Tour():
         # Actualizar costo y tour
         self.cost = self.delta_cost_two_opt(self.current, self.cost, s, e)
         self.current = new_tour.copy()
+
+    def randomTwoOptSwap(self) -> None:
+        """Aplica el operador two_opt entre dos nodos aleatorios"""
+        # Inicializar numeros aleatorios para realizar el swap
+        n1 = random.randint(0, self.problem.getSize())
+        n2 = random.randint(0, self.problem.getSize())
+
+        while (n1 == n2 | abs(n2-n1) < 2 ): # si los numeros son iguales
+            n2 = random.randint(0, self.problem.getSize())
+
+        # realizar movimiento 2opt
+        self.twoOptSwap(n1, n2)
         
     def randomNeighbor(self, move_type: TSPMove) -> None:
         """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove"""
         
-        n1 = n2 = util.random.randint(0, self.problem.getSize())
+        n1 = random.randint(0, self.problem.getSize())
+        n2 = random.randint(0, self.problem.getSize())
         # Determinar que sean numeros diferentes
         while (n1 == n2):
-            n2 = util.random.randint(0, self.problem.getSize())
+            n2 = random.randint(0, self.problem.getSize())
 
         # Seleccionar el tipo de movimiento
         if (move_type == TSPMove.TWO_OPT):
