@@ -59,6 +59,10 @@ class Main():
             solver = GeneticAlgorithm(options, problem)
             # Ejecutar la busqueda
             solver.search()
+            # Guardar la solucion en archivo
+            solver.printSolFile(options.output)
+            # Escribir la solucion por consola
+            solver.print_best_solution()
  
         end = timer() # tiempo final de ejecucion
-        print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.2f} segundos{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
