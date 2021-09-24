@@ -56,7 +56,7 @@ class SimulatedAnnealing():
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol()
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
-        print(f"{bcolors.BOLD}Tiempo total de ejecucion de Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.2f} segundos{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de ejecucion de Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
         self.updateTrajectory()
 
     def search(self, first_solution: Tour = None) -> None:
@@ -91,8 +91,9 @@ class SimulatedAnnealing():
             # Generar un vecino aleatoriamente
             neighbor_tour.randomNeighbor(self.move_type)
 
+            # Mostrar avance iteracion
             if not self.options.silent:
-                print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}{bcolors.ENDC};", end='')
+                print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}; {bcolors.ENDC}", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
@@ -104,7 +105,7 @@ class SimulatedAnnealing():
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
                 
-                if (random.uniform(0,1) <= prob):
+                if (random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
                     if not self.options.silent:
@@ -182,7 +183,8 @@ class SimulatedAnnealing():
         # usar el archivo en modo append
         with open("trajectory/SATrajectory.csv", "a", newline="\n") as csvfile:
             
-            fields = ["solution","cost","instance","date","alpha","t0","tmin","cooling","seed","move","max_evaluations","max_time","initial_solution"]
+            fields = ["solution","cost","instance","date","alpha","t0","tmin", \
+                     "cooling","seed","move","max_evaluations","max_time","initial_solution"]
             writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fields)
             # Si la posicion de el archivo es cero se escriben los headers
             if not csvfile.tell():
@@ -192,4 +194,9 @@ class SimulatedAnnealing():
             sol = " ".join([str(elem) for elem in self.best_tour.current])
 
             # escribir la mejor solucion y todas las caracteristicas de su ejecucion
-            writer.writerow({"solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, "date": datetime.today(), "alpha": self.options.alpha, "t0": self.options.t0, "tmin": self.options.tmin, "cooling": self.options.cooling.value, "seed": self.options.seed, "move": self.options.move.value, "max_evaluations": self.options.max_evaluations, "max_time": self.options.max_time, "initial_solution": self.options.initial_solution.value})
+            writer.writerow({"solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, \
+                            "date": datetime.today(), "alpha": self.options.alpha, "t0": self.options.t0, \
+                            "tmin": self.options.tmin, "cooling": self.options.cooling.value, \
+                            "seed": self.options.seed, "move": self.options.move.value, \
+                            "max_evaluations": self.options.max_evaluations, "max_time": self.options.max_time, \
+                            "initial_solution": self.options.initial_solution.value})
