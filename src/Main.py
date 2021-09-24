@@ -1,11 +1,13 @@
+import sys
+import os
+from timeit import default_timer as timer
+
 from src.Algorithms.GeneticAlgorithm import GeneticAlgorithm
+from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
 from src.Utilities import bcolors
 from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType
 from src.TSP import TSP
-from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
-import sys
-from timeit import default_timer as timer
 
 class Main():
     """
@@ -26,7 +28,9 @@ class Main():
             Lista con los argumentos que pueda tener al inicializar la clase
 
         """
-        
+        # Activa la secuencia VT100 en Windows 10 para que funcione ANSI y se puedan cambiar se color los textos en cmd y powershell
+        os.system('')  
+        #bcolors.disable(bcolors)
         start = timer() # tiempo inicial de ejecucion
         # leer e inicializar las opciones 
         options = AlgorithmsOptions(argv)

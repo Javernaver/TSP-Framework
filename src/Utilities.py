@@ -15,6 +15,17 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+    def disable(self):
+        self.HEADER = ''
+        self.OKBLUE = ''
+        self.OKCYAN = ''
+        self.OKGREEN = ''
+        self.WARNING = ''
+        self.FAIL = ''
+        self.ENDC = ''
+        self.BOLD = ''
+        self.UNDERLINE = ''
+
 def swap2 (v :list, v2 :list, i :int, j :int) -> None:
     # Funcion: rutina auxiliar para ordenar un arreglo de enteros
     # Input: dos arreglos, dos indices
