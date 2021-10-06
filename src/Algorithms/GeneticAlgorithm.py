@@ -200,10 +200,12 @@ class GeneticAlgorithm():
         # usar el archivo en modo append
         with open("trajectory/GATrajectory.csv", "a", newline="\n") as csvfile:
             
-            fields = ["solution","cost","instance","date","pop_size","offspring_size", \
-                     "pselection_type","crossover_type","mutation_type","mutation_prob", \
-                     "selection_strategy","gselection_type","seed","move","max_evaluations",\
+            # Headers
+            fields = ["solution","cost","instance","date","pop_size","offspring_size", 
+                     "pselection_type","crossover_type","mutation_type","mutation_prob", 
+                     "selection_strategy","gselection_type","seed","move","max_evaluations",
                      "max_iterations","max_time","initial_solution"]
+
             writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fields)
             # Si la posicion de el archivo es cero se escriben los headers
             if not csvfile.tell():
@@ -213,11 +215,14 @@ class GeneticAlgorithm():
             sol = " ".join([str(elem) for elem in self.best_tour.current])
 
             # escribir la mejor solucion y todas las caracteristicas de su ejecucion
-            writer.writerow({"solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, \
-                            "date": datetime.today(), "pop_size": self.options.pop_size, \
-                            "offspring_size": self.options.offspring_size, "pselection_type": self.options.pselection_type.value, \
-                            "crossover_type": self.options.crossover_type.value, "mutation_type": self.options.mutation_type.value,\
-                            "mutation_prob": self.options.mutation_prob, "selection_strategy": self.options.selection_strategy.value, \
-                            "gselection_type": self.options.gselection_type.value, "seed": self.options.seed, "move": self.options.move.value, \
-                            "max_evaluations": self.options.max_evaluations,"max_iterations": self.options.max_iterations, \
-                            "max_time": self.options.max_time, "initial_solution": self.options.initial_solution.value})
+            writer.writerow({
+                "solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, 
+                "date": datetime.today(), "pop_size": self.options.pop_size, 
+                "offspring_size": self.options.offspring_size, "pselection_type": self.options.pselection_type.value, 
+                "crossover_type": self.options.crossover_type.value, "mutation_type": self.options.mutation_type.value,
+                "mutation_prob": self.options.mutation_prob, "selection_strategy": self.options.selection_strategy.value, 
+                "gselection_type": self.options.gselection_type.value, "seed": self.options.seed, 
+                "move": self.options.move.value, "max_evaluations": self.options.max_evaluations,
+                "max_iterations": self.options.max_iterations, "max_time": self.options.max_time,
+                "initial_solution": self.options.initial_solution.value
+            })

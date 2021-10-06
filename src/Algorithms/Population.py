@@ -91,7 +91,7 @@ class Population():
 
 
     def searchBest(self) -> None:
-        """ Busca el mejor individuo en la poblacion """
+        """ Busca el mejor individuo en la poblacion y guarda su indice en la poblacion """
         # Encontrar y guardar el indice de el individuo de la poblacion con menor costo
         if self.pop:
             self.best_index = self.pop.index( min(self.pop, key=lambda tour: tour.cost) )
@@ -155,8 +155,8 @@ class Population():
         """
         su = 0.0
         # Encontrar el minimo y el máximo en los individuos
-        mini = (min(candidates, key=lambda tour: tour.cost)).cost
-        maxi = (max(candidates, key=lambda tour: tour.cost)).cost
+        mini = ( min(candidates, key=lambda tour: tour.cost) ).cost
+        maxi = ( max(candidates, key=lambda tour: tour.cost) ).cost
         roulette = [0.0] * len(candidates)
 
         # Generar ruleta
