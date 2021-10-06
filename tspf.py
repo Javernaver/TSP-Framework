@@ -1,5 +1,5 @@
 #!/usr/bin/python
 import sys
-from src.Main import Main
+from src.Main import main
 
-Main(sys.argv)
+main(sys.argv)
