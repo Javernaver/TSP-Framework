@@ -22,7 +22,7 @@ class Tour():
             if (kwargs['type_initial_sol'] == InitialSolution.RANDOM):
                 self.current = self.problem.random_tour()
             elif (kwargs['type_initial_sol'] == InitialSolution.NEAREST_N):
-                self.current = self.problem.greedy_nearest_n(0)
+                self.current = self.problem.greedy_nearest_n(-1)
             elif (kwargs['type_initial_sol'] == InitialSolution.DETERMINISTIC):
                 self.current = self.problem.deterministic_tour()
             else:
