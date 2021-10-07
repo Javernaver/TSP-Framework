@@ -5,11 +5,17 @@ from src import Utilities
 import sys
 from enum import Enum
 
-class Point:
+class Point():
     """ Clase puntero para coordenadas """
-    def __init__(self, x, y):
+    def __init__(self, x, y) -> None:
         self.x = x
         self.y = y
+
+class Distance():
+    """ Clase de apoyo para ayudar a crear la matriz del vecindario para los nodos """
+    def __init__(self, val, pos) -> None:
+        self.distance = val
+        self.position = pos
 
 class Distance_type(Enum):
     """Tipos de instancias en TSPlib"""
@@ -26,17 +32,16 @@ class TSPlibReader():
     # Variable que indica el tipo de distancia
     distance_type :Distance_type
     # Matriz de distancia: distancia de nodos i a j
-    distance = [[]]
+    distance = []
     # Lista de vecinos mas cercanos: para cada nodo i una lista de vecinos ordenados
-    nn_list = [[]]
+    nn_list = []
     # Numero de nodos
     n = 0
     # Nombre del archivo de instancia
     name = ''
 
-    def __init__(self, tsp_file_name):
-        # Funcion: Constructor clase TSPlibReader
-        # Input: Ruta al archivo de la instancia
+    def __init__(self, tsp_file_name: str):
+        """ Constructor clase TSPlibReader recibe la ruta al archivo de la instancia"""
 
         try:
             # Leer instancia desde un archivo
@@ -51,12 +56,23 @@ class TSPlibReader():
         print('Calculando los vecinos...')
         self.compute_nn_lists()
         print(f"instancia {self.name} tiene {self.n} nodos")
+        #print(self.distance)
+        #print(self.nn_list)
 
-    def read_etsp (self, tsp_file_name):
-        # Funcion: lectura y parsing de instancia TSPlib
-        # Input: ruta al archivo de instancia
-        # Output: arreglo de coordenas
-        # Comentario: archivo de instancia debe estar en formato TSPLIB
+
+    def read_etsp(self, tsp_file_name: str) -> list:
+        """ Lectura y parsing de instancia TSPlib (archivo de instancia debe estar en formato TSPLIB)
+
+            Parameters
+            ----------
+            tsp_file_name : str
+                ruta al archivo de instancia
+            
+            Returns
+            -------
+            list
+                lista de coordenas
+        """
         buf = ''
        
         nodeptr = []
@@ -124,40 +140,59 @@ class TSPlibReader():
         
         return nodeptr
 
-    def round_distance (self, i, j):
-        # Funcion: computa la distancia Euclidiana (redondea al siguiente entero) entre dos nodos
-        # Input: indices de dos nodos
-        # Output: distancia entre dos nodos
-        # Comentarios: para una definicion de como calcular esta distancia vea TSPLIB
-        #              la funcion round, rendondea al entero mas cercano
-        #              en caso de ser 1.5 -> 2 y 2.5 -> 2
-        
+    def round_distance(self, i, j) -> int:
+        """ Computa la distancia Euclidiana (redondea al siguiente entero) entre dos nodos.
+            Para una definicion de como calcular esta distancia vea TSPLIB en caso de ser 1.5 -> 2 y 2.5 -> 2
+
+            Parameters
+            ----------
+            i, j : int | float
+                coordenadas
+            
+            Returns
+            -------
+            int
+                distancia entre dos nodos
+        """      
         diferencia_x = self.nodeptr[i].x - self.nodeptr[j].x
         diferencia_y = self.nodeptr[i].y - self.nodeptr[j].y
         distancia = math.sqrt(pow(diferencia_x,2) + pow(diferencia_y,2)) 
         return round(distancia)
 
-    def ceil_distance (self, i, j):
-        # Funcion: computa la distancia Euclidiana (usando funcion techo) entre dos nodos
-        # Input: indices de dos nodos
-        # Output: distancia entre dos nodos
-        # Comentarios: para una definicion de como calcular esta distancia vea TSPLIB
-        #              la funcion math, redondea al entero mayor
-        #              en caso de ser 1.1 -> 2 y 1.9 -> 2
+    def ceil_distance (self, i, j) -> int:
+        """ Computa la distancia Euclidiana (usando funcion techo) entre dos nodos.
+            Para una definicion de como calcular esta distancia vea TSPLIB
+            la funcion math, redondea al entero mayor en caso de ser 1.1 -> 2 y 1.9 -> 2
 
+            Parameters
+            ----------
+            i, j : int | float
+                coordenadas
+            
+            Returns
+            -------
+            int
+                distancia entre dos nodos
+        """
         diferencia_x = self.nodeptr[i].x - self.nodeptr[j].x
         diferencia_y = self.nodeptr[i].y - self.nodeptr[j].y
         distancia = round(math.sqrt(pow(diferencia_x,2) + pow(diferencia_y,2)),2)
         return math.ceil(distancia)
 
-    def geo_distance (self, i, j):
-        # Funcion: computa la distancia geografica (redondeada al siguiente entero)
-        #          entre dos nodos
-        # Input: indices de dos nodos
-        # Output: distancia entre dos nodos
-        # Comentarios: adaptada desde el codigo de concorde. Para una definicion de
-        #              como calcular esta distancia vea TSPLIB
+    def geo_distance(self, i, j) -> int:
+        """ Computa la distancia geografica (redondeada al siguiente entero) entre dos nodos
+            Adaptada desde el codigo de concorde. Para una definicion de como calcular esta distancia vea TSPLIB
 
+            Parameters
+            ----------
+            i, j : int | float
+                coordenadas
+            
+            Returns
+            -------
+            int
+                distancia entre dos nodos
+        """
         deg = float
         min = float
         lati = float
@@ -194,13 +229,20 @@ class TSPlibReader():
         dd = int(RRR * math.acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3))+ 1.0)
         return dd
 
-    def att_distance (self, i, j):
-        # Funcion: computa la distancia ATT (redondeada al siguiente entero) entre
-        #          dos nodos
-        # Input: indices de dos nodos
-        # Output: distancia entre dos nodos
-        # Comentarios: para un definicion de como calcular esta distancia vea TSPLIB
+    def att_distance(self, i, j) -> int:
+        """ Computa la distancia ATT (redondeada al siguiente entero) entre dos nodos
+            Adaptada desde el codigo de concorde. Para una definicion de como calcular esta distancia vea TSPLIB
 
+            Parameters
+            ----------
+            i, j : int | float
+                coordenadas
+            
+            Returns
+            -------
+            int
+                distancia entre dos nodos
+        """
         diferencia_x = Decimal(f"{self.nodeptr[i].x}") - Decimal(f"{self.nodeptr[j].x}")
         diferencia_y = Decimal(f"{self.nodeptr[i].y}") - Decimal(f"{self.nodeptr[j].y}")
         rij = math.sqrt(float(pow(diferencia_x,2) + pow(diferencia_y,2)) / 10.0)
@@ -213,48 +255,53 @@ class TSPlibReader():
         return dij
 
     def compute_distances(self):
-        """ computa y guarda las distancias entre los nodos en la variable disntance """
+        """ Computa y guarda las distancias entre los nodos generando una lista de listas (matriz)
+            y la guarda en la variable distance """
             
-        matrix = [[]]
+        matrix = []
         
         for i in range(self.n):
+
+            matrix.append([])
+
             for j in range(self.n):
+
                 if (self.distance_type == Distance_type.EUC_2D):
-                    matrix.append([])
                     matrix[i].append(self.round_distance(i,j))
                 elif (self.distance_type == Distance_type.CEIL_2D):
-                    matrix.append([])
                     matrix[i].append(self.ceil_distance(i,j))
                 elif (self.distance_type == Distance_type.GEO):
-                    matrix.append([])
                     matrix[i].append(self.geo_distance(i,j))
                 elif (self.distance_type == Distance_type.ATT):
-                    matrix.append([])
                     matrix[i].append(self.att_distance(i,j))
 
-        self.distance = matrix.copy()     
+        self.distance = matrix     
 
     def compute_nn_lists(self):
-        """ computa y guarda la lista de vecinos mas cercanos a cada nodo en la variable nn_list """
+        """ Computa y guarda la lista de vecinos mas cercanos a cada nodo y genera una lista de listas (matriz) 
+            que se guarda en la variable nn_list """
 
-        distance_vector = []
-        help_vector = []
-        m_nnear = [[]]
+        distance_value = 0 # valor de distancia
+        distances = [Distance] * self.n # lista para las distancias del vecindario 
+        nn = self.n - 1 
+        m_nnear = [] # matriz del vecindario
 
-        nn = (self.n - 1)
-        for node in range(self.n): # Computar cnd-sets para todos los nodos
-            for i in range(self.n): # Copiar distancias desde nodo hacia otros nodos
-                if (node == 0):
-                    distance_vector.append(self.distance[node][i])
-                    help_vector.append(i)
-                else:
-                    distance_vector[i] = self.distance[node][i]
-                    help_vector[i] = i
-            distance_vector[node] = sys.maxsize # Ciudad no es el vecino mas cercano
-            Utilities.sort2(distance_vector, help_vector, 0, self.n-1)
-            for i in range(nn):
-                m_nnear.append([])
-                m_nnear[node].append(help_vector[i])
-        
-        self.nn_list = m_nnear.copy()
+        for node in range(self.n): # Recorrer los nodos
 
+            for i in range(self.n): # Preparar distancias de la seccion
+                
+                distance_value = self.distance[node][i] # se guardan los valores de distancia
+                distances[i] = Distance(distance_value, i) # 
+                
+            #print(distance_values, [distance.distance for distance in distances])
+            distances[node].distance = sys.maxsize # Ciudad no es el vecino mas cercano y se le da un valor altisimo
+            
+            distances.sort(key=lambda dist: dist.distance) # ordenar de menor a mayor
+            #print(distance_values, [distance.distance for distance in distances])
+
+            # Crear seccion del vecindario con las posiciones de los vecinos
+            m_nnear.append([])
+            for i in range(nn): 
+                m_nnear[node].append(distances[i].position)
+
+        self.nn_list = m_nnear
