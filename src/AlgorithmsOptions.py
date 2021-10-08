@@ -224,10 +224,10 @@ class AlgorithmsOptions():
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
-        parser.add_argument("-is", "--insol", help="Solucion inicial [ RANDOM | NEAREST_N | DETERMINISTIC ]")
         parser.add_argument("-t", "--time", help="Limite de tiempo de ejecucion en segundos")
 
         # Definir argumentos de Simulated Annealing
+        parser.add_argument("-is", "--insol", help="Solucion inicial [ RANDOM | NEAREST_N | DETERMINISTIC ]")
         parser.add_argument("-a", "--alpha", help="Parametro alfa para el esquema geometrico ]0,1]")
         parser.add_argument("-t0", "--tini", help="Temperatura inicial ]0,DOUBLE_MAX]")
         parser.add_argument("-tm", "--tmin", help="Temperatura minima ]0,DOUBLE_MAX]")
@@ -237,7 +237,7 @@ class AlgorithmsOptions():
         parser.add_argument("-p", "--psize", help="Tamaño de la poblacion ]0,INT_MAX]")
         parser.add_argument("-o", "--osize", help="Cantidad de hijos a generar ]0,INT_MAX]")
         parser.add_argument("-ps", "--pselection", help="Operador de seleccion de padres [ random | best | roulette | tournament ]")
-        parser.add_argument("-cr", "--crossover", help="Operador de crossover [ox | opx | pmx]")
+        parser.add_argument("-cr", "--crossover", help="Operador de crossover [ ox | opx | pmx ]")
         parser.add_argument("-mu", "--mutation", help="Operador de mutacion [ swap | 2opt ]")
         parser.add_argument("-mp", "--mprobability", help="Probabilidad de mutacion [0.0,1.0]")
         parser.add_argument("-gs", "--gselection", help="Operador de seleccion de poblacion [ random | best | roulette | tournament ]")
@@ -251,14 +251,16 @@ class AlgorithmsOptions():
         if self.metaheuristic == MHType.SA:
             # Procesar argumentos de Simulated Annealing
             self.argsSA(args, kwargs)
+            # Validar logica de opciones
+            self.validOptSA()
         elif self.metaheuristic == MHType.GA:
             # Procesar argumentos de Algoritmo Genetico
-            self.argsGA(args, kwargs)        
-        # Validar logica de opciones
-        self.validateOptions()
+            self.argsGA(args, kwargs) 
+            # Validar logica de opciones
+            self.validOptGA() 
         
 
-    def argsGeneral(self, args: argparse.Namespace, kwargs :dict) -> None:
+    def argsGeneral(self, args: argparse.Namespace, kwargs: dict) -> None:
         """Procesar los argumentos generales, se pregunta se llego por argumento o por definicion, luego se asigna segun venga dando prioridad a los argumentos"""
         # Maximo tiempo de ejecucion 
         if (args.time or 'time' in kwargs):
@@ -312,8 +314,15 @@ class AlgorithmsOptions():
                 self.move = TSPMove.TWO_OPT
             elif (val == 'swap'):
                 self.move = TSPMove.SWAP
-            else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm o --move) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm o --move) {bcolors.ENDC}") 
 
+        # Modo de salida reducido para no mostrar todos los cambios en los ciclos de los algoritmos
+        if (args.silent):
+            self.silent = True
+
+
+    def argsSA(self, args: argparse.Namespace, kwargs: dict) -> None:
+        """Procesar los argumentos de Simulated Annealing"""
         # Solucion inicial
         if (args.insol or 'insol' in kwargs):
             val = args.insol.upper() if args.insol else kwargs['insol'].upper()
@@ -323,15 +332,8 @@ class AlgorithmsOptions():
                 self.initial_solution = InitialSolution.NEAREST_N
             elif (val == 'DETERMINISTIC'):
                 self.initial_solution = InitialSolution.DETERMINISTIC
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is o --inso) {bcolors.ENDC}")    
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is o --inso) {bcolors.ENDC}")
 
-        # Modo de salida reducido para no mostrar todos los cambios en los ciclos de los algoritmos
-        if (args.silent):
-            self.silent = True
-
-
-    def argsSA(self, args: argparse.Namespace, kwargs :dict) -> None:
-        """Procesar los argumentos de Simulated Annealing"""
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
             val = args.cooling.lower() if args.cooling else kwargs['cooling'].lower()
@@ -365,7 +367,7 @@ class AlgorithmsOptions():
                 print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
 
 
-    def argsGA(self, args: argparse.Namespace, kwargs :dict) -> None:
+    def argsGA(self, args: argparse.Namespace, kwargs: dict) -> None:
         """Procesar los argumentos de Algoritmo Genetico"""
         # Tamaño de la poblacion
         if (args.psize or 'psize' in kwargs):
@@ -444,19 +446,25 @@ class AlgorithmsOptions():
             else: print(f"{bcolors.FAIL}Error: Tipo de seleccion de padres no reconocido (-g o --gstrategy) {bcolors.ENDC}")
 
 
-    def validateOptions(self) -> None:
+    def validOptSA(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
-        if (self.max_evaluations <= 0 and self.max_iterations <= 0):
+        if (self.max_evaluations <= 0 or self.max_iterations <= 0):
             print(f"{bcolors.FAIL}Error: iteraciones o evaluaciones maximas deben ser > 0 Iteraciones: {self.max_iterations} Evaluaciones: {self.max_evaluations}{bcolors.ENDC}")
             exit()
-        if (self.max_evaluations <= 0 or self.tmin <= 0 or self.t0 <= 0):
-            print(f"{bcolors.FAIL}Error: Las temperatura minima, la temperatura inicial y las evaluaciones maximas deben ser > 0, tmin: {self.tmin} t0: {self.t0} evaluaciones: {self.max_evaluations} {bcolors.ENDC}")
+        if (self.tmin <= 0 or self.t0 <= 0):
+            print(f"{bcolors.FAIL}Error: Las temperatura minima y la temperatura inicial maximas deben ser > 0, tmin: {self.tmin} t0: {self.t0} evaluaciones: {self.max_evaluations} {bcolors.ENDC}")
             exit()
         if (self.alpha <= 0 or self.alpha > 1):
             print(f"{bcolors.FAIL}Error: alfa debe ser > 0 y <= 1, valor: {self.alpha} {bcolors.ENDC}")
             exit()
         if (self.t0 <= self.tmin):
             print(f"{bcolors.FAIL}Error: t0 debe ser > tmin, valor tmin: {self.tmin} valor t0: {self.t0}{bcolors.ENDC}")
+            exit()
+    
+    def validOptGA(self) -> None:
+        """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
+        if (self.max_evaluations <= 0 or self.max_iterations <= 0):
+            print(f"{bcolors.FAIL}Error: iteraciones o evaluaciones maximas deben ser > 0 Iteraciones: {self.max_iterations} Evaluaciones: {self.max_evaluations}{bcolors.ENDC}")
             exit()
         if (self.mutation_prob > 1.0 or self.mutation_prob < 0.0 ):
             print(f"{bcolors.FAIL}Error: la probabilidad de mutacion debe ser [0.0, 1.0]: {self.mutation_prob}{bcolors.ENDC}")
@@ -467,7 +475,6 @@ class AlgorithmsOptions():
         if (self.pop_size <= 1):
             print(f"{bcolors.FAIL}Error: tamaño de la poblacion (-p/psize) debe ser > 1{bcolors.ENDC}")
             exit()
-            
                    
     def printOptions(self) -> None:
         """ Mostrar las opciones y parametros finales """

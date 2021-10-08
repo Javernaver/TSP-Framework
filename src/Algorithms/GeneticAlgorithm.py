@@ -112,9 +112,9 @@ class GeneticAlgorithm():
         # tiempo para iteraciones y condicion de termino por tiempo
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
+            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...\n{bcolors.ENDC}")
             print(f"{bcolors.BOLD}\nGeneracion; Tiempo; Mejor hijo; Detalle{bcolors.ENDC}", end='')
-        else: 
-            print(f"{bcolors.HEADER}\nComenzando Busqueda con Algoritmo Generico...\n{bcolors.ENDC}")
+         
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(self.iterations, self.evaluations, end-start)):
@@ -173,6 +173,7 @@ class GeneticAlgorithm():
     def terminationCondition(self, iterations: int, evaluations: int, time: float) -> bool:
         """ Condicion de termino para el ciclo principal de Algoritmo Genetico, 
         basado en los criterios de iteraciones, evaluaciones y tiempo, devuelve verdadero o falso si se debe continuar o no"""
+        
         # Criterio de termino de las iteraciones
         if (self.options.max_iterations > 0):
             if (iterations > self.options.max_iterations):
@@ -181,7 +182,6 @@ class GeneticAlgorithm():
         if (self.options.max_evaluations > 0):
             if (evaluations > self.options.max_evaluations):
                 return False
-
         # Criterio de termino por tiempo
         if (self.options.max_time > 0):
             if (time > self.options.max_time):
