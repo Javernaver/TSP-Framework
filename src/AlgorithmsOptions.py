@@ -142,6 +142,8 @@ class AlgorithmsOptions():
     # OPCIONES GENERALES
     
     output = "solucion.txt"	# Archivo para imprimir la solucion
+
+    trayectory = "trayectory.txt"	# Archivo para imprimir la trayectoria de solucion
     
     instance = "instances/burma14.tsp" # Archivo de la instancia    
     
@@ -221,6 +223,7 @@ class AlgorithmsOptions():
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
         parser.add_argument("-out", "--output", help="Nombre del archivo de salida para la solucion")
+        parser.add_argument("-tra", "--trayectory", help="Nombre del archivo de salida para la trayectoria de la solucion")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
@@ -276,9 +279,13 @@ class AlgorithmsOptions():
             except: 
                 print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s o --seed){bcolors.ENDC}")
 
-        # Archivo de salida
+        # Archivo de salida para solucion
         if (args.output or 'output' in kwargs):
             self.output = args.output if args.output else kwargs['output']
+
+        # Archivo de salida para trayectoria
+        if (args.trayectory or 'trayectory' in kwargs):
+            self.trayectory = args.trayectory if args.trayectory else kwargs['trayectory']
 
         # Archivo de instancia
         if (args.instance or 'instance' in kwargs):

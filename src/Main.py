@@ -26,28 +26,29 @@ def main(argv=sys.argv) -> None:
     problem = TSP(options.instance)
     #print(problema.random_tour())
 
-    first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
-    #print(solucion_inicial.actual, solucion_inicial.costo)
-    #solucion_inicial.randomNeighbor(TSPMove.TWO_OPT)
-    #print(solucion_inicial.actual, solucion_inicial.costo)
-
     # Ejecutar Metaheuristica
     if (options.metaheuristic == MHType.SA):
+
+        # Solucion inicial
+        first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
         # Crear solver
         solver = SimulatedAnnealing(options, problem)
         # Ejecutar la busqueda
         solver.search(first_solution)
-        # Guardar la solucion en archivo
+        # Guardar la solucion y trayectoria en archivo
         solver.printSolFile(options.output)
+        solver.printTraFile(options.trayectory)
         # Escribir la solucion por consola
         solver.print_best_solution()
+        
     elif (options.metaheuristic == MHType.GA):
         # Crear solver
         solver = GeneticAlgorithm(options, problem)
         # Ejecutar la busqueda
         solver.search()
-        # Guardar la solucion en archivo
+        # Guardar la solucion y trayectoria en archivo
         solver.printSolFile(options.output)
+        solver.printTraFile(options.trayectory)
         # Escribir la solucion por consola
         solver.print_best_solution()
 

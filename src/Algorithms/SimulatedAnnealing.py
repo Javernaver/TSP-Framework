@@ -3,7 +3,7 @@ from timeit import default_timer as timer
 from datetime import datetime
 from math import e, log
 from pathlib import Path
-from src.Utilities import bcolors, random
+from src.Utilities import bcolors, random, printSolToFile, printTraToFile
 from src.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, TSPMove, CoolingType
 from src.TSP import TSP
 from src.Tour import Tour
@@ -30,6 +30,8 @@ class SimulatedAnnealing():
         self.total_time = 0.0 # tiempo de ejecucion de Simulated Annealing
 
         self.options: AlgorithmsOptions # Opciones
+
+        self.trayectory = [] # lista de listas con la trayectoria de la solucion
         
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
@@ -57,7 +59,7 @@ class SimulatedAnnealing():
         self.best_tour.printSol()
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Tiempo total de ejecucion de Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
-        self.updateTrajectory()
+        self.updateLog()
 
     def search(self, first_solution: Tour = None) -> None:
         """ Ejecuta la busqueda de Simulated Annealing desde una solucion inicial """
@@ -73,7 +75,7 @@ class SimulatedAnnealing():
         current_tour = Tour(tour=first_solution) # variable del tour actual 
         neighbor_tour = Tour(tour=first_solution) # variable del tour vecino generado 
         
-        self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento 
+        self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
 
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
@@ -99,6 +101,7 @@ class SimulatedAnnealing():
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
                 current_tour.copy(neighbor_tour)
+                self.trayectory.append(current_tour.current.copy()) # Guardar trayectoria
                 if not self.options.silent:
                     print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
             else:
@@ -108,6 +111,7 @@ class SimulatedAnnealing():
                 if (random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
+                    # self.trayectory.append(current_tour.current.copy()) # Guardar trayectoria
                     if not self.options.silent:
                         print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
                 else:
@@ -121,6 +125,7 @@ class SimulatedAnnealing():
                 if not self.options.silent:
                     print(f"{bcolors.OKGREEN} --> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
                 self.best_tour.copy(current_tour)
+                self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
                     
             # reducir la temperatura y aumentar las evaluaciones
             temperature = self.reduceTemperature(temperature, self.evaluations)
@@ -128,6 +133,7 @@ class SimulatedAnnealing():
         
         # actualizar tiempo total de busqueda de Simulated Annealing
         self.total_time = timer() - start
+        self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
         print()   
 		
 
@@ -172,16 +178,20 @@ class SimulatedAnnealing():
 
         return t_new
 
-    def printSolFile(self, filename: str) -> None:
+    def printSolFile(self, outputSol: str) -> None:
         """ Guarda la solucion en archivo de texto"""
-        self.best_tour.printToFile(filename)
+        printSolToFile(outputSol, self.best_tour.current)
 
-    def updateTrajectory(self) -> None:
+    def printTraFile(self, outputTra: str) -> None:
+        """ Guarda la trayectoria de la solucion en archivo de texto"""
+        printTraToFile(outputTra, self.trayectory)
+
+    def updateLog(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
         # crea la carpeta en caso de que no exista (python 3.5+)
-        Path("trajectory/").mkdir(exist_ok=True)
+        Path("log/").mkdir(exist_ok=True)
         # usar el archivo en modo append
-        with open("trajectory/SATrajectory.csv", "a", newline="\n") as csvfile:
+        with open("log/SAlog.csv", "a", newline="\n") as csvfile:
             
             # Headers
             fields = ["solution","cost","instance","date","alpha","t0","tmin",

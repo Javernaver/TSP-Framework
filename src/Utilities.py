@@ -26,40 +26,41 @@ class bcolors:
         self.BOLD = ''
         self.UNDERLINE = ''
 
-def swap2 (v :list, v2 :list, i :int, j :int) -> None:
-    # Funcion: rutina auxiliar para ordenar un arreglo de enteros
-    # Input: dos arreglos, dos indices
-    # Output: dos arreglos ordenados
-    # Comentarios: los elementos en la posicion i y j de las dos matrices
-    #              se intercambian
-
-    v[i], v[j] = v[j], v[i]
-    v2[i], v2[j] = v2[j], v2[i]
-
-def sort2 (v :list, v2 :list, left :int, right :int) -> None:
-    # Funcion: rutina recursiva (quicksort) para ordenar un arreglo.
-    #          El segundo arreglo hace la misma secuencia de intercambio
-    # Input: dos arreglos, dos indices
-    # Output: ordenamiento de dos arreglos
-    # Comentarios: los elementos en la posicion i y j de las dos matrices
-    #              se intercambian
-    
-    if (left >= right):
-        return
-    swap2(v, v2, left, int((left + right) / 2))
-    last = left
-    for k in range(left + 1, right + 1):
-        if(v[k] < v[left]):
-            last = last + 1
-            swap2(v, v2, last, k)         
-    swap2(v, v2, left, last)
-    sort2(v, v2, left, last)
-    sort2(v, v2, last + 1, right)
-
-def dtrunc (x :float) -> float:
-    #Funcion: truncar un numero float
-    #Output: numero float sin parte decimal
+def dtrunc (x: float) -> float:
+    """ Truncar un numero float """
 
     k = int(x)
-    x = float(k)
+    x = float(k) # numero float sin parte decimal
     return x
+
+def printSolToFile(outputFile: str, solution: list) -> None:
+    """ Guardar la solucion para una instacia y ejecucion en un archivo recibido por parametro """
+    if not outputFile or not solution:
+        return
+    try:
+        print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{outputFile}")
+        # Abrir archivo para escribir o reemplazar
+        file = open(outputFile, 'w')
+        # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+        sol = " ".join([str(elem) for elem in solution])
+        file.write(sol)
+        file.close()
+    except IOError:
+        print(f"{bcolors.FAIL}No se pudo guardar el archivo... {outputFile} Error: {IOError}{bcolors.ENDC}")
+
+def printTraToFile(trayectoryFile: str, trayectory: list) -> None:
+    """ Guardar la trayectoria de una solucion para una instacia y ejecucion en un archivo recibido por parametro """
+    if not trayectoryFile or not trayectoryFile:
+        return
+    try:
+        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{trayectoryFile}")
+        # Abrir archivo para escribir o reemplazar
+        file = open(trayectoryFile, 'w')
+        # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+        for tour in trayectory:
+            sol = " ".join([str(elem) for elem in tour])
+            sol += '\n'
+            file.write(sol)
+        file.close()
+    except IOError:
+        print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trayectoryFile} Error: {IOError}{bcolors.ENDC}")

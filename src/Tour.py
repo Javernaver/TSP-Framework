@@ -252,21 +252,6 @@ class Tour():
         else:
             self.swap(n1, n2)
 
-    def printToFile(self, filename: str) -> None:
-        """ Guardar la solucion para una instacia y ejecucion en un archivo recibido por parametro """
-        if not filename:
-            return
-        try:
-            print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{filename}")
-            # Abrir archivo para escribir o reemplazar
-            file = open(filename, 'w')
-            # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
-            sol = " ".join([str(elem) for elem in self.current])
-            file.write(sol)
-            file.close()
-        except IOError:
-            print(f"{bcolors.FAIL}No se pudo guardar el archivo... {filename} Error: {IOError}{bcolors.ENDC}")
-
 
     def getPosition(self, node: int) -> int:
         """Retorna el indice de un nodo"""

@@ -4,7 +4,7 @@ from pathlib import Path
 from timeit import default_timer as timer
 
 from src.Algorithms.Population import Population
-from src.Utilities import bcolors
+from src.Utilities import bcolors, printSolToFile, printTraToFile
 from src.Tour import Tour
 from src.TSP import TSP
 from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, SelectionType, CrossoverType, MutationType
@@ -47,6 +47,8 @@ class GeneticAlgorithm():
 
         self.total_time = 0.0 # tiempo de ejecucion de Algoritmo Genetico
 
+        self.trayectory = [] # lista de listas con la trayectoria de la solucion
+
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
             self.options = AlgorithmsOptions()
@@ -85,7 +87,7 @@ class GeneticAlgorithm():
         print(f"{bcolors.BOLD}Total de iteraciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.iterations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Tiempo total de ejecucion de Algoritmo Genetico:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
-        self.updateTrajectory()
+        self.updateLog()
 
 
     def search(self) -> None:
@@ -106,8 +108,10 @@ class GeneticAlgorithm():
         # Guardar la mejor solución en best_tour
         if not self.best_tour:
             self.best_tour = Tour(tour=population.getBestTour())
+            self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
         else:
             self.best_tour.copy(population.getBestTour())
+            self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
 
         # tiempo para iteraciones y condicion de termino por tiempo
         start = end = timer()
@@ -139,6 +143,7 @@ class GeneticAlgorithm():
                     print(f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} --> ¡Mejor hijo encontrado!: {offspring.getBestTour().cost} --> ¡Mejor solucion actualizada!{bcolors.ENDC}", end='')
 
                 self.best_tour.copy(offspring.getBestTour())
+                self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
                 
             else: 
                 if not self.options.silent:
@@ -189,16 +194,20 @@ class GeneticAlgorithm():
         
         return True
 
-    def printSolFile(self, filename: str) -> None:
+    def printSolFile(self, outputSol: str) -> None:
         """ Guarda la solucion en archivo de texto"""
-        self.best_tour.printToFile(filename)
+        printSolToFile(outputSol, self.best_tour.current)
 
-    def updateTrajectory(self) -> None:
+    def printTraFile(self, outputTra: str) -> None:
+        """ Guarda la trayectoria de la solucion en archivo de texto"""
+        printTraToFile(outputTra, self.trayectory)
+
+    def updateLog(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
         # crea la carpeta en caso de que no exista (python 3.5+)
-        Path("trajectory/").mkdir(exist_ok=True)
+        Path("log/").mkdir(exist_ok=True)
         # usar el archivo en modo append
-        with open("trajectory/GATrajectory.csv", "a", newline="\n") as csvfile:
+        with open("log/GAlog.csv", "a", newline="\n") as csvfile:
             
             # Headers
             fields = ["solution","cost","instance","date","pop_size","offspring_size", 
