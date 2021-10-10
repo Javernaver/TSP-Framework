@@ -5,7 +5,7 @@ from src.Utilities import bcolors, random
 class Tour():
  
     def __init__(self, **kwargs) -> None:
-
+        
         # Atributos de instancia
         self.problem: TSP # Instancia del problema
     
@@ -64,18 +64,19 @@ class Tour():
     def delta_cost_swap(self, tour: list, cost: int, n1: int, n2: int) -> int:
         """ Recalcula el costo de un tour al aplicar el movimiento swap  
 
-        Input
-        -----
-        tour: list
-            Lista del tour a modificar (sin haber sido modificado aun),
-        cost: int
-            El costo actual del tour
-        n1, n2: int
-            Indices de los nodos para hacer swap
+            Parameters
+            ----------
+            tour: list
+                Lista del tour a modificar (sin haber sido modificado aun),
+            cost: int
+                El costo actual del tour
+            n1, n2: int
+                Indices de los nodos para hacer swap
 
-        Output
-        ------
-            El nuevo costo luego de aplicar swap
+            Returns
+            -------
+            int
+                El nuevo costo luego de aplicar swap
         """
      
         # Si es el mismo nodo, no hay swap
@@ -140,31 +141,32 @@ class Tour():
     def randomSwap(self) -> None:
         """Aplica el operador swap entre dos nodos aleatorios"""
         # Inicializar numeros aleatorios para realizar el swap
-        n1 = random.randint(0, self.problem.getSize())
-        n2 = random.randint(0, self.problem.getSize())
+        n1 = random.randint(0, self.problem.getSize()-1)
+        n2 = random.randint(0, self.problem.getSize()-1)
 
         while (n1 == n2): # si los numeros son iguales
-            n2 = random.randint(0, self.problem.getSize())
+            n2 = random.randint(0, self.problem.getSize()-1)
 
         # realizar swap
         self.swap(n1, n2)
 
 
     def delta_cost_two_opt(self, tour: list, cost: int, s: int, e: int) -> int:
-        """ Recalcula el costo de un tour al alplicar el movimiento 2-opt    
+        """ Recalcula el costo de un tour al aplicar el movimiento 2-opt    
 
-        Input
-        -----
-        tour: list
-            Lista del tour a modificar (sin haber sido modificado aun),
-        cost: int
-            El costo actual del tour
-        s, e: int
-            Indices de los nodos para ser intercambiardos con 2-opt
+            Parameters
+            ----------
+            tour: list
+                Lista del tour a modificar (sin haber sido modificado aun),
+            cost: int
+                El costo actual del tour
+            s, e: int
+                Indices de los nodos para ser intercambiardos con 2-opt
 
-        Output
-        ------
-            El nuevo costo luego de aplicar 2-opt
+            Returns
+            -------
+                int
+                    El nuevo costo luego de aplicar 2-opt
         """
 
         # Si es el mismo nodo, no hay swap
@@ -200,21 +202,19 @@ class Tour():
         # Identificar el indice menor y el mayor
         s = min(n1, n2)
         e = max(n1, n2)
-        new_tour = [0] * len(self.current)
+        new_tour = [] # Tour nuevo
+        section = [] # seccion a aplicar 2-opt
 
-        # Copiar la primera parte del tour no modificado por 2-opt
-        for i in range(s):
-            new_tour[i] = self.current[i]
-        
-        # invertir el orden del tour entre [s,e] 
-        aux = 0
-        for i in range(s,e+1):
-            new_tour[i] = self.current[e-aux] # intercambiar nodos
-            aux += 1
+        # Agregar la primera parte del tour no modificado por 2-opt
+        new_tour = self.current[:s]
 
-        # Copiar la parte final del tour no modificado por 2-opt 
-        for i in range(e+1, len(self.current)):
-            new_tour[i] = self.current[i]
+        # Extraer e invertir la seccion del tour entre [s,e] 
+        section = self.current[s:e+1] # extraer
+        section.reverse() # invertir
+        new_tour.extend(section) # unir al nuevo tour
+
+        # Agregar la parte final del tour no modificado por 2-opt 
+        new_tour.extend(self.current[e+1:])
 
         # Igualar inicio y final
         new_tour[len(self.current)-1] = new_tour[0]
@@ -226,11 +226,11 @@ class Tour():
     def randomTwoOptSwap(self) -> None:
         """Aplica el operador two_opt entre dos nodos aleatorios"""
         # Inicializar numeros aleatorios para realizar el swap
-        n1 = random.randint(0, self.problem.getSize())
-        n2 = random.randint(0, self.problem.getSize())
+        n1 = random.randint(0, self.problem.getSize()-1)
+        n2 = random.randint(0, self.problem.getSize()-1)
 
         while (n1 == n2 | abs(n2-n1) < 2 ): # si los numeros son iguales
-            n2 = random.randint(0, self.problem.getSize())
+            n2 = random.randint(0, self.problem.getSize()-1)
 
         # realizar movimiento 2opt
         self.twoOptSwap(n1, n2)
@@ -238,11 +238,11 @@ class Tour():
     def randomNeighbor(self, move_type: TSPMove) -> None:
         """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove"""
         
-        n1 = random.randint(0, self.problem.getSize())
-        n2 = random.randint(0, self.problem.getSize())
+        n1 = random.randint(0, self.problem.getSize()-1)
+        n2 = random.randint(0, self.problem.getSize()-1)
         # Determinar que sean numeros diferentes
         while (n1 == n2):
-            n2 = random.randint(0, self.problem.getSize())
+            n2 = random.randint(0, self.problem.getSize()-1)
 
         # Seleccionar el tipo de movimiento
         if (move_type == TSPMove.TWO_OPT):
