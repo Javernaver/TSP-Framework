@@ -1,0 +1,485 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module src.AlgorithmsOptions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="src.html"><font color="#ffffff">src</font></a>.AlgorithmsOptions</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cproyectos%5Ctsp-framework%5Csrc%5Calgorithmsoptions.py">d:\proyectos\tsp-framework\src\algorithmsoptions.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="src.Utilities.html">src.Utilities</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#AlgorithmsOptions">AlgorithmsOptions</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="enum.html#Enum">enum.Enum</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#CoolingType">CoolingType</a>
+</font></dt><dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#CrossoverType">CrossoverType</a>
+</font></dt><dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#InitialSolution">InitialSolution</a>
+</font></dt><dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#MHType">MHType</a>
+</font></dt><dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#SelectionStrategy">SelectionStrategy</a>
+</font></dt><dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#SelectionType">SelectionType</a>
+</font></dt><dt><font face="helvetica, arial"><a href="src.AlgorithmsOptions.html#TSPMove">TSPMove</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AlgorithmsOptions">class <strong>AlgorithmsOptions</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#AlgorithmsOptions">AlgorithmsOptions</a>(argv=[],&nbsp;**kwargs)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+Clase&nbsp;para&nbsp;configurar&nbsp;y&nbsp;leer&nbsp;todas&nbsp;las&nbsp;opciones&nbsp;que&nbsp;pueda&nbsp;tener&nbsp;una&nbsp;metaheristica&nbsp;recibidas&nbsp;como&nbsp;atributo&nbsp;o&nbsp;como&nbsp;definiciones<br>
+&nbsp;<br>
+Attributes<br>
+----------<br>
+output&nbsp;:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Archivo&nbsp;para&nbsp;imprimir&nbsp;la&nbsp;solucion<br>
+instance&nbsp;:&nbsp;str<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Archivo&nbsp;de&nbsp;la&nbsp;instancia&nbsp;TSP&nbsp;con&nbsp;formato&nbsp;TSPLib<br>
+seed&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Semilla&nbsp;para&nbsp;el&nbsp;generador&nbsp;de&nbsp;numero&nbsp;aleatorios<br>
+metaheuristic&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Tipo&nbsp;de&nbsp;metaheuristica&nbsp;a&nbsp;ejecutar&nbsp;SA&nbsp;o&nbsp;GA<br>
+move&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Tipo&nbsp;del&nbsp;movimiento&nbsp;para&nbsp;la&nbsp;metaheuristica<br>
+max_evaluations&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Evaluaciones&nbsp;maximas&nbsp;<br>
+alpha&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Parametro&nbsp;alfa&nbsp;para&nbsp;el&nbsp;enfriamiento&nbsp;de&nbsp;SA<br>
+t0&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Temperatura&nbsp;inicial&nbsp;para&nbsp;SA<br>
+tmin&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Temperatura&nbsp;minima&nbsp;para&nbsp;SA<br>
+cooling&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Tipo&nbsp;de&nbsp;enfriamiento&nbsp;para&nbsp;SA<br>
+pop_size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Tamaño&nbsp;de&nbsp;la&nbsp;poblacion&nbsp;<br>
+offspring_size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Cantidad&nbsp;de&nbsp;hijos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+pselection_type&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Seleccion&nbsp;de&nbsp;padres&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+crossover_type&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Cruzamiento<br>
+mutation_type&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Mutacion<br>
+mutation_prob&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Probabilidad&nbsp;de&nbsp;mutacion<br>
+selection_strategy&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Estrategia&nbsp;de&nbsp;seleccion&nbsp;de&nbsp;la&nbsp;nueva&nbsp;poblacion<br>
+gselection_type&nbsp;:&nbsp;<a href="enum.html#Enum">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;Seleccion&nbsp;de&nbsp;la&nbsp;nueva&nbsp;poblacion<br>
+Methods<br>
+-------<br>
+<a href="#AlgorithmsOptions-__init__">__init__</a>(args:&nbsp;list,&nbsp;**kwargs:&nbsp;dict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Constructor&nbsp;de&nbsp;clase&nbsp;para&nbsp;configurar&nbsp;y&nbsp;leer&nbsp;todas&nbsp;las&nbsp;opciones&nbsp;que&nbsp;pueda&nbsp;tener&nbsp;una&nbsp;metaheristica&nbsp;recibidas&nbsp;como&nbsp;atributo<br>
+<a href="#AlgorithmsOptions-readOptions">readOptions</a>(argv&nbsp;:list,&nbsp;kwargs:&nbsp;dict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Clase&nbsp;que&nbsp;lee&nbsp;las&nbsp;opciones&nbsp;introducidas&nbsp;como&nbsp;atributo&nbsp;y&nbsp;por&nbsp;definicion<br>
+validateOptions()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Validar&nbsp;que&nbsp;algunos&nbsp;paramaetros&nbsp;para&nbsp;los&nbsp;algoritmos&nbsp;sean&nbsp;coerentes<br>
+generalArgs(args&nbsp;:any,&nbsp;kwargs:&nbsp;dict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Procesar&nbsp;los&nbsp;argumentos&nbsp;generales,&nbsp;se&nbsp;pregunta&nbsp;se&nbsp;llego&nbsp;por&nbsp;argumento&nbsp;o&nbsp;por&nbsp;definicion,&nbsp;luego&nbsp;se&nbsp;asigna&nbsp;segun&nbsp;venga&nbsp;dando&nbsp;prioridad&nbsp;a&nbsp;los&nbsp;argumentos<br>
+saArgs(args&nbsp;:any,&nbsp;kwargs:&nbsp;dict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Procesar&nbsp;los&nbsp;argumentos&nbsp;de&nbsp;Simulated&nbsp;Annealing<br>
+gaArgs(args&nbsp;:any,&nbsp;kwargs:&nbsp;dict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Procesar&nbsp;los&nbsp;argumentos&nbsp;de&nbsp;Algoritmo&nbsp;Genetico<br>
+<a href="#AlgorithmsOptions-printOptions">printOptions</a>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Mostrar&nbsp;las&nbsp;opciones&nbsp;y&nbsp;parametros&nbsp;finales<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="AlgorithmsOptions-__init__"><strong>__init__</strong></a>(self, argv=[], **kwargs) -&gt; None</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-argsGA"><strong>argsGA</strong></a>(self, args: argparse.Namespace, kwargs: dict) -&gt; None</dt><dd><tt>Procesar&nbsp;los&nbsp;argumentos&nbsp;de&nbsp;Algoritmo&nbsp;Genetico</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-argsGeneral"><strong>argsGeneral</strong></a>(self, args: argparse.Namespace, kwargs: dict) -&gt; None</dt><dd><tt>Procesar&nbsp;los&nbsp;argumentos&nbsp;generales,&nbsp;se&nbsp;pregunta&nbsp;se&nbsp;llego&nbsp;por&nbsp;argumento&nbsp;o&nbsp;por&nbsp;definicion,&nbsp;luego&nbsp;se&nbsp;asigna&nbsp;segun&nbsp;venga&nbsp;dando&nbsp;prioridad&nbsp;a&nbsp;los&nbsp;argumentos</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-argsSA"><strong>argsSA</strong></a>(self, args: argparse.Namespace, kwargs: dict) -&gt; None</dt><dd><tt>Procesar&nbsp;los&nbsp;argumentos&nbsp;de&nbsp;Simulated&nbsp;Annealing</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-printOptions"><strong>printOptions</strong></a>(self) -&gt; None</dt><dd><tt>Mostrar&nbsp;las&nbsp;opciones&nbsp;y&nbsp;parametros&nbsp;finales</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-readOptions"><strong>readOptions</strong></a>(self, argv: list, kwargs: dict) -&gt; None</dt><dd><tt>Leer&nbsp;las&nbsp;opciones&nbsp;introducidas&nbsp;como&nbsp;atributo&nbsp;y&nbsp;como&nbsp;definicion</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-validOptGA"><strong>validOptGA</strong></a>(self) -&gt; None</dt><dd><tt>Validar&nbsp;que&nbsp;algunos&nbsp;parametros&nbsp;cumplan&nbsp;con&nbsp;la&nbsp;logica&nbsp;del&nbsp;algoritmo&nbsp;a&nbsp;aplicar</tt></dd></dl>
+
+<dl><dt><a name="AlgorithmsOptions-validOptSA"><strong>validOptSA</strong></a>(self) -&gt; None</dt><dd><tt>Validar&nbsp;que&nbsp;algunos&nbsp;parametros&nbsp;cumplan&nbsp;con&nbsp;la&nbsp;logica&nbsp;del&nbsp;algoritmo&nbsp;a&nbsp;aplicar</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>alpha</strong> = 0.98</dl>
+
+<dl><dt><strong>cooling</strong> = &lt;CoolingType.GEOMETRIC: 'GEOMETRIC'&gt;</dl>
+
+<dl><dt><strong>crossover_type</strong> = &lt;CrossoverType.OX: 'OX'&gt;</dl>
+
+<dl><dt><strong>gselection_type</strong> = &lt;SelectionType.RANDOM: 'RANDOM'&gt;</dl>
+
+<dl><dt><strong>initial_solution</strong> = &lt;InitialSolution.DETERMINISTIC: 'DETERMINISTIC'&gt;</dl>
+
+<dl><dt><strong>instance</strong> = 'instances/burma14.tsp'</dl>
+
+<dl><dt><strong>max_evaluations</strong> = 1000</dl>
+
+<dl><dt><strong>max_iterations</strong> = 20</dl>
+
+<dl><dt><strong>max_time</strong> = 60.0</dl>
+
+<dl><dt><strong>metaheuristic</strong> = &lt;MHType.SA: 'SA'&gt;</dl>
+
+<dl><dt><strong>move</strong> = &lt;TSPMove.SWAP: 'SWAP'&gt;</dl>
+
+<dl><dt><strong>mutation_prob</strong> = 0.2</dl>
+
+<dl><dt><strong>mutation_type</strong> = &lt;TSPMove.SWAP: 'SWAP'&gt;</dl>
+
+<dl><dt><strong>offspring_size</strong> = 20</dl>
+
+<dl><dt><strong>output</strong> = 'solucion.txt'</dl>
+
+<dl><dt><strong>pop_size</strong> = 10</dl>
+
+<dl><dt><strong>pselection_type</strong> = &lt;SelectionType.RANDOM: 'RANDOM'&gt;</dl>
+
+<dl><dt><strong>seed</strong> = 0</dl>
+
+<dl><dt><strong>selection_strategy</strong> = &lt;SelectionStrategy.MULAMBDA: 'MULAMBDA'&gt;</dl>
+
+<dl><dt><strong>silent</strong> = False</dl>
+
+<dl><dt><strong>t0</strong> = 1000.0</dl>
+
+<dl><dt><strong>tmin</strong> = 900.0</dl>
+
+<dl><dt><strong>trayectory</strong> = 'trayectory.txt'</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CoolingType">class <strong>CoolingType</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#CoolingType">CoolingType</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Esquemas&nbsp;de&nbsp;enfriamiento&nbsp;disponibles&nbsp;para&nbsp;Simulated&nbsp;Annealing<br>
+GEOMETRIC:&nbsp;t&nbsp;=&nbsp;t&nbsp;*&nbsp;alpha<br>
+LINEAR:&nbsp;t&nbsp;=&nbsp;t&nbsp;*&nbsp;(1&nbsp;-&nbsp;(evaluation&nbsp;/&nbsp;max_evaluations))<br>
+LOG:&nbsp;t&nbsp;=&nbsp;t&nbsp;*&nbsp;alpha&nbsp;*&nbsp;1/ln(evaluation&nbsp;+&nbsp;1)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#CoolingType">CoolingType</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>GEOMETRIC</strong> = &lt;CoolingType.GEOMETRIC: 'GEOMETRIC'&gt;</dl>
+
+<dl><dt><strong>LINEAR</strong> = &lt;CoolingType.LINEAR: 'LINEAR'&gt;</dl>
+
+<dl><dt><strong>LOG</strong> = &lt;CoolingType.LOG: 'LOG'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CrossoverType">class <strong>CrossoverType</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#CrossoverType">CrossoverType</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Tipos&nbsp;de&nbsp;cruzamiento&nbsp;disponibles<br>
+PMX:&nbsp;(partially-mapped&nbsp;crossover)&nbsp;hace&nbsp;swap&nbsp;adaptando&nbsp;los&nbsp;tours<br>
+O1X:&nbsp;(order&nbsp;1&nbsp;crossover)&nbsp;<br>
+OPX:&nbsp;(one&nbsp;point&nbsp;crossover)&nbsp;se&nbsp;realiza&nbsp;cruzamiento&nbsp;en&nbsp;un&nbsp;punto&nbsp;utilizando&nbsp;una&nbsp;lista&nbsp;de&nbsp;referencia<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#CrossoverType">CrossoverType</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>OPX</strong> = &lt;CrossoverType.OPX: 'OPX'&gt;</dl>
+
+<dl><dt><strong>OX</strong> = &lt;CrossoverType.OX: 'OX'&gt;</dl>
+
+<dl><dt><strong>PMX</strong> = &lt;CrossoverType.PMX: 'PMX'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="InitialSolution">class <strong>InitialSolution</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#InitialSolution">InitialSolution</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Metodos&nbsp;disponibles&nbsp;para&nbsp;crear&nbsp;una&nbsp;solucion&nbsp;inicial<br>
+RANDOM:&nbsp;Solucion&nbsp;aleatoria<br>
+NEAREST_N:&nbsp;Solucion&nbsp;creada&nbsp;con&nbsp;la&nbsp;heuristica&nbsp;del&nbsp;vecino&nbsp;mas&nbsp;cercano<br>
+DETERMINISTIC:&nbsp;Solucion&nbsp;creada&nbsp;deterministicamente&nbsp;para&nbsp;testing,&nbsp;en&nbsp;este&nbsp;caso&nbsp;es&nbsp;secuencial<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#InitialSolution">InitialSolution</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>DETERMINISTIC</strong> = &lt;InitialSolution.DETERMINISTIC: 'DETERMINISTIC'&gt;</dl>
+
+<dl><dt><strong>NEAREST_N</strong> = &lt;InitialSolution.NEAREST_N: 'NEAREST_N'&gt;</dl>
+
+<dl><dt><strong>RANDOM</strong> = &lt;InitialSolution.RANDOM: 'RANDOM'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MHType">class <strong>MHType</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#MHType">MHType</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Tipos&nbsp;de&nbsp;Metaheristicas&nbsp;disponibles<br>
+SA:&nbsp;Simulated&nbsp;Annealing<br>
+GA:&nbsp;Genetic&nbsp;Algorithm<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#MHType">MHType</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>GA</strong> = &lt;MHType.GA: 'GA'&gt;</dl>
+
+<dl><dt><strong>SA</strong> = &lt;MHType.SA: 'SA'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SelectionStrategy">class <strong>SelectionStrategy</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#SelectionStrategy">SelectionStrategy</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Estrategias&nbsp;de&nbsp;seleccion&nbsp;de&nbsp;individuos&nbsp;de&nbsp;la&nbsp;poblacion<br>
+MU_LAMBDA:&nbsp;Estrategia&nbsp;(mu,&nbsp;lambda)<br>
+MUPLUSLAMBDA:&nbsp;Estrategia&nbsp;(mu+lambda)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#SelectionStrategy">SelectionStrategy</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>MULAMBDA</strong> = &lt;SelectionStrategy.MULAMBDA: 'MULAMBDA'&gt;</dl>
+
+<dl><dt><strong>MUPLUSLAMBDA</strong> = &lt;SelectionStrategy.MUPLUSLAMBDA: 'MUPLUSLAMBDA'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SelectionType">class <strong>SelectionType</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#SelectionType">SelectionType</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Tipos&nbsp;de&nbsp;seleccion&nbsp;de&nbsp;individuos<br>
+RANDOM:&nbsp;Seleccion&nbsp;aleatoria<br>
+BEST:&nbsp;Seleccion&nbsp;de&nbsp;los&nbsp;mejores&nbsp;(elitismo)<br>
+ROULETTE:&nbsp;Seleccion&nbsp;proporcional&nbsp;al&nbsp;fitness<br>
+TOURNAMENT:&nbsp;Seleccion&nbsp;de&nbsp;torneos&nbsp;k=3<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#SelectionType">SelectionType</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>BEST</strong> = &lt;SelectionType.BEST: 'BEST'&gt;</dl>
+
+<dl><dt><strong>RANDOM</strong> = &lt;SelectionType.RANDOM: 'RANDOM'&gt;</dl>
+
+<dl><dt><strong>ROULETTE</strong> = &lt;SelectionType.ROULETTE: 'ROULETTE'&gt;</dl>
+
+<dl><dt><strong>TOURNAMENT</strong> = &lt;SelectionType.TOURNAMENT: 'TOURNAMENT'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TSPMove">class <strong>TSPMove</strong></a>(<a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#TSPMove">TSPMove</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Tipos&nbsp;de&nbsp;movimientos&nbsp;disponibles&nbsp;para&nbsp;el&nbsp;TSP&nbsp;<br>
+TWO_OPT:&nbsp;Operador&nbsp;2-opt<br>
+SWAP:&nbsp;Operador&nbsp;swap<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="src.AlgorithmsOptions.html#TSPMove">TSPMove</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>SWAP</strong> = &lt;TSPMove.SWAP: 'SWAP'&gt;</dl>
+
+<dl><dt><strong>TWO_OPT</strong> = &lt;TSPMove.TWO_OPT: 'TWO_OPT'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

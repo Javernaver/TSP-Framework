@@ -7,7 +7,7 @@ from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
 from src.Utilities import bcolors
 from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType
-from src.TSP import TSP
+from src.Tsp import Tsp
 
 def main(argv=sys.argv) -> None:
     """
@@ -23,7 +23,7 @@ def main(argv=sys.argv) -> None:
     options = AlgorithmsOptions(argv)
 
     # leer e interpretar el problema TSP leido desde la instancia definida
-    problem = TSP(options.instance)
+    problem = Tsp(options.instance)
     #print(problema.random_tour())
 
     # Ejecutar Metaheuristica
@@ -54,3 +54,6 @@ def main(argv=sys.argv) -> None:
 
     end = timer() # tiempo final de ejecucion
     print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
+
+if __name__ == '__main__':
+    main()

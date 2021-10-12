@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module src.Algorithms.Population</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="src.html"><font color="#ffffff">src</font></a>.<a href="src.Algorithms.html"><font color="#ffffff">Algorithms</font></a>.Population</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cproyectos%5Ctsp-framework%5Csrc%5Calgorithms%5Cpopulation.py">d:\proyectos\tsp-framework\src\algorithms\population.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="src.Algorithms.Population.html#Population">Population</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Population">class <strong>Population</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Population">Population</a>(**kwargs)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Population-OPXCrossover"><strong>OPXCrossover</strong></a>(self, parents: list) -&gt; list</dt><dd><tt>Aplica&nbsp;el&nbsp;operador&nbsp;OPX&nbsp;o&nbsp;cruzamiento&nbsp;en&nbsp;un&nbsp;punto&nbsp;a&nbsp;los&nbsp;padres.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+parents&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;2&nbsp;individuos&nbsp;padres&nbsp;seleccionados&nbsp;para&nbsp;cruzamiento<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;2&nbsp;hijos&nbsp;resultantes&nbsp;del&nbsp;cruzamiento</tt></dd></dl>
+
+<dl><dt><a name="Population-OXCrossover"><strong>OXCrossover</strong></a>(self, parents: list) -&gt; list</dt><dd><tt>Aplica&nbsp;el&nbsp;operador&nbsp;OX&nbsp;a&nbsp;los&nbsp;padres<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+parents&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;2&nbsp;individuos&nbsp;padres&nbsp;seleccionados&nbsp;para&nbsp;cruzamiento<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;2&nbsp;hijos&nbsp;resultantes&nbsp;del&nbsp;cruzamiento</tt></dd></dl>
+
+<dl><dt><a name="Population-PMXCrossover"><strong>PMXCrossover</strong></a>(self, parents: list) -&gt; list</dt><dd><tt>Aplica&nbsp;el&nbsp;operador&nbsp;PMX&nbsp;a&nbsp;los&nbsp;padres<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+parents&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;2&nbsp;individuos&nbsp;padres&nbsp;seleccionados&nbsp;para&nbsp;cruzamiento<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;2&nbsp;hijos&nbsp;resultantes&nbsp;del&nbsp;cruzamiento</tt></dd></dl>
+
+<dl><dt><a name="Population-__init__"><strong>__init__</strong></a>(self, **kwargs) -&gt; None</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Population-add"><strong>add</strong></a>(self, indivi: &lt;built-in function any&gt;) -&gt; None</dt><dd><tt>Añade&nbsp;un&nbsp;individuo&nbsp;o&nbsp;varios&nbsp;de&nbsp;estos&nbsp;a&nbsp;la&nbsp;solucion</tt></dd></dl>
+
+<dl><dt><a name="Population-clear"><strong>clear</strong></a>(self) -&gt; None</dt><dd><tt>Elimina&nbsp;todos&nbsp;los&nbsp;individuos&nbsp;de&nbsp;la&nbsp;poblacion</tt></dd></dl>
+
+<dl><dt><a name="Population-copy"><strong>copy</strong></a>(self, population: 'Population') -&gt; None</dt><dd><tt>Copia&nbsp;el&nbsp;contenido&nbsp;de&nbsp;otra&nbsp;instancia&nbsp;del&nbsp;objeto&nbsp;recibida&nbsp;por&nbsp;parametro</tt></dd></dl>
+
+<dl><dt><a name="Population-crossover"><strong>crossover</strong></a>(self, parents_id: list, ctype: src.AlgorithmsOptions.CrossoverType) -&gt; list</dt><dd><tt>Aplica&nbsp;el&nbsp;operador&nbsp;cruzamiento<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+parents_id&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;individuos&nbsp;padres&nbsp;seleccionados&nbsp;para&nbsp;cruzamiento<br>
+ctype&nbsp;:&nbsp;CrossoverType<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tipo&nbsp;de&nbsp;cruzamiento<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;individuos&nbsp;hijos&nbsp;generados</tt></dd></dl>
+
+<dl><dt><a name="Population-generateRouletteWheel"><strong>generateRouletteWheel</strong></a>(self, candidates: list) -&gt; list</dt><dd><tt>Retorna&nbsp;la&nbsp;torta&nbsp;de&nbsp;probabilidades&nbsp;asociadas&nbsp;al&nbsp;fitness&nbsp;de&nbsp;las&nbsp;soluciones&nbsp;entregadas,&nbsp;la&nbsp;seleccion&nbsp;es&nbsp;<br>
+proporcional&nbsp;al&nbsp;fitness<br>
+Ruleta&nbsp;para&nbsp;minimizacion:&nbsp;p(x1)&nbsp;=&nbsp;(min&nbsp;+&nbsp;max&nbsp;-&nbsp;f(x1))&nbsp;/&nbsp;sum(f(x))<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+candidates&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;candidatos&nbsp;que&nbsp;participan&nbsp;de&nbsp;la&nbsp;ruleta&nbsp;<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;que&nbsp;posee&nbsp;las&nbsp;probabilidades&nbsp;acumuladas&nbsp;para&nbsp;la&nbsp;seleccion&nbsp;de&nbsp;soluciones</tt></dd></dl>
+
+<dl><dt><a name="Population-getBestTour"><strong>getBestTour</strong></a>(self) -&gt; src.Tour.Tour</dt><dd><tt>Retorna&nbsp;el&nbsp;mejor&nbsp;individuo&nbsp;de&nbsp;la&nbsp;poblacion</tt></dd></dl>
+
+<dl><dt><a name="Population-getIndividuals"><strong>getIndividuals</strong></a>(self, index: list) -&gt; list</dt><dd><tt>Retorna&nbsp;individuos&nbsp;segun&nbsp;una&nbsp;lista&nbsp;con&nbsp;indices<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+index&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;individuos<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;individuos&nbsp;requeridos</tt></dd></dl>
+
+<dl><dt><a name="Population-joinPopulation"><strong>joinPopulation</strong></a>(self, population: 'Population') -&gt; None</dt><dd><tt>Une&nbsp;dos&nbsp;poblaciones</tt></dd></dl>
+
+<dl><dt><a name="Population-mutation"><strong>mutation</strong></a>(self, mut_probability: float, mtype: src.AlgorithmsOptions.TSPMove) -&gt; None</dt><dd><tt>Aplica&nbsp;el&nbsp;operador&nbsp;de&nbsp;mutacion<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+mut_probability&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;probabilidad&nbsp;de&nbsp;mutacion&nbsp;<br>
+mtype&nbsp;:&nbsp;TSPMove<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tipo&nbsp;de&nbsp;mutacion</tt></dd></dl>
+
+<dl><dt><a name="Population-orderPopulation"><strong>orderPopulation</strong></a>(self) -&gt; None</dt><dd><tt>Ordena&nbsp;la&nbsp;poblacion&nbsp;de&nbsp;menor&nbsp;a&nbsp;mayor&nbsp;fitness</tt></dd></dl>
+
+<dl><dt><a name="Population-printPop"><strong>printPop</strong></a>(self) -&gt; None</dt><dd><tt>Imprime&nbsp;la&nbsp;poblacion&nbsp;de&nbsp;soluciones&nbsp;i&nbsp;costo</tt></dd></dl>
+
+<dl><dt><a name="Population-searchBest"><strong>searchBest</strong></a>(self) -&gt; None</dt><dd><tt>Busca&nbsp;el&nbsp;mejor&nbsp;individuo&nbsp;en&nbsp;la&nbsp;poblacion&nbsp;y&nbsp;guarda&nbsp;su&nbsp;indice&nbsp;en&nbsp;la&nbsp;poblacion</tt></dd></dl>
+
+<dl><dt><a name="Population-selectIBest"><strong>selectIBest</strong></a>(self, size: int = 2) -&gt; list</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;en&nbsp;base&nbsp;al&nbsp;fitness,&nbsp;siendo&nbsp;una&nbsp;seleccion&nbsp;elitista<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar&nbsp;(por&nbsp;defecto&nbsp;2)<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;individuos&nbsp;seleccionados</tt></dd></dl>
+
+<dl><dt><a name="Population-selectIRandom"><strong>selectIRandom</strong></a>(self, size: int = 2) -&gt; list</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;aleatoriamente<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar&nbsp;(por&nbsp;defecto&nbsp;2)<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;individuos&nbsp;seleccionados</tt></dd></dl>
+
+<dl><dt><a name="Population-selectIRoulette"><strong>selectIRoulette</strong></a>(self, size: int = 2) -&gt; list</dt><dd><tt>Selecciona&nbsp;los&nbsp;individuos&nbsp;padres&nbsp;en&nbsp;base&nbsp;a&nbsp;la&nbsp;ruleta<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar&nbsp;(por&nbsp;defecto&nbsp;2)<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;individuos&nbsp;seleccionados</tt></dd></dl>
+
+<dl><dt><a name="Population-selectITournament"><strong>selectITournament</strong></a>(self, size: int = 2, tsize: int = 3) -&gt; list</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;en&nbsp;base&nbsp;al&nbsp;fitness&nbsp;en&nbsp;un&nbsp;torneo<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;los&nbsp;individuos&nbsp;seleccionados&nbsp;o&nbsp;ganadores&nbsp;del&nbsp;torneo&nbsp;(por&nbsp;defecto&nbsp;2)<br>
+tsize&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;los&nbsp;participantes&nbsp;del&nbsp;torneo&nbsp;(por&nbsp;defecto&nbsp;3)<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;individuos&nbsp;seleccionados</tt></dd></dl>
+
+<dl><dt><a name="Population-selectParents"><strong>selectParents</strong></a>(self, stype: src.AlgorithmsOptions.SelectionType) -&gt; list</dt><dd><tt>Selecciona&nbsp;2&nbsp;padres&nbsp;segun&nbsp;el&nbsp;tipo&nbsp;de&nbsp;seleccion<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+stype&nbsp;:&nbsp;SelectionType<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tipo&nbsp;de&nbsp;seleccion<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista&nbsp;con&nbsp;los&nbsp;indices&nbsp;de&nbsp;los&nbsp;padres&nbsp;seleccionados</tt></dd></dl>
+
+<dl><dt><a name="Population-selectPopBest"><strong>selectPopBest</strong></a>(self, size: int) -&gt; None</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;para&nbsp;permacer&nbsp;en&nbsp;la&nbsp;poblacion&nbsp;en&nbsp;base&nbsp;al&nbsp;fitness,&nbsp;siendo&nbsp;una&nbsp;seleccion&nbsp;elitista<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar</tt></dd></dl>
+
+<dl><dt><a name="Population-selectPopRandom"><strong>selectPopRandom</strong></a>(self, size: int) -&gt; None</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;aleatoriamente&nbsp;para&nbsp;permanecer&nbsp;en&nbsp;la&nbsp;poblacion<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar</tt></dd></dl>
+
+<dl><dt><a name="Population-selectPopRoulette"><strong>selectPopRoulette</strong></a>(self, size: int) -&gt; None</dt><dd><tt>Selecciona&nbsp;los&nbsp;individuos&nbsp;padres&nbsp;en&nbsp;base&nbsp;a&nbsp;la&nbsp;ruleta&nbsp;para&nbsp;permanacer&nbsp;en&nbsp;la&nbsp;poblacion<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar</tt></dd></dl>
+
+<dl><dt><a name="Population-selectPopTournament"><strong>selectPopTournament</strong></a>(self, size: int, tsize: int = 3) -&gt; None</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;en&nbsp;base&nbsp;al&nbsp;fitness&nbsp;en&nbsp;un&nbsp;torneo&nbsp;para&nbsp;permanecer&nbsp;en&nbsp;la&nbsp;poblacion<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tamaño&nbsp;de&nbsp;los&nbsp;individuos&nbsp;seleccionados&nbsp;o&nbsp;ganadores&nbsp;del&nbsp;torneo<br>
+tsize&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tamaño&nbsp;de&nbsp;los&nbsp;participantes&nbsp;del&nbsp;torneo&nbsp;(por&nbsp;defecto&nbsp;3)</tt></dd></dl>
+
+<dl><dt><a name="Population-selectPopulation"><strong>selectPopulation</strong></a>(self, size: int, stype: src.AlgorithmsOptions.SelectionType) -&gt; None</dt><dd><tt>Selecciona&nbsp;individuos&nbsp;para&nbsp;permanecer&nbsp;en&nbsp;la&nbsp;poblacion<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+size&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numero&nbsp;de&nbsp;individuos&nbsp;a&nbsp;seleccionar<br>
+stype&nbsp;:&nbsp;SelectionType<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tipo&nbsp;de&nbsp;seleccion</tt></dd></dl>
+
+<dl><dt><a name="Population-start"><strong>start</strong></a>(self) -&gt; None</dt><dd><tt>Inicializa&nbsp;la&nbsp;poblacion</tt></dd></dl>
+
+<dl><dt><a name="Population-swapMutation"><strong>swapMutation</strong></a>(self, mut_probability: float) -&gt; None</dt><dd><tt>Aplica&nbsp;swap&nbsp;aleatoriamente&nbsp;a&nbsp;toda&nbsp;la&nbsp;poblacion&nbsp;segun&nbsp;la&nbsp;probabilidad&nbsp;recibida<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+mut_probability&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;probabilidad&nbsp;de&nbsp;mutacion</tt></dd></dl>
+
+<dl><dt><a name="Population-twoOptMutation"><strong>twoOptMutation</strong></a>(self, mut_probability: float) -&gt; None</dt><dd><tt>Aplica&nbsp;el&nbsp;movimiento&nbsp;2opt&nbsp;aleatoriamente&nbsp;a&nbsp;toda&nbsp;la&nbsp;poblacion&nbsp;segun&nbsp;la&nbsp;probabilidad&nbsp;recibida<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+mut_probability&nbsp;:&nbsp;float<br>
+&nbsp;&nbsp;&nbsp;&nbsp;probabilidad&nbsp;de&nbsp;mutacion</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

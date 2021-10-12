@@ -1,7 +1,7 @@
 from src.Utilities import bcolors, random
 from src.TSPlibReader import TSPlibReader
 
-class TSP():
+class Tsp():
     """
     Clase que lee una instancia, evalua soluciones del TSP y provee metodos para crear soluciones
 
@@ -50,7 +50,7 @@ class TSP():
         for fila in self.distances:
             for valor in fila:
                 print(f"{bcolors.OKCYAN}{valor} {bcolors.ENDC}",end=" ")
-            if fila: print()      
+            print()      
 
     def get_distance(self, i: int, j: int) -> int:
         """ Obtener distancia entre los nodos por su indice i y j"""
@@ -122,7 +122,7 @@ class TSP():
         tour = [0] * self.nodes
         selected = [False] * self.nodes
 
-        # Si el nodo inicial es menor que 0
+        # Si el nodo inicial es menor que 0 se genera uno aleatorio para comenzar
         if (start < 0):
             start = random.randint(0, self.nodes-1)
         tour[0] = start

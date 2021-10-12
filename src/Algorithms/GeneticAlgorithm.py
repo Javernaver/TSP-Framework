@@ -6,34 +6,16 @@ from timeit import default_timer as timer
 from src.Algorithms.Population import Population
 from src.Utilities import bcolors, printSolToFile, printTraToFile
 from src.Tour import Tour
-from src.TSP import TSP
-from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, SelectionType, CrossoverType, MutationType
+from src.Tsp import Tsp
+from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, SelectionType, CrossoverType, TSPMove
 
 
 class GeneticAlgorithm():
 
-    def __init__(self, options: AlgorithmsOptions = None, problem: TSP = None) -> None:
+    def __init__(self, options: AlgorithmsOptions = None, problem: Tsp = None) -> None:
 
         # Atributos de instancia
-        self.problem: TSP # Problema 	
-    
-        self.pop_size = 10 # Parametro tamaño de la poblacion 	
-        
-        self.offspring_size = 20	# Cantidad de hijos
-        
-        self.pselection_type = SelectionType.RANDOM # Seleccion de padres
-        
-        self.crossover_type = CrossoverType.OX # Cruzamiento 	
-        
-        self.mutation_type = MutationType.SWAP # Mutacion	
-        
-        self.mutation_prob = 0.2 # Probabilidad de mutacion
-        
-        self.selection_strategy = SelectionStrategy.MULAMBDA # Estrategia de seleccion de la nueva poblacion
-        
-        self.gselection_type = SelectionType.RANDOM # Tipo de seleccion de la poblacion
-        
-        self.elitism = 0 # Soluciones seleccionadas por elitismo 
+        self.problem: Tsp # Problema 	
 
         self.best_tour: Tour = None # Mejor tour 
         
@@ -56,7 +38,7 @@ class GeneticAlgorithm():
             self.options = options
         # Si el objeto con el problema tsp no esta incluido
         if not problem:
-            self.problem = TSP(self.options.instance)
+            self.problem = Tsp(self.options.instance)
         else:
             self.problem = problem
 
@@ -116,7 +98,7 @@ class GeneticAlgorithm():
         # tiempo para iteraciones y condicion de termino por tiempo
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
-            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...\n{bcolors.ENDC}")
+            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...{bcolors.ENDC}")
             print(f"{bcolors.BOLD}\nGeneracion; Tiempo; Mejor hijo; Detalle{bcolors.ENDC}", end='')
          
 

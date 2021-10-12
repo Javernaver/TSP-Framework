@@ -20,6 +20,8 @@ class TSPMove(Enum):
     TWO_OPT = 'TWO_OPT'
     SWAP = 'SWAP'
 
+""" Simulated Annealing """
+
 class InitialSolution(Enum):
     """ Metodos disponibles para crear una solucion inicial
     RANDOM: Solucion aleatoria
@@ -39,6 +41,8 @@ class CoolingType(Enum):
     GEOMETRIC = 'GEOMETRIC'
     LINEAR = 'LINEAR'
     LOG = 'LOG'
+
+""" Algoritmo Genetico """
 
 class SelectionType(Enum):
     """Tipos de seleccion de individuos
@@ -62,19 +66,10 @@ class CrossoverType(Enum):
     OX = 'OX'
     OPX = 'OPX'
 
-
-class MutationType(Enum):
-    """Tipos de mutacion disponibles
-    TWO_OPT: mutacion que aplica un movimiento 2-opt aleatoriamente
-    SWAP: mutacion que aplica un movimiento swap aleatoriamente
-    """
-    TWO_OPT = 'TWO_OPT'
-    SWAP = 'SWAP'
-
 class SelectionStrategy(Enum):
-    """Estrategias de seleccion de individuos
-    MU_LAMBDA: estrategia (mu, lambda)
-    MUPLUSLAMBDA: estrategia (mu+lambda)
+    """Estrategias de seleccion de individuos de la poblacion
+    MU_LAMBDA: Estrategia (mu, lambda)
+    MUPLUSLAMBDA: Estrategia (mu+lambda)
     """
     MULAMBDA = 'MULAMBDA'
     MUPLUSLAMBDA = 'MUPLUSLAMBDA'
@@ -123,9 +118,9 @@ class AlgorithmsOptions():
         Seleccion de la nueva poblacion
     Methods
     -------
-    __init__(args: list, **keyargs: dict)
+    __init__(args: list, **kwargs: dict)
         Constructor de clase para configurar y leer todas las opciones que pueda tener una metaheristica recibidas como atributo
-    readOptions(argv :list, keyargs :dict)
+    readOptions(argv :list, kwargs: dict)
         Clase que lee las opciones introducidas como atributo y por definicion
     validateOptions()
         Validar que algunos paramaetros para los algoritmos sean coerentes
@@ -183,7 +178,7 @@ class AlgorithmsOptions():
     
     crossover_type = CrossoverType.OX # Cruzamiento
     
-    mutation_type = MutationType.SWAP # Mutacion
+    mutation_type = TSPMove.SWAP # Mutacion
     
     mutation_prob = 0.2 # probabilidad de mutacion 
     
@@ -317,7 +312,7 @@ class AlgorithmsOptions():
         # Seleccion del movimiento para la metaheuristica
         if (args.move or 'move' in kwargs):
             val = args.move.lower() if args.move else kwargs['move'].lower()
-            if (val == '2opt'):
+            if (val == '2opt' or val == '2-opt'):
                 self.move = TSPMove.TWO_OPT
             elif (val == 'swap'):
                 self.move = TSPMove.SWAP
@@ -417,10 +412,10 @@ class AlgorithmsOptions():
         # Operador de mutacion
         if (args.mutation or 'mutation' in kwargs):
             val = args.mutation.lower() if args.mutation else kwargs['mutation'].lower()
-            if (val == '2opt'):
-                self.mutation_type = MutationType.TWO_OPT
+            if (val == '2opt' or val == '2-opt'):
+                self.mutation_type = TSPMove.TWO_OPT
             elif (val == 'swap'):
-                self.mutation_type = MutationType.SWAP
+                self.mutation_type = TSPMove.SWAP
             else: print(f"{bcolors.FAIL}Error: Tipo de mutacion no reconocido (-mu o --mutation) {bcolors.ENDC}")
 
         # Probabilidad de mutacion

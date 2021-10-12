@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module src.Tsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="src.html"><font color="#ffffff">src</font></a>.Tsp</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cproyectos%5Ctsp-framework%5Csrc%5Ctsp.py">d:\proyectos\tsp-framework\src\tsp.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="src.Tsp.html#Tsp">Tsp</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Tsp">class <strong>Tsp</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Tsp">Tsp</a>(filename:&nbsp;str)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+Clase&nbsp;que&nbsp;lee&nbsp;una&nbsp;instancia,&nbsp;evalua&nbsp;soluciones&nbsp;del&nbsp;TSP&nbsp;y&nbsp;provee&nbsp;metodos&nbsp;para&nbsp;crear&nbsp;soluciones<br>
+&nbsp;<br>
+Attributes<br>
+----------<br>
+nodes&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Numero&nbsp;de&nbsp;Nodos<br>
+distances&nbsp;:&nbsp;list[list]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Matriz&nbsp;con&nbsp;la&nbsp;distacia<br>
+neighbours&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Matriz&nbsp;con&nbsp;vecinos&nbsp;mas&nbsp;cercanos<br>
+tsplib_instance&nbsp;:&nbsp;TSPlibReader<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Instancia&nbsp;TSP<br>
+options&nbsp;:&nbsp;AlgorithmsOptions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Opciones<br>
+&nbsp;<br>
+&nbsp;<br>
+Methods<br>
+-------<br>
+<a href="#Tsp-__init__">__init__</a>(args,&nbsp;opciones)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Clase&nbsp;constructora,&nbsp;lee&nbsp;todas&nbsp;las&nbsp;opciones&nbsp;que&nbsp;pueda&nbsp;tener&nbsp;el&nbsp;problema<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Tsp-__init__"><strong>__init__</strong></a>(self, filename: str) -&gt; None</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Tsp-compute_tour_length"><strong>compute_tour_length</strong></a>(self, tour: list) -&gt; int</dt><dd><tt>Computar&nbsp;y&nbsp;retornar&nbsp;el&nbsp;costo&nbsp;de&nbsp;un&nbsp;tour</tt></dd></dl>
+
+<dl><dt><a name="Tsp-deterministic_tour"><strong>deterministic_tour</strong></a>(self) -&gt; list</dt><dd><tt>Genera&nbsp;una&nbsp;solucion&nbsp;deterministica</tt></dd></dl>
+
+<dl><dt><a name="Tsp-getSize"><strong>getSize</strong></a>(self) -&gt; int</dt><dd><tt>Obtener&nbsp;numero&nbsp;de&nbsp;nodos</tt></dd></dl>
+
+<dl><dt><a name="Tsp-get_distance"><strong>get_distance</strong></a>(self, i: int, j: int) -&gt; int</dt><dd><tt>Obtener&nbsp;distancia&nbsp;entre&nbsp;los&nbsp;nodos&nbsp;por&nbsp;su&nbsp;indice&nbsp;i&nbsp;y&nbsp;j</tt></dd></dl>
+
+<dl><dt><a name="Tsp-greedy_nearest_n"><strong>greedy_nearest_n</strong></a>(self, start: int) -&gt; list</dt><dd><tt>Genera&nbsp;una&nbsp;solucion&nbsp;del&nbsp;tsp&nbsp;usando&nbsp;la&nbsp;heuristica&nbsp;del&nbsp;nodo&nbsp;mas&nbsp;cercano&nbsp;comenzando&nbsp;del&nbsp;nodo&nbsp;start</tt></dd></dl>
+
+<dl><dt><a name="Tsp-print_distances"><strong>print_distances</strong></a>(self) -&gt; None</dt><dd><tt>Imprimir&nbsp;matriz&nbsp;de&nbsp;distancia&nbsp;entre&nbsp;nodos</tt></dd></dl>
+
+<dl><dt><a name="Tsp-print_solution_and_cost"><strong>print_solution_and_cost</strong></a>(self, tour: list) -&gt; None</dt><dd><tt>Muestra&nbsp;la&nbsp;solucion&nbsp;y&nbsp;costo&nbsp;de&nbsp;un&nbsp;tour</tt></dd></dl>
+
+<dl><dt><a name="Tsp-random_tour"><strong>random_tour</strong></a>(self) -&gt; list</dt><dd><tt>Genera&nbsp;una&nbsp;solucion&nbsp;aleatoria</tt></dd></dl>
+
+<dl><dt><a name="Tsp-tsp_check_tour"><strong>tsp_check_tour</strong></a>(self, tour: list) -&gt; bool</dt><dd><tt>Revisa&nbsp;la&nbsp;correctitud&nbsp;de&nbsp;una&nbsp;solucion&nbsp;del&nbsp;TSP</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

@@ -5,17 +5,17 @@ from math import e, log
 from pathlib import Path
 from src.Utilities import bcolors, random, printSolToFile, printTraToFile
 from src.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, TSPMove, CoolingType
-from src.TSP import TSP
+from src.Tsp import Tsp
 from src.Tour import Tour
 
 class SimulatedAnnealing():
         
     
-    def __init__(self, options: AlgorithmsOptions = None, problem: TSP = None) -> None:
+    def __init__(self, options: AlgorithmsOptions = None, problem: Tsp = None) -> None:
 
 
         # Atributos de instancia
-        self.problem: TSP # Problema TSP
+        self.problem: Tsp # Problema TSP
     
         self.cooling: CoolingType # Esquema de enfriamiento
         
@@ -40,7 +40,7 @@ class SimulatedAnnealing():
             self.options = options
         # Si el objeto con el problema tsp no esta incluido
         if not problem:
-            self.problem = TSP(self.options.instance)
+            self.problem = Tsp(self.options.instance)
         else:
             self.problem = problem
 
@@ -83,15 +83,15 @@ class SimulatedAnnealing():
         # tiempo inicial para iteraciones y condicion de termino por tiempo
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
-            print(f"{bcolors.BOLD}\nEjecutando Simulated Annealing...{bcolors.ENDC}")
+            print(f"{bcolors.HEADER}\nEjecutando Simulated Annealing...{bcolors.ENDC}")
             print(f"{bcolors.BOLD}\nIteracion; Temperatura; Tiempo; Detalle{bcolors.ENDC}", end='')
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations, end-start)):
             
             end = timer() # tiempo actual de iteracion
-            # Generar un vecino aleatoriamente
-            neighbor_tour.randomNeighbor(self.move_type)
+            # Generar un vecino aleatoriamente a traves de un movimiento
+            neighbor_tour.randomMove(self.move_type)
 
             # Mostrar avance iteracion
             if not self.options.silent:

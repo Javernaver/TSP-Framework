@@ -33,16 +33,16 @@ def dtrunc (x: float) -> float:
     x = float(k) # numero float sin parte decimal
     return x
 
-def printSolToFile(outputFile: str, solution: list) -> None:
+def printSolToFile(outputFile: str, tour: list) -> None:
     """ Guardar la solucion para una instacia y ejecucion en un archivo recibido por parametro """
-    if not outputFile or not solution:
+    if not outputFile or not tour:
         return
     try:
         print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{outputFile}")
         # Abrir archivo para escribir o reemplazar
         file = open(outputFile, 'w')
         # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
-        sol = " ".join([str(elem) for elem in solution])
+        sol = " ".join([str(elem) for elem in tour])
         file.write(sol)
         file.close()
     except IOError:

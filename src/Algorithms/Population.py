@@ -1,7 +1,7 @@
-from src.AlgorithmsOptions import CrossoverType, MutationType, SelectionType
+from src.AlgorithmsOptions import CrossoverType, TSPMove, SelectionType
 from src.Utilities import bcolors, random
 from src.Tour import Tour
-from src.TSP import TSP
+from src.Tsp import Tsp
 
 class Population():
 
@@ -9,7 +9,7 @@ class Population():
     def __init__(self, **kwargs) -> None:
         
         # Atributos de instancia
-        self.problem: TSP # Instancia del problema TSP
+        self.problem: Tsp # Instancia del problema TSP
         
         self.pop = [] # Poblacion
         
@@ -565,19 +565,19 @@ class Population():
 
     """ METODOS DE MUTACION """
 
-    def mutation(self, mut_probability: float, mtype: MutationType) -> None:
+    def mutation(self, mut_probability: float, mtype: TSPMove) -> None:
         """ Aplica el operador de mutacion
 
             Parameters
             ----------
             mut_probability : float
                 probabilidad de mutacion 
-            mtype : MutationType
+            mtype : TSPMove
                 tipo de mutacion 
         """
-        if (mtype == MutationType.SWAP):
+        if (mtype == TSPMove.SWAP):
             self.swapMutation(mut_probability)
-        elif (mtype == MutationType.TWO_OPT):
+        elif (mtype == TSPMove.TWO_OPT):
             self.twoOptMutation(mut_probability)
         else:
             self.swapMutation(mut_probability)
@@ -598,7 +598,7 @@ class Population():
             # obtener probabilidad de [0,1]
             r = random.random()
             if (mut_probability > r):
-                self.pop[i].randomSwap()  
+                self.pop[i].randomMove(TSPMove.SWAP)  
 
     def twoOptMutation(self, mut_probability: float) -> None:
         """Aplica el movimiento 2opt aleatoriamente a toda la poblacion segun la probabilidad recibida
@@ -613,7 +613,7 @@ class Population():
             # obtener probabilidad de [0,1]
             r = random.random()
             if (mut_probability > r):
-                self.pop[i].randomTwoOptSwap()
+                self.pop[i].randomMove(TSPMove.TWO_OPT)
 
     
     """ SELECCION DE POBLACION """
@@ -763,12 +763,13 @@ class Population():
             return
 
         # Seleccionar individuos
-        for i in range(size):
+        for _ in range(size):
             # seleccionar individuos para participar en torneo aleatoriamente
             tsel = self.selectIRandom(tsize)
 
-            # Seleccionar mejor individuo de los participantes del torneo
-            index = min(tsel, key=lambda j: self.pop[j].cost)
+            # Seleccionar mejor individuo de los participantes del torneo 
+            # tsel lista de indices y con min se accede a la poblacion dichos indices y se selecciona el de menor costo y se selecciona
+            index = min(tsel, key=lambda ind: self.pop[ind].cost)
             # Agregar individuo a los seleccionados y luego eliminarlo de la poblacion
             sel.append(self.pop[index]) 
             self.pop.pop(index) # eliminar de la poblacion

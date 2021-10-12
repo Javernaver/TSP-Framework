@@ -1,13 +1,41 @@
-from src.TSP import TSP
+from src.Tsp import Tsp
 from src.AlgorithmsOptions import InitialSolution, TSPMove
 from src.Utilities import bcolors, random
 
 class Tour():
+    """ Clase Tour la cual representa un recorrido para una solucion de TSP
+
+        Parameters
+        ----------
+        problem : Tsp, optional
+            Instancia del problema TSP
+        current : list, optional
+            Recorrido actual para un tour el cual es una lista con los puntos a recorrer secuencialmente
+        type_initial_sol : InitialSolution
+            Tipo de solucion inicial
+        tour : Tour, optional
+            Otra instancia de la misma clase
+
+        Atributes
+        ---------
+        problem : Tsp, optional
+            Instancia del problema TSP
+        current : list, optional
+            Recorrido actual para un tour el cual es una lista con los puntos a recorrer secuencialmente
+        cost : int
+            El costo o resultado de la funcion objetivo para un recorrido
+        tour : Tour, optional
+            Otra instancia de la misma clase
+
+        Examples
+        --------
+        >>> tour = Tour(problem=tsp_problem, type_initial_sol=InitialSolution.RANDOM)
+    """
  
     def __init__(self, **kwargs) -> None:
-        
+                
         # Atributos de instancia
-        self.problem: TSP # Instancia del problema
+        self.problem: Tsp # Instancia del problema
     
         self.current = [] # Solucion actual
 
@@ -66,11 +94,11 @@ class Tour():
 
             Parameters
             ----------
-            tour: list
+            tour : list
                 Lista del tour a modificar (sin haber sido modificado aun),
-            cost: int
+            cost : int
                 El costo actual del tour
-            n1, n2: int
+            n1, n2 : int
                 Indices de los nodos para hacer swap
 
             Returns
@@ -138,29 +166,17 @@ class Tour():
         self.cost = self.delta_cost_swap(self.current, self.cost, n1, n2)
         self.current = tour.copy()
 
-    def randomSwap(self) -> None:
-        """Aplica el operador swap entre dos nodos aleatorios"""
-        # Inicializar numeros aleatorios para realizar el swap
-        n1 = random.randint(0, self.problem.getSize()-1)
-        n2 = random.randint(0, self.problem.getSize()-1)
-
-        while (n1 == n2): # si los numeros son iguales
-            n2 = random.randint(0, self.problem.getSize()-1)
-
-        # realizar swap
-        self.swap(n1, n2)
-
 
     def delta_cost_two_opt(self, tour: list, cost: int, s: int, e: int) -> int:
         """ Recalcula el costo de un tour al aplicar el movimiento 2-opt    
 
             Parameters
             ----------
-            tour: list
-                Lista del tour a modificar (sin haber sido modificado aun),
-            cost: int
+            tour : list
+                Lista del tour a modificar sin haber sido modificado aun
+            cost : int
                 El costo actual del tour
-            s, e: int
+            s, e : int
                 Indices de los nodos para ser intercambiardos con 2-opt
 
             Returns
@@ -223,19 +239,8 @@ class Tour():
         self.cost = self.delta_cost_two_opt(self.current, self.cost, s, e)
         self.current = new_tour.copy()
 
-    def randomTwoOptSwap(self) -> None:
-        """Aplica el operador two_opt entre dos nodos aleatorios"""
-        # Inicializar numeros aleatorios para realizar el swap
-        n1 = random.randint(0, self.problem.getSize()-1)
-        n2 = random.randint(0, self.problem.getSize()-1)
 
-        while (n1 == n2 | abs(n2-n1) < 2 ): # si los numeros son iguales
-            n2 = random.randint(0, self.problem.getSize()-1)
-
-        # realizar movimiento 2opt
-        self.twoOptSwap(n1, n2)
-        
-    def randomNeighbor(self, move_type: TSPMove) -> None:
+    def randomMove(self, move_type: TSPMove) -> None:
         """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove"""
         
         n1 = random.randint(0, self.problem.getSize()-1)

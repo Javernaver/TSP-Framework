@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module src.Tour</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="src.html"><font color="#ffffff">src</font></a>.Tour</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:d%3A%5Cproyectos%5Ctsp-framework%5Csrc%5Ctour.py">d:\proyectos\tsp-framework\src\tour.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="src.Tour.html#Tour">Tour</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Tour">class <strong>Tour</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Tour">Tour</a>(**kwargs)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+Clase&nbsp;<a href="#Tour">Tour</a>&nbsp;la&nbsp;cual&nbsp;representa&nbsp;un&nbsp;recorrido&nbsp;para&nbsp;una&nbsp;solucion&nbsp;de&nbsp;TSP<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+problem&nbsp;:&nbsp;Tsp,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Instancia&nbsp;del&nbsp;problema&nbsp;TSP<br>
+current&nbsp;:&nbsp;list,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Recorrido&nbsp;actual&nbsp;para&nbsp;un&nbsp;tour&nbsp;el&nbsp;cual&nbsp;es&nbsp;una&nbsp;lista&nbsp;con&nbsp;los&nbsp;puntos&nbsp;a&nbsp;recorrer&nbsp;secuencialmente<br>
+type_initial_sol&nbsp;:&nbsp;InitialSolution<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Tipo&nbsp;de&nbsp;solucion&nbsp;inicial<br>
+tour&nbsp;:&nbsp;<a href="#Tour">Tour</a>,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Otra&nbsp;instancia&nbsp;de&nbsp;la&nbsp;misma&nbsp;clase<br>
+&nbsp;<br>
+Atributes<br>
+---------<br>
+problem&nbsp;:&nbsp;Tsp,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Instancia&nbsp;del&nbsp;problema&nbsp;TSP<br>
+current&nbsp;:&nbsp;list,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Recorrido&nbsp;actual&nbsp;para&nbsp;un&nbsp;tour&nbsp;el&nbsp;cual&nbsp;es&nbsp;una&nbsp;lista&nbsp;con&nbsp;los&nbsp;puntos&nbsp;a&nbsp;recorrer&nbsp;secuencialmente<br>
+cost&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;El&nbsp;costo&nbsp;o&nbsp;resultado&nbsp;de&nbsp;la&nbsp;funcion&nbsp;objetivo&nbsp;para&nbsp;un&nbsp;recorrido<br>
+tour&nbsp;:&nbsp;<a href="#Tour">Tour</a>,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Otra&nbsp;instancia&nbsp;de&nbsp;la&nbsp;misma&nbsp;clase<br>
+&nbsp;<br>
+Examples<br>
+--------<br>
+&gt;&gt;&gt;&nbsp;tour&nbsp;=&nbsp;<a href="#Tour">Tour</a>(problem=tsp_problem,&nbsp;type_initial_sol=InitialSolution.RANDOM)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Tour-__init__"><strong>__init__</strong></a>(self, **kwargs) -&gt; None</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="Tour-copy"><strong>copy</strong></a>(self, tour: 'Tour') -&gt; None</dt><dd><tt>Copia&nbsp;una&nbsp;solucion&nbsp;de&nbsp;otra&nbsp;instancia&nbsp;del&nbsp;objeto&nbsp;recibida&nbsp;por&nbsp;parametro&nbsp;actualizando&nbsp;la&nbsp;solucion&nbsp;actual</tt></dd></dl>
+
+<dl><dt><a name="Tour-delta_cost_swap"><strong>delta_cost_swap</strong></a>(self, tour: list, cost: int, n1: int, n2: int) -&gt; int</dt><dd><tt>Recalcula&nbsp;el&nbsp;costo&nbsp;de&nbsp;un&nbsp;tour&nbsp;al&nbsp;aplicar&nbsp;el&nbsp;movimiento&nbsp;swap&nbsp;&nbsp;<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+tour&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Lista&nbsp;del&nbsp;tour&nbsp;a&nbsp;modificar&nbsp;(sin&nbsp;haber&nbsp;sido&nbsp;modificado&nbsp;aun),<br>
+cost&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;El&nbsp;costo&nbsp;actual&nbsp;del&nbsp;tour<br>
+n1,&nbsp;n2&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Indices&nbsp;de&nbsp;los&nbsp;nodos&nbsp;para&nbsp;hacer&nbsp;swap<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;El&nbsp;nuevo&nbsp;costo&nbsp;luego&nbsp;de&nbsp;aplicar&nbsp;swap</tt></dd></dl>
+
+<dl><dt><a name="Tour-delta_cost_two_opt"><strong>delta_cost_two_opt</strong></a>(self, tour: list, cost: int, s: int, e: int) -&gt; int</dt><dd><tt>Recalcula&nbsp;el&nbsp;costo&nbsp;de&nbsp;un&nbsp;tour&nbsp;al&nbsp;aplicar&nbsp;el&nbsp;movimiento&nbsp;2-opt&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+tour&nbsp;:&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Lista&nbsp;del&nbsp;tour&nbsp;a&nbsp;modificar&nbsp;sin&nbsp;haber&nbsp;sido&nbsp;modificado&nbsp;aun<br>
+cost&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;El&nbsp;costo&nbsp;actual&nbsp;del&nbsp;tour<br>
+s,&nbsp;e&nbsp;:&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Indices&nbsp;de&nbsp;los&nbsp;nodos&nbsp;para&nbsp;ser&nbsp;intercambiardos&nbsp;con&nbsp;2-opt<br>
+&nbsp;<br>
+Returns<br>
+-------<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El&nbsp;nuevo&nbsp;costo&nbsp;luego&nbsp;de&nbsp;aplicar&nbsp;2-opt</tt></dd></dl>
+
+<dl><dt><a name="Tour-getNode"><strong>getNode</strong></a>(self, pos: int) -&gt; int</dt><dd><tt>Retorna&nbsp;el&nbsp;nodo&nbsp;de&nbsp;un&nbsp;indice&nbsp;recibido</tt></dd></dl>
+
+<dl><dt><a name="Tour-getPosition"><strong>getPosition</strong></a>(self, node: int) -&gt; int</dt><dd><tt>Retorna&nbsp;el&nbsp;indice&nbsp;de&nbsp;un&nbsp;nodo</tt></dd></dl>
+
+<dl><dt><a name="Tour-printCost"><strong>printCost</strong></a>(self) -&gt; None</dt><dd><tt>Escribe&nbsp;el&nbsp;costo&nbsp;de&nbsp;un&nbsp;tour</tt></dd></dl>
+
+<dl><dt><a name="Tour-printSol"><strong>printSol</strong></a>(self) -&gt; None</dt><dd><tt>Escribir&nbsp;solucion&nbsp;y&nbsp;costo</tt></dd></dl>
+
+<dl><dt><a name="Tour-randomMove"><strong>randomMove</strong></a>(self, move_type: src.AlgorithmsOptions.TSPMove) -&gt; None</dt><dd><tt>Aplica&nbsp;un&nbsp;movimiento&nbsp;aleatorio&nbsp;recibido&nbsp;por&nbsp;parametro&nbsp;del&nbsp;tipo&nbsp;TSPMove</tt></dd></dl>
+
+<dl><dt><a name="Tour-swap"><strong>swap</strong></a>(self, n1: int, n2: int) -&gt; None</dt><dd><tt>Aplica&nbsp;el&nbsp;movimiento&nbsp;swap&nbsp;entre&nbsp;dos&nbsp;nodos&nbsp;modificando&nbsp;la&nbsp;solucion&nbsp;actual&nbsp;y&nbsp;su&nbsp;costo</tt></dd></dl>
+
+<dl><dt><a name="Tour-twoOptSwap"><strong>twoOptSwap</strong></a>(self, n1: int, n2: int) -&gt; None</dt><dd><tt>Aplica&nbsp;el&nbsp;movimiento&nbsp;2-opt&nbsp;entre&nbsp;dos&nbsp;nodos&nbsp;modificando&nbsp;la&nbsp;solucion&nbsp;actual&nbsp;y&nbsp;su&nbsp;costo</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>
