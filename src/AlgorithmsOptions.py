@@ -158,7 +158,7 @@ class AlgorithmsOptions():
     
     silent = False # Modo silencioso
 
-    graphic = False # Graficacion de la trayectoria
+    visualize = False # Visualizacion de la trayectoria
 
     # OPCIONES PARA SIMULATED ANNEALING 
     
@@ -216,7 +216,7 @@ class AlgorithmsOptions():
         # Declarar y definir argumentos
         # Definir argumentos generales
         parser.add_argument("-s", "--silent", help="Ejecuta sin mostrar los cambios en cada ciclo de los algoritmos", action="store_true")
-        parser.add_argument("-gra", "--graphic", help="Muestra la trayectoria a la mejor solucion de forma grafica", action="store_true")
+        parser.add_argument("-vi", "--visualize", help="Muestra la visualizacion de trayectoria a la mejor solucion de forma grafica", action="store_true")
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
@@ -286,8 +286,8 @@ class AlgorithmsOptions():
             self.trajectory = args.trajectory if args.trajectory else kwargs['trajectory']
 
         # Archivo de salida para trayectoria
-        if (args.graphic or 'graphic' in kwargs):
-            self.graphic = args.graphic if args.graphic else kwargs['graphic']
+        if (args.visualize or 'graphic' in kwargs):
+            self.visualize = args.visualize if args.visualize else kwargs['visualize']
 
         # Archivo de instancia
         if (args.instance or 'instance' in kwargs):

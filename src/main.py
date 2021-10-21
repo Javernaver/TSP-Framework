@@ -58,7 +58,7 @@ def main(argv=sys.argv) -> None:
     end = timer() # tiempo final de ejecucion
     print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
     
-    if options.graphic:
+    if options.visualize:
         solver.graphic()
     
 if __name__ == '__main__':

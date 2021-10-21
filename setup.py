@@ -10,7 +10,7 @@ setup(
     url='https://github.com/Javernaver/TSP-Framework',
     scripts=['tspf.py'],
     packages=['src', 'src.Algorithms'],
-    install_requires=[ ], 
+    install_requires=['matplotlib'], 
     zip_safe=False,
     classifiers=[
         'License :: MIT License',
