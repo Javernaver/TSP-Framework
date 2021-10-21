@@ -48,19 +48,19 @@ def printSolToFile(outputFile: str, tour: list) -> None:
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {outputFile} Error: {IOError}{bcolors.ENDC}")
 
-def printTraToFile(trayectoryFile: str, trayectory: list) -> None:
+def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
     """ Guardar la trayectoria de una solucion para una instacia y ejecucion en un archivo recibido por parametro """
-    if not trayectoryFile or not trayectoryFile:
+    if not trajectoryFile or not trajectoryFile:
         return
     try:
-        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{trayectoryFile}")
+        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{trajectoryFile}")
         # Abrir archivo para escribir o reemplazar
-        file = open(trayectoryFile, 'w')
+        file = open(trajectoryFile, 'w')
         # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
-        for tour in trayectory:
+        for tour in trajectory:
             sol = " ".join([str(elem) for elem in tour])
             sol += '\n'
             file.write(sol)
         file.close()
     except IOError:
-        print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trayectoryFile} Error: {IOError}{bcolors.ENDC}")
+        print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trajectoryFile} Error: {IOError}{bcolors.ENDC}")

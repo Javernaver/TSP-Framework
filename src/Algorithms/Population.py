@@ -1,10 +1,37 @@
-from src.AlgorithmsOptions import CrossoverType, TSPMove, SelectionType
-from src.Utilities import bcolors, random
+from src.AlgorithmsOptions import CrossoverType, InitialSolution, TSPMove, SelectionType
+from src.utilities import bcolors, random
 from src.Tour import Tour
 from src.Tsp import Tsp
 
 class Population():
+    """ Clase Population la cual representa una poblacion de indiviuos para Algoritmo Genetico, debe inicializarse obligatoriamente como diccionario
 
+        Parameters
+        ----------
+        problem : Tsp
+            Instancia del problema TSP
+        pop_size : int
+            Numero de integrantes de la poblacion
+        population : list
+            Otra lista con poblacion
+        all : Population
+            Otra instancia de la misma clase
+
+        Atributes
+        ---------
+        problem : Tsp
+            Instancia del problema TSP
+        pop : list
+            Lista con la poblacion de la instancia
+        pop_size : int
+            Numero total de individuos de la poblacion
+        best_index : int
+            Indice del indivuduo con la mejor solucion
+
+        Examples
+        --------
+        >>> pop = Population(pop_size=sizePop, problem=tsp_problem)
+    """
     
     def __init__(self, **kwargs) -> None:
         
@@ -27,7 +54,7 @@ class Population():
             self.pop_size = kwargs['pop_size']
             # Agregar individuos a la poblacion
             for _ in range(self.pop_size):
-                self.pop.append( Tour(type_initial_sol='random', problem=self.problem) )
+                self.pop.append( Tour(type_initial_sol=InitialSolution.RANDOM, problem=self.problem) )
             # encontrar mejor individuo    
             self.searchBest()
         

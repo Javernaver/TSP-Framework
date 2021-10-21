@@ -1,6 +1,6 @@
 from enum import Enum
-from src.Utilities import bcolors
-import src.Utilities as util
+from src.utilities import bcolors
+import src.utilities as util
 import time
 import argparse
 
@@ -136,9 +136,9 @@ class AlgorithmsOptions():
     
     # OPCIONES GENERALES
     
-    output = "solucion.txt"	# Archivo para imprimir la solucion
+    output = "solution.txt"	# Archivo para imprimir la solucion
 
-    trayectory = "trayectory.txt"	# Archivo para imprimir la trayectoria de solucion
+    trajectory = "trajectory.txt"	# Archivo para imprimir la trayectoria de solucion
     
     instance = "instances/burma14.tsp" # Archivo de la instancia    
     
@@ -157,6 +157,8 @@ class AlgorithmsOptions():
     initial_solution = InitialSolution.DETERMINISTIC # Solucion Inicial
     
     silent = False # Modo silencioso
+
+    graphic = False # Graficacion de la trayectoria
 
     # OPCIONES PARA SIMULATED ANNEALING 
     
@@ -214,11 +216,12 @@ class AlgorithmsOptions():
         # Declarar y definir argumentos
         # Definir argumentos generales
         parser.add_argument("-s", "--silent", help="Ejecuta sin mostrar los cambios en cada ciclo de los algoritmos", action="store_true")
+        parser.add_argument("-gra", "--graphic", help="Muestra la trayectoria a la mejor solucion de forma grafica", action="store_true")
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
         parser.add_argument("-out", "--output", help="Nombre del archivo de salida para la solucion")
-        parser.add_argument("-tra", "--trayectory", help="Nombre del archivo de salida para la trayectoria de la solucion")
+        parser.add_argument("-tra", "--trajectory", help="Nombre del archivo de salida para la trayectoria de la solucion")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
@@ -279,8 +282,12 @@ class AlgorithmsOptions():
             self.output = args.output if args.output else kwargs['output']
 
         # Archivo de salida para trayectoria
-        if (args.trayectory or 'trayectory' in kwargs):
-            self.trayectory = args.trayectory if args.trayectory else kwargs['trayectory']
+        if (args.trajectory or 'trajectory' in kwargs):
+            self.trajectory = args.trajectory if args.trajectory else kwargs['trajectory']
+
+        # Archivo de salida para trayectoria
+        if (args.graphic or 'graphic' in kwargs):
+            self.graphic = args.graphic if args.graphic else kwargs['graphic']
 
         # Archivo de instancia
         if (args.instance or 'instance' in kwargs):

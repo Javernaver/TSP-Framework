@@ -1,30 +1,30 @@
 from src.Tsp import Tsp
 from src.AlgorithmsOptions import InitialSolution, TSPMove
-from src.Utilities import bcolors, random
+from src.utilities import bcolors, random
 
 class Tour():
-    """ Clase Tour la cual representa un recorrido para una solucion de TSP
+    """ Clase Tour la cual representa un recorrido para una solucion de TSP, debe inicializarse obligatoriamente como diccionario
 
         Parameters
         ----------
-        problem : Tsp, optional
+        problem : Tsp
             Instancia del problema TSP
-        current : list, optional
+        current : list
             Recorrido actual para un tour el cual es una lista con los puntos a recorrer secuencialmente
         type_initial_sol : InitialSolution
             Tipo de solucion inicial
-        tour : Tour, optional
+        tour : Tour
             Otra instancia de la misma clase
 
         Atributes
         ---------
-        problem : Tsp, optional
+        problem : Tsp
             Instancia del problema TSP
-        current : list, optional
+        current : list
             Recorrido actual para un tour el cual es una lista con los puntos a recorrer secuencialmente
         cost : int
             El costo o resultado de la funcion objetivo para un recorrido
-        tour : Tour, optional
+        tour : Tour
             Otra instancia de la misma clase
 
         Examples

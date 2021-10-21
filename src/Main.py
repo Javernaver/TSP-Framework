@@ -4,7 +4,7 @@ from timeit import default_timer as timer
 
 from src.Algorithms.GeneticAlgorithm import GeneticAlgorithm
 from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
-from src.Utilities import bcolors
+from src.utilities import bcolors
 from src.Tour import Tour
 from src.AlgorithmsOptions import AlgorithmsOptions, MHType
 from src.Tsp import Tsp
@@ -26,7 +26,7 @@ def main(argv=sys.argv) -> None:
     problem = Tsp(options.instance)
     #print(problema.random_tour())
 
-    # Ejecutar Metaheuristica
+    # Ejecutar Metaheuristica Simulated Annealing
     if (options.metaheuristic == MHType.SA):
 
         # Solucion inicial
@@ -35,25 +35,31 @@ def main(argv=sys.argv) -> None:
         solver = SimulatedAnnealing(options, problem)
         # Ejecutar la busqueda
         solver.search(first_solution)
-        # Guardar la solucion y trayectoria en archivo
-        solver.printSolFile(options.output)
-        solver.printTraFile(options.trayectory)
-        # Escribir la solucion por consola
-        solver.print_best_solution()
-        
+
+    # Ejecutar Metaheuristica Algoritmo Genetico
     elif (options.metaheuristic == MHType.GA):
         # Crear solver
         solver = GeneticAlgorithm(options, problem)
         # Ejecutar la busqueda
         solver.search()
-        # Guardar la solucion y trayectoria en archivo
-        solver.printSolFile(options.output)
-        solver.printTraFile(options.trayectory)
-        # Escribir la solucion por consola
-        solver.print_best_solution()
 
+    else: 
+        # Crear solver
+        solver = GeneticAlgorithm(options, problem)
+        # Ejecutar la busqueda
+        solver.search()
+
+    # Guardar la solucion y trayectoria en archivo
+    solver.printSolFile(options.output)
+    solver.printTraFile(options.trajectory)
+    # Escribir la solucion por consola
+    solver.print_best_solution()
+    
     end = timer() # tiempo final de ejecucion
     print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
-
+    
+    if options.graphic:
+        solver.graphic()
+    
 if __name__ == '__main__':
     main()

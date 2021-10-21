@@ -3,10 +3,11 @@ from timeit import default_timer as timer
 from datetime import datetime
 from math import e, log
 from pathlib import Path
-from src.Utilities import bcolors, random, printSolToFile, printTraToFile
+from src.utilities import bcolors, random, printSolToFile, printTraToFile
 from src.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, TSPMove, CoolingType
 from src.Tsp import Tsp
 from src.Tour import Tour
+from src import plot
 
 class SimulatedAnnealing():
         
@@ -31,7 +32,7 @@ class SimulatedAnnealing():
 
         self.options: AlgorithmsOptions # Opciones
 
-        self.trayectory = [] # lista de listas con la trayectoria de la solucion
+        self.trajectory = [] # lista de listas con la trayectoria de la solucion
         
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
@@ -101,7 +102,7 @@ class SimulatedAnnealing():
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
                 current_tour.copy(neighbor_tour)
-                self.trayectory.append(current_tour.current.copy()) # Guardar trayectoria
+                self.trajectory.append(current_tour.current.copy()) # Guardar trayectoria
                 if not self.options.silent:
                     print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
             else:
@@ -111,7 +112,7 @@ class SimulatedAnnealing():
                 if (random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
-                    # self.trayectory.append(current_tour.current.copy()) # Guardar trayectoria
+                    # self.trajectory.append(current_tour.current.copy()) # Guardar trayectoria
                     if not self.options.silent:
                         print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
                 else:
@@ -125,7 +126,7 @@ class SimulatedAnnealing():
                 if not self.options.silent:
                     print(f"{bcolors.OKGREEN} --> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
                 self.best_tour.copy(current_tour)
-                self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
+                self.trajectory.append(self.best_tour.current.copy()) # Guardar trayectoria
                     
             # reducir la temperatura y aumentar las evaluaciones
             temperature = self.reduceTemperature(temperature, self.evaluations)
@@ -133,7 +134,7 @@ class SimulatedAnnealing():
         
         # actualizar tiempo total de busqueda de Simulated Annealing
         self.total_time = timer() - start
-        self.trayectory.append(self.best_tour.current.copy()) # Guardar trayectoria
+        self.trajectory.append(self.best_tour.current.copy()) # Guardar trayectoria
         print()   
 		
 
@@ -184,7 +185,7 @@ class SimulatedAnnealing():
 
     def printTraFile(self, outputTra: str) -> None:
         """ Guarda la trayectoria de la solucion en archivo de texto"""
-        printTraToFile(outputTra, self.trayectory)
+        printTraToFile(outputTra, self.trajectory)
 
     def updateLog(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
@@ -213,3 +214,7 @@ class SimulatedAnnealing():
                 "max_evaluations": self.options.max_evaluations, "max_time": self.options.max_time,
                 "initial_solution": self.options.initial_solution.value
             })
+
+    def graphic(self) -> None:
+        plot.trajectory = self.trajectory.copy()
+        plot.show()

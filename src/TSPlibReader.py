@@ -1,7 +1,7 @@
 from decimal import *
 import os
 import math
-from src import Utilities
+from src import utilities
 import sys
 from enum import Enum
 
@@ -30,7 +30,7 @@ class TSPlibReader():
     # Arreglo de estructuras que contiene las coordenadas, Tipo Point
     nodeptr = []
     # Variable que indica el tipo de distancia
-    distance_type :Distance_type
+    distance_type: Distance_type
     # Matriz de distancia: distancia de nodos i a j
     distance = []
     # Lista de vecinos mas cercanos: para cada nodo i una lista de vecinos ordenados
@@ -209,17 +209,17 @@ class TSPlibReader():
         y2 = self.nodeptr[j].y
         RRR = 6378.388
 
-        deg = Utilities.dtrunc(x1)
+        deg = utilities.dtrunc(x1)
         min = float(Decimal(f"{x1}") - Decimal(f"{deg}"))
         lati = math.pi * (deg + 5.0 * min / 3.0) / 180.0
-        deg = Utilities.dtrunc(x2)
+        deg = utilities.dtrunc(x2)
         min = float(Decimal(f"{x2}") - Decimal(f"{deg}"))
         latj = math.pi * (deg + 5.0 * min / 3.0) / 180.0
 
-        deg = Utilities.dtrunc(y1)
+        deg = utilities.dtrunc(y1)
         min = float(Decimal(f"{y1}") - Decimal(f"{deg}"))
         longi = math.pi * (deg + 5.0 * min / 3.0) / 180.0
-        deg = Utilities.dtrunc(y2)
+        deg = utilities.dtrunc(y2)
         min = float(Decimal(f"{y2}") - Decimal(f"{deg}"))
         longj = math.pi * (deg + 5.0 * min / 3.0) / 180.0
 
@@ -246,7 +246,7 @@ class TSPlibReader():
         diferencia_x = Decimal(f"{self.nodeptr[i].x}") - Decimal(f"{self.nodeptr[j].x}")
         diferencia_y = Decimal(f"{self.nodeptr[i].y}") - Decimal(f"{self.nodeptr[j].y}")
         rij = math.sqrt(float(pow(diferencia_x,2) + pow(diferencia_y,2)) / 10.0)
-        tij = Utilities.dtrunc(rij)
+        tij = utilities.dtrunc(rij)
 
         if (tij < rij):
             dij = int(tij + 1)

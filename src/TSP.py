@@ -1,5 +1,7 @@
-from src.Utilities import bcolors, random
+from src.utilities import bcolors, random
 from src.TSPlibReader import TSPlibReader
+from src import plot
+
 
 class Tsp():
     """
@@ -38,6 +40,7 @@ class Tsp():
         self.nodes = self.instance.n # Numero de Nodos
 
         #self.print_distances()
+        plot.coords = self.instance.nodeptr.copy()
 
 
     def getSize(self) -> int:
