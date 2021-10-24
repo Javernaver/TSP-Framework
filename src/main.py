@@ -56,10 +56,10 @@ def main(argv=sys.argv) -> None:
     solver.print_best_solution()
     
     end = timer() # tiempo final de ejecucion
-    print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
+    print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
     
     if options.visualize:
-        solver.graphic()
+        solver.visualize()
     
 if __name__ == '__main__':
     main()

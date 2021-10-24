@@ -1,3 +1,5 @@
+import statistics as stats
+
 from src.AlgorithmsOptions import CrossoverType, InitialSolution, TSPMove, SelectionType
 from src.utilities import bcolors, random
 from src.Tour import Tour
@@ -30,7 +32,7 @@ class Population():
 
         Examples
         --------
-        >>> pop = Population(pop_size=sizePop, problem=tsp_problem)
+        >>> pop = Population(pop_size=10, problem=tsp_problem_variable)
     """
     
     def __init__(self, **kwargs) -> None:
@@ -198,6 +200,19 @@ class Population():
 
         return roulette
 
+    def getDeviation(self) -> float:
+        """Obtener la desviacion estandar de la poblacion basado en su calidad """
+        # obtener lista con los costos de los tours en la poblacion
+        costs = [tour.cost for tour in self.pop]
+        deviation = stats.stdev(costs) # calcular desviacion estandar
+        return deviation
+
+    def getAverage(self) -> float:
+        """Obtener el promedio de la poblacion basado en su calidad """
+        # obtener lista con los costos de los tours en la poblacion
+        costs = [tour.cost for tour in self.pop]
+        avg = stats.mean(costs) # calcular media aritmetica (promedio)
+        return avg
 
     """ METODOS DE SELECCION DE PADRES (2) """
 

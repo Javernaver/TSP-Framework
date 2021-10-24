@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 from matplotlib.animation import FuncAnimation
 
 coords = []
@@ -31,7 +32,7 @@ def generateCoords() -> None:
 def generateMap(i: int) -> None:
     
     try:
-        points = trajectory[i]
+        points = trajectory[i].tour
         #ax.set_xlabel(f'Tour: {trajectory[i]}')
     except:
         return
@@ -72,4 +73,21 @@ def show() -> None:
 
     plt.tight_layout()
     plt.grid(color='black', linestyle='-', linewidth=0.1)
+    plt_set_fullscreen()
+
     plt.show()
+
+def plt_set_fullscreen():
+
+    backend = str(plt.get_backend())
+    mgr = plt.get_current_fig_manager()
+    
+    if backend == 'TkAgg':
+        if os.name == 'nt':
+            mgr.window.state('zoomed')
+        else:
+            mgr.resize(*mgr.window.maxsize())
+    elif backend == 'wxAgg':
+        mgr.frame.Maximize(True)
+    elif backend == 'Qt4Agg':
+        mgr.window.showMaximized()

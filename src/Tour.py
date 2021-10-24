@@ -81,9 +81,9 @@ class Tour():
         self.current = tour.current.copy()
         self.cost = tour.cost
 
-    def printSol(self) -> None:
+    def printSol(self, final: bool = False) -> None:
         """ Escribir solucion y costo """
-        self.problem.print_solution_and_cost(self.current)
+        self.problem.print_solution_and_cost(self.current, final)
 
     def printCost(self) -> None:
         """ Escribe el costo de un tour """

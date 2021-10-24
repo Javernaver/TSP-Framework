@@ -36,7 +36,7 @@ class CoolingType(Enum):
     """Esquemas de enfriamiento disponibles para Simulated Annealing
     GEOMETRIC: t = t * alpha
     LINEAR: t = t * (1 - (evaluation / max_evaluations))
-    LOG: t = t * alpha * 1/ln(evaluation + 1)
+    LOG: t = (t * alpha) * 1 / (ln(evaluation) + 1)
     """
     GEOMETRIC = 'GEOMETRIC'
     LINEAR = 'LINEAR'
@@ -138,7 +138,7 @@ class AlgorithmsOptions():
     
     output = "solution.txt"	# Archivo para imprimir la solucion
 
-    trajectory = "trajectory.txt"	# Archivo para imprimir la trayectoria de solucion
+    trajectory = "trajectory.csv"	# Archivo para imprimir la trayectoria de solucion
     
     instance = "instances/burma14.tsp" # Archivo de la instancia    
     

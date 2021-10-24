@@ -103,12 +103,18 @@ class Tsp():
         print()
         return False
         
-    def print_solution_and_cost(self, tour: list) -> None:
+    def print_solution_and_cost(self, tour: list, final: bool) -> None:
         """ Muestra la solucion y costo de un tour """
-        print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
+        if final:
+            print(f"{bcolors.BOLD}Solucion Final: {bcolors.ENDC}", end='')
+        else:
+            print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
         for elem in tour:
             print(f"{bcolors.OKCYAN}{elem}{bcolors.ENDC}", end=' ')
-        print(f"{bcolors.BOLD}\nCosto: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
+        if final:
+            print(f"{bcolors.BOLD}\nCosto Final: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
+        else:
+            print(f"{bcolors.BOLD}\nCosto: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
 
     def random_tour(self) -> list:
         """ Genera una solucion aleatoria """

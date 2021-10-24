@@ -1,6 +1,8 @@
 import random
 import sys
-sys.setrecursionlimit(3000)
+import csv
+
+
 seed = 0
 
 class bcolors:
@@ -25,6 +27,44 @@ class bcolors:
         self.ENDC = ''
         self.BOLD = ''
         self.UNDERLINE = ''
+
+
+class Trajectory():
+    """ Clase cuyo fin es almacenar datos de la trayectoria recorrida por las soluciones de los algorimtos
+
+        Parameters
+        ----------
+        tour : list
+            lista con el recorrido
+        cost : int
+            calidad del recorrido
+        iterations : int
+            numero de iteraciones al llegar a la solucion
+        evaluations : int
+            numero de evaluaciones al llegar a la solucion
+        average : float, optional
+            promedio de las soluciones de la poblacion (Algoritmo Genetico)
+        deviation : float, optional
+            deviacion estandar de las soluciones de la poblacion (Algoritmo Genetico)
+        temperature : float, optional
+            temperatura al momemto de la solucion (simulated annealing)
+
+        Examples
+        --------
+        >>> tra = Trajectory([0,1,2,3,4,5,6,7,8,9,0],
+                            3542, 10, 15,
+                            temperature=950.31)
+    """
+    def __init__(self, tour: list, cost: int, iterations: int,
+                 evaluations: int, average: float = 0.0, deviation: float = 0.0,
+                 temperature: float = 0.0) -> None:
+        self.tour = tour
+        self.cost = cost
+        self.iterations = iterations
+        self.evaluations = evaluations
+        self.average = average # promedio
+        self.deviation = deviation # desviacion estandar
+        self.temperature = temperature
 
 def dtrunc (x: float) -> float:
     """ Truncar un numero float """
@@ -55,12 +95,22 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
     try:
         print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{trajectoryFile}")
         # Abrir archivo para escribir o reemplazar
-        file = open(trajectoryFile, 'w')
+        csvfile = open(trajectoryFile, 'w', newline="\n")
+
+        # Headers
+        fields = ["Iterations","Evaluations","cost","solution"]
+        writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fields)
+        writer.writeheader()
         # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
-        for tour in trajectory:
-            sol = " ".join([str(elem) for elem in tour])
-            sol += '\n'
-            file.write(sol)
-        file.close()
+        for tra in trajectory:
+            sol = " ".join([str(elem) for elem in tra.tour])
+            # escribir la mejor solucion y todas las caracteristicas de su ejecucion
+            writer.writerow({
+                "Iterations": tra.iterations, "Evaluations": tra.evaluations,
+                "cost": tra.cost, 
+                "solution": sol
+            })
+
+        csvfile.close()
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trajectoryFile} Error: {IOError}{bcolors.ENDC}")
