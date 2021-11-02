@@ -31,7 +31,7 @@ class Tsp():
     def __init__(self, filename: str) -> None:
 
         # Atributos de instancia
-        self.instance = TSPlibReader(filename) # Instancia TSPlibReader que lee el archivo y calcula las distancias
+        self.instance = TSPlibReader(tsp_file_name=filename) # Instancia TSPlibReader que lee el archivo y calcula las distancias
 
         self.distances = self.instance.distance # Matriz con las distacias
 

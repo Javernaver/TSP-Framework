@@ -57,7 +57,7 @@ class Trajectory():
     """
     def __init__(self, tour: list, cost: int, iterations: int,
                  evaluations: int, average: float = 0.0, deviation: float = 0.0,
-                 temperature: float = 0.0) -> None:
+                 temperature: float = -1.0) -> None:
         self.tour = tour
         self.cost = cost
         self.iterations = iterations

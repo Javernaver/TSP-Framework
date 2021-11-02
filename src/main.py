@@ -20,10 +20,10 @@ def main(argv=sys.argv) -> None:
     #bcolors.disable(bcolors)
     start = timer() # tiempo inicial de ejecucion
     # leer e inicializar las opciones 
-    options = AlgorithmsOptions(argv)
+    options = AlgorithmsOptions(argv=argv)
 
     # leer e interpretar el problema TSP leido desde la instancia definida
-    problem = Tsp(options.instance)
+    problem = Tsp(filename=options.instance)
     #print(problema.random_tour())
 
     # Ejecutar Metaheuristica Simulated Annealing
@@ -32,20 +32,20 @@ def main(argv=sys.argv) -> None:
         # Solucion inicial
         first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
         # Crear solver
-        solver = SimulatedAnnealing(options, problem)
+        solver = SimulatedAnnealing(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search(first_solution)
 
     # Ejecutar Metaheuristica Algoritmo Genetico
     elif (options.metaheuristic == MHType.GA):
         # Crear solver
-        solver = GeneticAlgorithm(options, problem)
+        solver = GeneticAlgorithm(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search()
 
     else: 
         # Crear solver
-        solver = GeneticAlgorithm(options, problem)
+        solver = GeneticAlgorithm(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search()
 
@@ -59,7 +59,8 @@ def main(argv=sys.argv) -> None:
     print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
     
     if options.visualize:
-        solver.visualize()
-    
+        solver.visualize(options.replit)
+ 
+   
 if __name__ == '__main__':
     main()

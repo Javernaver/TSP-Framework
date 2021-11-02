@@ -12,6 +12,50 @@ from src import plot
 
 
 class GeneticAlgorithm():
+    """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda
+
+        Parameters
+        ----------
+        problem : Tsp
+            Instancia del problema TSP
+        options : AlgorithmsOptions
+            Objeto de opciones para el algoritmo
+
+        Attributes
+        ----------
+        pop_size : int
+            Numero de integrantes de la poblacion
+        offspring_size : int
+            Numero de hijos para los integrantes de la poblacion
+        pselection_type : SelectionType
+            Metodo de seleccion de padres
+        crossover_type : CrossoverType
+            Metodo de cruzamiento para los padres
+        mutation_type : TSPMove
+            Metodo de mutacion para la poblacion
+        mutation_prob : float
+            Probabilidad de mutacion para la poblacion
+        selection_strategy : SelectionStrategy
+            Estrategia de seleccion para la nueva poblacion
+        gselection_type : SelectionType
+            Tipo de seleccion de la poblacion
+        best_tour : Tour
+            Instancia del mejor tour
+        evaluations : int
+            Numero de evaluaciones
+        iterations : int
+            Numero de iteraciones
+        total_time : float
+            Tiempo de ejecucion de Simulated Annealing
+        trajectory : list
+            Lista de objetos de la trayectoria de la solucion
+
+        Examples
+        --------
+        >>> options = AlgorithmsOptions()
+        >>> problem = Tsp(filename=options.instance)
+        >>> solver = GeneticAlgorithm(options=options, problem=problem)
+    """
 
     def __init__(self, options: AlgorithmsOptions = None, problem: Tsp = None) -> None:
 
@@ -68,8 +112,8 @@ class GeneticAlgorithm():
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol(True)
         print(f"{bcolors.BOLD}Total de iteraciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.iterations-1}{bcolors.ENDC}")
-        print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations}{bcolors.ENDC}")
-        print(f"{bcolors.BOLD}Tiempo total de ejecucion de Algoritmo Genetico:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-self.offspring_size}{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de busqueda con Algoritmo Genetico:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
         self.updateLog()
 
 
@@ -93,9 +137,8 @@ class GeneticAlgorithm():
             self.best_tour = Tour(tour=population.getBestTour())
         else:
             self.best_tour.copy(population.getBestTour())
-        self.trajectory.append( Trajectory(self.best_tour.current.copy(),
-                                self.best_tour.cost, self.iterations, self.evaluations,
-                                population.getAverage(), population.getDeviation() )) # Guardar trayectoria
+        
+        self.evaluations += self.offspring_size
 
         # tiempo para iteraciones y condicion de termino por tiempo
         start = end = timer()
@@ -124,7 +167,7 @@ class GeneticAlgorithm():
             if (offspring.getBestTour().cost < self.best_tour.cost):
         
                 if not self.options.silent:
-                    print(f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} (¡Actualizado!){bcolors.ENDC}", end='')
+                    print(f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} ¡Actualizado!{bcolors.ENDC}", end='')
 
                 self.best_tour.copy(offspring.getBestTour())
                 # Guardar trayectoria
@@ -212,20 +255,30 @@ class GeneticAlgorithm():
 
             # escribir la mejor solucion y todas las caracteristicas de su ejecucion
             writer.writerow({
-                "solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance, 
-                "date": datetime.today(), "pop_size": self.options.pop_size, 
-                "offspring_size": self.options.offspring_size, "pselection_type": self.options.pselection_type.value, 
-                "crossover_type": self.options.crossover_type.value, "mutation_type": self.options.mutation_type.value,
-                "mutation_prob": self.options.mutation_prob, "selection_strategy": self.options.selection_strategy.value, 
-                "gselection_type": self.options.gselection_type.value, "seed": self.options.seed, 
-                "move": self.options.move.value, "max_evaluations": self.options.max_evaluations,
-                "max_iterations": self.options.max_iterations, "max_time": self.options.max_time,
+                "solution": sol, 
+                "cost": self.best_tour.cost, 
+                "instance": self.options.instance, 
+                "date": datetime.today(), 
+                "pop_size": self.options.pop_size, 
+                "offspring_size": self.options.offspring_size, 
+                "pselection_type": self.options.pselection_type.value, 
+                "crossover_type": self.options.crossover_type.value, 
+                "mutation_type": self.options.mutation_type.value,
+                "mutation_prob": self.options.mutation_prob, 
+                "selection_strategy": self.options.selection_strategy.value, 
+                "gselection_type": self.options.gselection_type.value, 
+                "seed": self.options.seed, 
+                "move": self.options.move.value, 
+                "max_evaluations": self.options.max_evaluations,
+                "max_iterations": self.options.max_iterations, 
+                "max_time": self.options.max_time,
                 "initial_solution": self.options.initial_solution.value
             })
     
 
-    def visualize(self) -> None:
+    def visualize(self, replit: bool) -> None:
         """ Visualiza la trayectoria de la solucion"""
+        plot.replit = replit
         plot.trajectory = self.trajectory
         plot.show()
         

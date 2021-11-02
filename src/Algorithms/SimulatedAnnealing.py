@@ -10,10 +10,40 @@ from src.Tour import Tour
 from src import plot
 
 class SimulatedAnnealing():
-        
+    """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda
+
+        Parameters
+        ----------
+        problem : Tsp
+            Instancia del problema TSP
+        options : AlgorithmsOptions
+            Objeto de opciones para el algoritmo
+
+        Attributes
+        ----------
+        cooling : CoolingType
+            Esquema de enfriamiento
+        move_type: TSPMove
+            Tipo de movimiento
+        alpha : float
+            Parametro alfa para el esquema de enfriamiento geometrico
+        best_tour : Tour
+            Instancia del mejor tour
+        evaluations : int
+            Numero de evaluaciones
+        total_time : float
+            Tiempo de ejecucion de Simulated Annealing
+        trajectory : list
+            Lista de objetos de la trayectoria de la solucion
+
+        Examples
+        --------
+        >>> options = AlgorithmsOptions()
+        >>> problem = Tsp(filename=options.instance)
+        >>> solver = SimulatedAnnealing(options=options, problem=problem)
+    """
     
     def __init__(self, options: AlgorithmsOptions = None, problem: Tsp = None) -> None:
-
 
         # Atributos de instancia
         self.problem: Tsp # Problema TSP
@@ -32,7 +62,7 @@ class SimulatedAnnealing():
 
         self.options: AlgorithmsOptions # Opciones
 
-        self.trajectory = [] # lista de listas con la trayectoria de la solucion
+        self.trajectory = [] # lista con la trayectoria de la solucion
         
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
@@ -41,7 +71,7 @@ class SimulatedAnnealing():
             self.options = options
         # Si el objeto con el problema tsp no esta incluido
         if not problem:
-            self.problem = Tsp(self.options.instance)
+            self.problem = Tsp(filename=self.options.instance)
         else:
             self.problem = problem
 
@@ -49,6 +79,7 @@ class SimulatedAnnealing():
         self.move_type = self.options.move
         self.alpha = self.options.alpha
         
+        # inicializar mejor tour
         self.best_tour = Tour(problem=self.problem, type_initial_sol=InitialSolution.DETERMINISTIC)
 
         print(f"{bcolors.HEADER}\nIniciando Simulated Annealing...{bcolors.ENDC}")
@@ -59,7 +90,7 @@ class SimulatedAnnealing():
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol(True)
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
-        print(f"{bcolors.BOLD}Tiempo total de ejecucion de Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de busqueda con Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
         self.updateLog()
 
     def search(self, first_solution: Tour = None) -> None:
@@ -218,15 +249,23 @@ class SimulatedAnnealing():
 
             # escribir la mejor solucion y todas las caracteristicas de su ejecucion
             writer.writerow({
-                "solution": sol, "cost": self.best_tour.cost, "instance": self.options.instance,
-                "date": datetime.today(), "alpha": self.options.alpha, "t0": self.options.t0,
-                "tmin": self.options.tmin, "cooling": self.options.cooling.value,
-                "seed": self.options.seed, "move": self.options.move.value,
-                "max_evaluations": self.options.max_evaluations, "max_time": self.options.max_time,
+                "solution": sol, 
+                "cost": self.best_tour.cost, 
+                "instance": self.options.instance,
+                "date": datetime.today(), 
+                "alpha": self.options.alpha, 
+                "t0": self.options.t0,
+                "tmin": self.options.tmin, 
+                "cooling": self.options.cooling.value,
+                "seed": self.options.seed, 
+                "move": self.options.move.value,
+                "max_evaluations": self.options.max_evaluations, 
+                "max_time": self.options.max_time,
                 "initial_solution": self.options.initial_solution.value
             })
 
-    def visualize(self) -> None:
+    def visualize(self, replit: bool) -> None:
         """ Visualiza la trayectoria de la solucion"""
+        plot.replit = replit
         plot.trajectory = self.trajectory
         plot.show()

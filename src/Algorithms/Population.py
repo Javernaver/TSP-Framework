@@ -19,8 +19,8 @@ class Population():
         all : Population
             Otra instancia de la misma clase
 
-        Atributes
-        ---------
+        Attributes
+        ----------
         problem : Tsp
             Instancia del problema TSP
         pop : list
@@ -32,7 +32,9 @@ class Population():
 
         Examples
         --------
-        >>> pop = Population(pop_size=10, problem=tsp_problem_variable)
+        >>> options = AlgorithmsOptions()
+        >>> problem = Tsp(filename=options.instance)
+        >>> pop = Population(pop_size=10, problem=problem)
     """
     
     def __init__(self, **kwargs) -> None:

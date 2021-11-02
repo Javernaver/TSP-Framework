@@ -160,6 +160,8 @@ class AlgorithmsOptions():
 
     visualize = False # Visualizacion de la trayectoria
 
+    replit = False # Si se esta ejecutando en Replit.com ya que causa inconveniencia con la graficacion
+
     # OPCIONES PARA SIMULATED ANNEALING 
     
     alpha = 0.98 # Parametro alfa para el enfriamiento
@@ -217,6 +219,8 @@ class AlgorithmsOptions():
         # Definir argumentos generales
         parser.add_argument("-s", "--silent", help="Ejecuta sin mostrar los cambios en cada ciclo de los algoritmos", action="store_true")
         parser.add_argument("-vi", "--visualize", help="Muestra la visualizacion de trayectoria a la mejor solucion de forma grafica", action="store_true")
+        parser.add_argument("-re", "--replit", help="Si se ejecuta en Replit.com ya que la visualizacion puede tener inconvenientes", action="store_true")
+
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
@@ -285,9 +289,13 @@ class AlgorithmsOptions():
         if (args.trajectory or 'trajectory' in kwargs):
             self.trajectory = args.trajectory if args.trajectory else kwargs['trajectory']
 
-        # Archivo de salida para trayectoria
+        # Si se visualizara la trayectoria
         if (args.visualize or 'graphic' in kwargs):
             self.visualize = args.visualize if args.visualize else kwargs['visualize']
+
+        # Si se ejecuta en Replit.com
+        if (args.replit or 'replit' in kwargs):
+            self.replit = args.replit if args.replit else kwargs['replit']
 
         # Archivo de instancia
         if (args.instance or 'instance' in kwargs):
