@@ -1,16 +1,7 @@
 """Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico"""
-import csv
-from datetime import datetime
-from pathlib import Path
-from timeit import default_timer as timer
 
-from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, SelectionType, CrossoverType, TSPMove
-from src.Algorithms.Population import Population
-from src.Tour import Tour
-from src.Tsp import Tsp
-from src.utilities import bcolors, Trajectory, printSolToFile, printTraToFile
-from src import plot
-
+from . import Population, csv, datetime, Path, timer
+from src import Tour, Tsp, AlgorithmsOptions, SelectionStrategy, plot, bcolors, Trajectory, utilities
 
 class GeneticAlgorithm():
     """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda
@@ -139,6 +130,10 @@ class GeneticAlgorithm():
         else:
             self.best_tour.copy(population.getBestTour())
         
+        # Guardar trayectoria
+        self.trajectory.append( Trajectory(self.best_tour.current.copy(),
+                                self.best_tour.cost, self.iterations, self.evaluations,
+                                population.getAverage(), population.getDeviation()) ) 
         self.evaluations += self.offspring_size
 
         # tiempo para iteraciones y condicion de termino por tiempo
@@ -146,7 +141,6 @@ class GeneticAlgorithm():
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
             print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...{bcolors.ENDC}")
             print(f"{bcolors.BOLD}\nIteraciones; Evaluaciones; Tiempo; Mejor hijo(Minimo); Promedio; Desviacion Estandar; Detalle{bcolors.ENDC}", end='')
-         
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(self.iterations, self.evaluations, end-start)):
@@ -205,7 +199,6 @@ class GeneticAlgorithm():
         self.total_time = timer() - start
         print()
 
-
     def terminationCondition(self, iterations: int, evaluations: int, time: float) -> bool:
         """ Condicion de termino para el ciclo principal de Algoritmo Genetico, 
         basado en los criterios de iteraciones, evaluaciones y tiempo, devuelve verdadero o falso si se debe continuar o no"""
@@ -227,11 +220,11 @@ class GeneticAlgorithm():
 
     def printSolFile(self, outputSol: str) -> None:
         """ Guarda la solucion en archivo de texto"""
-        printSolToFile(outputSol, self.best_tour.current)
+        utilities.printSolToFile(outputSol, self.best_tour.current)
 
     def printTraFile(self, outputTra: str) -> None:
         """ Guarda la trayectoria de la solucion en archivo de texto"""
-        printTraToFile(outputTra, self.trajectory)
+        utilities.printTraToFile(outputTra, self.trajectory)
 
     def updateLog(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """

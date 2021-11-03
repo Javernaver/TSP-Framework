@@ -1,7 +1,5 @@
 """ Modulo que contiene la clase la cual representa el problema TSP"""
-from src.utilities import bcolors, random
-from src.TSPlibReader import TSPlibReader
-from src import plot
+from . import TSPlibReader, plot, bcolors, utilities
 
 class Tsp():
     """
@@ -121,7 +119,7 @@ class Tsp():
         # crear lista con tour a reordenar
         tour = list(range(self.nodes))
         # reordenar aleatoriamente el tour
-        random.shuffle(tour)
+        utilities.random.shuffle(tour)
         # asignar que el ultimo nodo sea igual al primero
         tour.append(tour[0])
         return tour
@@ -133,7 +131,7 @@ class Tsp():
 
         # Si el nodo inicial es menor que 0 se genera uno aleatorio para comenzar
         if (start < 0):
-            start = random.randint(0, self.nodes-1)
+            start = utilities.random.randint(0, self.nodes-1)
         tour[0] = start
         selected[start] = True
 

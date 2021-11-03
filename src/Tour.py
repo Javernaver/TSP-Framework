@@ -1,7 +1,6 @@
 """Modulo que contiene la clase la cual represente un recorrido para una solucion de TSP"""
-from src.AlgorithmsOptions import InitialSolution, TSPMove
-from src.Tsp import Tsp
-from src.utilities import bcolors, random
+
+from . import Tsp, InitialSolution, TSPMove, bcolors, utilities
 
 class Tour():
     """ Clase Tour la cual representa un recorrido para una solucion de TSP, debe inicializarse obligatoriamente como diccionario
@@ -244,11 +243,11 @@ class Tour():
     def randomMove(self, move_type: TSPMove) -> None:
         """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove"""
         
-        n1 = random.randint(0, self.problem.getSize()-1)
-        n2 = random.randint(0, self.problem.getSize()-1)
+        n1 = utilities.random.randint(0, self.problem.getSize()-1)
+        n2 = utilities.random.randint(0, self.problem.getSize()-1)
         # Determinar que sean numeros diferentes
         while (n1 == n2):
-            n2 = random.randint(0, self.problem.getSize()-1)
+            n2 = utilities.random.randint(0, self.problem.getSize()-1)
 
         # Seleccionar el tipo de movimiento
         if (move_type == TSPMove.TWO_OPT):

@@ -2,12 +2,7 @@
 Modulo con clases y metodos para la lectura, calculo y generacion de matrices con las distancias con los archivos
 que contengan porblemas TSP en formato TSPlib 
 """
-from decimal import *
-import os
-import math
-from src import utilities
-import sys
-from enum import Enum
+from . import os, sys, Enum, math, Decimal, utilities
 
 class Point():
     """ Clase puntero para coordenadas """

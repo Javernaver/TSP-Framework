@@ -1,10 +1,7 @@
 """Modulo que contiene la clase la cual representa la poblacion utilizada por la metaheuristica de Algoritmo Genetico"""
-import statistics as stats
 
-from src.AlgorithmsOptions import CrossoverType, InitialSolution, TSPMove, SelectionType
-from src.Tour import Tour
-from src.Tsp import Tsp
-from src.utilities import bcolors, random
+from . import stats
+from src import Tour, Tsp, CrossoverType, InitialSolution, TSPMove, SelectionType, bcolors, utilities
 
 class Population():
     """ Clase Population la cual representa una poblacion de indiviuos para Algoritmo Genetico, debe inicializarse obligatoriamente como diccionario
@@ -92,7 +89,7 @@ class Population():
         self.pop.clear()
         # Agregar individuos a la poblacion
         for i in range(self.pop_size):
-            self.pop.append( Tour(type_initial_sol='random', problem=self.problem) )
+            self.pop.append( Tour(type_initial_sol=InitialSolution.RANDOM, problem=self.problem) )
             self.pop[i].printSol()
         # encontrar mejor individuo    
         self.searchBest()
@@ -307,7 +304,7 @@ class Population():
         # Indices de los candidatos que pueden ser seleccionados
         elegible = list(range(self.pop_size-1))
         # Seleccionar los individuos aleatoriamente desde los candidatos y del tamaño recibido
-        sel = random.sample(elegible, size)
+        sel = utilities.random.sample(elegible, size)
 
         return sel
 
@@ -348,7 +345,7 @@ class Population():
             # Generar ruleta
             roulette = self.generateRouletteWheel(candidates)
             # Seleccionar
-            r = random.random()
+            r = utilities.random.random()
             for i in range(len(candidates)):
                 if (r < roulette[i]):
                     sel.append(ids[i])
@@ -461,7 +458,7 @@ class Population():
         cpoint = 0 # punto de cruzamiento
         aux = 0
         # Obtener punto de crossover aleatoriamente
-        cpoint = random.randint(0, size-1)
+        cpoint = utilities.random.randint(0, size-1)
         # Generar el primer hijo
         for i in range(cpoint):
             aux = o1.getPosition( p2.getNode(i) )
@@ -502,11 +499,11 @@ class Population():
         offspring = [] # lista para almacenar los hijos
 
         # Generar numeros aleatorios con los limites para las secciones del cruzamiento 
-        r1 = random.randint(0, size-1)
-        r2 = random.randint(0, size-1)
+        r1 = utilities.random.randint(0, size-1)
+        r2 = utilities.random.randint(0, size-1)
         while (r1 >= r2): # repetir hasta que el limite 2 sea mayor que el limite 1
-            r1 = random.randint(0, size-1)
-            r2 = random.randint(0, size-1)
+            r1 = utilities.random.randint(0, size-1)
+            r2 = utilities.random.randint(0, size-1)
         
         # Guardar los rangos de secciones de los padres segun los indices generados guardandolos en listas auxiliares
         aux1in = p1.current[r1:r2] 
@@ -573,7 +570,7 @@ class Population():
         cpoint = 0 # punto de cruzamiento
 
         # Generar punto de cruzamiento
-        cpoint = random.randint(0, size-1)
+        cpoint = utilities.random.randint(0, size-1)
         # Guardar los rangos desde el punto de cruzamiento del padre 2 al hijo 1 y del padre 1 al hijo 2
         aux1in = p2.current[cpoint:] 
         aux1in.pop() # eliminar el ultimo nodo que es igual al inicial del tour
@@ -641,7 +638,7 @@ class Population():
         r = 0.0
         for i in range(self.pop_size):
             # obtener probabilidad de [0,1]
-            r = random.random()
+            r = utilities.random.random()
             if (mut_probability > r):
                 self.pop[i].randomMove(TSPMove.SWAP)  
 
@@ -656,7 +653,7 @@ class Population():
         r = 0.0
         for i in range(self.pop_size):
             # obtener probabilidad de [0,1]
-            r = random.random()
+            r = utilities.random.random()
             if (mut_probability > r):
                 self.pop[i].randomMove(TSPMove.TWO_OPT)
 
@@ -734,7 +731,7 @@ class Population():
             return
 
         # Seleccionar los individuos aleatoriamente desde la poblacion elegible y de la cantidad recibida
-        sel = random.sample(self.pop, size)
+        sel = utilities.random.sample(self.pop, size)
 
         # Eliminar los individuos restantes de la poblacion
         self.pop.clear()
@@ -768,7 +765,7 @@ class Population():
             # Generar ruleta
             roulette = self.generateRouletteWheel(self.pop)
             # Seleccionar
-            r = random.random()
+            r = utilities.random.random()
             for i in range(len(self.pop)):
                 if (r < roulette[i]):
                     sel.append(self.pop[i]) # agregar a los seleccionados

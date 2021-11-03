@@ -1,15 +1,7 @@
-"""Modulo que contiene la clase la cual representa la metaheuristica de Simulated Anneali"""
-import csv
-from datetime import datetime
-from math import e, log
-from pathlib import Path
-from timeit import default_timer as timer
+"""Modulo que contiene la clase la cual representa la metaheuristica de Simulated Annealing"""
 
-from src.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, TSPMove, CoolingType
-from src.utilities import bcolors, Trajectory, random, printSolToFile, printTraToFile
-from src.Tsp import Tsp
-from src.Tour import Tour
-from src import plot
+from . import csv, datetime, Path, timer, math
+from src import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove, plot, bcolors, Trajectory, utilities
 
 class SimulatedAnnealing():
     """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda
@@ -145,7 +137,7 @@ class SimulatedAnnealing():
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
                 
-                if (random.random() <= prob):
+                if (utilities.random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
                     # self.trajectory.append(current_tour.current.copy()) # Guardar trayectoria
@@ -206,7 +198,7 @@ class SimulatedAnnealing():
         # determinar delta
         delta = neighbor_cost - current_cost
         # Aplicar y retornar la formula para el criterio de metropolis
-        return e**-(delta / temperature) 
+        return math.e**-(delta / temperature) 
 
 
     def reduceTemperature(self, temperature: float, evaluation: int) -> float:
@@ -218,18 +210,18 @@ class SimulatedAnnealing():
             #t_new *= (1 - (evaluation / self.options.max_evaluations))
             t_new = self.options.t0 * (1 - (evaluation / self.options.max_evaluations))
         elif (self.cooling == CoolingType.LOG):
-            #t_new = ((temperature * self.options.alpha) / (log(evaluation) + 1))
-            t_new = (self.options.t0 * self.options.alpha) * (1 / (log(evaluation) + 1))
+            #t_new = ((temperature * self.options.alpha) / (math.log(evaluation) + 1))
+            t_new = (self.options.t0 * self.options.alpha) * (1 / (math.log(evaluation) + 1))
 
         return t_new
 
     def printSolFile(self, outputSol: str) -> None:
         """ Guarda la solucion en archivo de texto"""
-        printSolToFile(outputSol, self.best_tour.current)
+        utilities.printSolToFile(outputSol, self.best_tour.current)
 
     def printTraFile(self, outputTra: str) -> None:
         """ Guarda la trayectoria de la solucion en archivo de texto"""
-        printTraToFile(outputTra, self.trajectory)
+        utilities.printTraToFile(outputTra, self.trajectory)
 
     def updateLog(self) -> None:
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """

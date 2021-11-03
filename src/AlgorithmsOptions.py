@@ -1,10 +1,6 @@
 """Modulo que contiene las clases encargadas de todas las opciones que puedan tener los demas modulos"""
-from enum import Enum
-import time
-import argparse
 
-import src.utilities as util
-from src.utilities import bcolors
+from . import Enum, time, argparse, bcolors, utilities
 
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles
@@ -200,10 +196,8 @@ class AlgorithmsOptions():
         # Leer argumentos que vengan por parametro o por definicion
         self.readOptions(argv, kwargs)
 
-        # Setear semilla en el generador de numeros aleatorio
-        util.seed = self.seed
         # definir semilla para el generador aleatorio
-        util.random.seed(self.seed)
+        utilities.random.seed(self.seed)
         # Mostrar Opciones 
         self.printOptions()
     

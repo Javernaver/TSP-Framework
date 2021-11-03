@@ -1,14 +1,7 @@
 """Modulo principal que utiliza todas las demas clases para ejecutar el framework"""
-import sys
-import os
-from timeit import default_timer as timer
 
-from src.AlgorithmsOptions import AlgorithmsOptions, MHType
-from src.Algorithms.GeneticAlgorithm import GeneticAlgorithm
-from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
-from src.Tsp import Tsp
-from src.Tour import Tour
-from src.utilities import bcolors
+from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, timer
+from . import sys, os, AlgorithmsOptions, MHType, Tsp, Tour, bcolors
 
 def main(argv=sys.argv) -> None:
     """
