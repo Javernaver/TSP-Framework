@@ -1,8 +1,10 @@
+"""Modulo que contiene las clases encargadas de todas las opciones que puedan tener los demas modulos"""
 from enum import Enum
-from src.utilities import bcolors
-import src.utilities as util
 import time
 import argparse
+
+import src.utilities as util
+from src.utilities import bcolors
 
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles

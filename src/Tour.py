@@ -1,5 +1,6 @@
-from src.Tsp import Tsp
+"""Modulo que contiene la clase la cual represente un recorrido para una solucion de TSP"""
 from src.AlgorithmsOptions import InitialSolution, TSPMove
+from src.Tsp import Tsp
 from src.utilities import bcolors, random
 
 class Tour():

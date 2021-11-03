@@ -1,7 +1,7 @@
+"""Modulo con las utilidades utilizadas por los demas modulos"""
 import random
 import sys
 import csv
-
 
 seed = 0
 

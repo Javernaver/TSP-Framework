@@ -1,3 +1,7 @@
+"""
+Modulo con clases y metodos para la lectura, calculo y generacion de matrices con las distancias con los archivos
+que contengan porblemas TSP en formato TSPlib 
+"""
 from decimal import *
 import os
 import math

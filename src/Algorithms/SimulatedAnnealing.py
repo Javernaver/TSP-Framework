@@ -1,10 +1,12 @@
+"""Modulo que contiene la clase la cual representa la metaheuristica de Simulated Anneali"""
 import csv
-from timeit import default_timer as timer
 from datetime import datetime
 from math import e, log
 from pathlib import Path
-from src.utilities import bcolors, Trajectory, random, printSolToFile, printTraToFile
+from timeit import default_timer as timer
+
 from src.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, TSPMove, CoolingType
+from src.utilities import bcolors, Trajectory, random, printSolToFile, printTraToFile
 from src.Tsp import Tsp
 from src.Tour import Tour
 from src import plot

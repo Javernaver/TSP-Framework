@@ -1,11 +1,11 @@
+""" Modulo que contiene la clase la cual representa el problema TSP"""
 from src.utilities import bcolors, random
 from src.TSPlibReader import TSPlibReader
 from src import plot
 
-
 class Tsp():
     """
-    Clase que lee una instancia, evalua soluciones del TSP y provee metodos para crear soluciones
+    Clase que representa el problema TSP, lee una instancia, evalua soluciones del TSP y provee metodos para crear soluciones
 
     Attributes
     ----------

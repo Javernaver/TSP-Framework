@@ -1,13 +1,14 @@
+"""Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico"""
 import csv
 from datetime import datetime
 from pathlib import Path
 from timeit import default_timer as timer
 
+from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, SelectionType, CrossoverType, TSPMove
 from src.Algorithms.Population import Population
-from src.utilities import bcolors, Trajectory, printSolToFile, printTraToFile
 from src.Tour import Tour
 from src.Tsp import Tsp
-from src.AlgorithmsOptions import AlgorithmsOptions, SelectionStrategy, SelectionType, CrossoverType, TSPMove
+from src.utilities import bcolors, Trajectory, printSolToFile, printTraToFile
 from src import plot
 
 
