@@ -1,7 +1,7 @@
 """Modulo que contiene la clase la cual representa la metaheuristica de Simulated Annealing"""
 
 from . import csv, datetime, Path, timer, math
-from src import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove, plot, bcolors, Trajectory, utilities
+from .. import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove, plot, bcolors, Trajectory, utilities
 
 class SimulatedAnnealing():
     """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda
@@ -102,7 +102,10 @@ class SimulatedAnnealing():
         neighbor_tour = Tour(tour=first_solution) # variable del tour vecino generado 
         
         self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
-
+        # Guardar trayectoria
+        self.trajectory.append( Trajectory(current_tour.current.copy(),
+                                current_tour.cost, self.evaluations, self.evaluations,
+                                temperature=temperature) ) 
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
 

@@ -18,6 +18,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#PYPI
+.pypirc
+
 # C extensions
 *.so
 

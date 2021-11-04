@@ -7,6 +7,6 @@ from pathlib import Path
 import statistics as stats
 from timeit import default_timer as timer
 
-from src.Algorithms.Population import Population
-from src.Algorithms.GeneticAlgorithm import GeneticAlgorithm
-from src.Algorithms.SimulatedAnnealing import SimulatedAnnealing
+from src.tspf.Algorithms.Population import Population
+from src.tspf.Algorithms.GeneticAlgorithm import GeneticAlgorithm
+from src.tspf.Algorithms.SimulatedAnnealing import SimulatedAnnealing

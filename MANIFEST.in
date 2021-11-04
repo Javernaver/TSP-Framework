@@ -1,2 +1,2 @@
 include instances/*
-include trajectory/*
+include src/tspf/instances/*.tsp

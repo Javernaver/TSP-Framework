@@ -2,7 +2,7 @@
 Modulo con clases y metodos para la lectura, calculo y generacion de matrices con las distancias con los archivos
 que contengan porblemas TSP en formato TSPlib 
 """
-from . import os, sys, Enum, math, Decimal, utilities
+from . import os, sys, Enum, math, Decimal, utilities, bcolors
 
 class Point():
     """ Clase puntero para coordenadas """
@@ -46,7 +46,7 @@ class TSPlibReader():
             # Leer instancia desde un archivo
             self.nodeptr = self.read_etsp(tsp_file_name)
         except:
-            print("Error: No se tiene acceso al archivo.")
+            print(f"{bcolors.FAIL}Error: No se tiene acceso al archivo.{bcolors.ENDC}")
             exit()
         # Obtener la matriz de distancias
         print('Calculando las distancias...')
@@ -82,11 +82,13 @@ class TSPlibReader():
         found_coord_section = False
 
         if (tsp_file_name == None):
-            print("Error: Instancia no especificada, abortando...")
+            print(f"{bcolors.FAIL}Error: Instancia no especificada, abortando...{bcolors.ENDC}")
             exit()
 
         if(not(os.access(tsp_file_name, os.R_OK))):
-            print(f"Error: No se puede leer el archivo {tsp_file_name}")
+            print(f"{bcolors.FAIL}Error: No se puede leer el archivo {tsp_file_name}{bcolors.ENDC}")
+            print(f"{bcolors.BOLD}Si esta utilizando el framework desde otra carpeta recuerde agregar la instancia tsp con el parametro (-i <PATH> o --instance <PATH>) {bcolors.ENDC}")  
+        
             exit()
             
         print(f"Leyendo archivo TSPlib {tsp_file_name} ... ")
@@ -100,7 +102,7 @@ class TSPlibReader():
                     self.name = linea[linea.find(":")+2:len(linea)-1]
 
                 elif(linea.startswith("TYPE") and linea.find("TSP") == -1):
-                    print("Instancia no esta en el formato TSPLIB !!")
+                    print(f"{bcolors.FAIL}Instancia no esta en el formato TSPLIB !!{bcolors.ENDC}")
                     exit()
                 elif(linea.startswith("DIMENSION")):
                     self.n = int(linea[linea.find(":")+2 : len(linea)-1])
@@ -117,7 +119,7 @@ class TSPlibReader():
                         elif(buf == "ATT"):
                             self.distance_type = Distance_type.ATT
                         else:
-                            print(f"EDGE_WEIGHT_TYPE {buf} no implementado en la clase.")
+                            print(f"{bcolors.FAIL}EDGE_WEIGHT_TYPE {buf} no implementado en la clase.{bcolors.ENDC}")
                             exit()
             else:
                   

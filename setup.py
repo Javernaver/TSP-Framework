@@ -2,23 +2,27 @@ from setuptools import setup
 
 setup(
     name='TSP-Framework',
-    version='0.5',
+    version='0.80',
     description='Framework para resolver el problema del vendedor viajero aplicando metaheristicas como Simulated Annealing y Genetic Algorithm',
     long_description=open('README.md').read(),
     author='Javier del Canto, Jorge Polanco',
     author_email='javier.delcanto.m@mail.pucv.cl, jorge.polanco.sanmartin@gmail.com',
     url='https://github.com/Javernaver/TSP-Framework',
     scripts=['tspf.py'],
-    packages=['src', 'src.Algorithms'],
+    packages=['src.tspf','src.tspf.Algorithms'],
     install_requires=['matplotlib'], 
     zip_safe=False,
     classifiers=[
-        'License :: MIT License',
-        'Programming Language :: Python :: 3.9.7',
+        'License :: Freeware',
+        'Programming Language :: Python :: 3.9',
     ],
     include_package_data=True,
     package_data={
-        'instances': ['instances/*.tsp'],
-        'trajectory': ['trajectory/*']
+        '': ['instances/*.tsp']
+    },
+    entry_points={
+        'console_scripts':[
+            'tspf = tspf:main'
+        ]
     },
 )

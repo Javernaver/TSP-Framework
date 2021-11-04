@@ -1,7 +1,7 @@
 """Modulo que contiene la clase la cual representa la poblacion utilizada por la metaheuristica de Algoritmo Genetico"""
 
 from . import stats
-from src import Tour, Tsp, CrossoverType, InitialSolution, TSPMove, SelectionType, bcolors, utilities
+from .. import Tour, Tsp, CrossoverType, InitialSolution, TSPMove, SelectionType, bcolors, utilities
 
 class Population():
     """ Clase Population la cual representa una poblacion de indiviuos para Algoritmo Genetico, debe inicializarse obligatoriamente como diccionario
