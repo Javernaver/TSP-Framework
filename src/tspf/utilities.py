@@ -1,6 +1,7 @@
 """Modulo con las utilidades utilizadas por los demas modulos"""
 import random
 import csv
+from os import path
 
 class bcolors:
     """ Clase cuyo objetivo es cambiar de color los output por consola """
@@ -76,8 +77,12 @@ def printSolToFile(outputFile: str, tour: list) -> None:
         return
     try:
         print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{outputFile}")
+        # Comprobar si existe el archivo y renombrar si es el caso
+        outputFile = checkFile(outputFile)
+
         # Abrir archivo para escribir o reemplazar
         file = open(outputFile, 'w')
+
         # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
         sol = " ".join([str(elem) for elem in tour])
         file.write(sol)
@@ -91,6 +96,9 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
         return
     try:
         print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{trajectoryFile}")
+        # Comprobar si existe el archivo y renombrar si es el caso
+        trajectoryFile = checkFile(trajectoryFile)
+
         # Abrir archivo para escribir o reemplazar
         csvfile = open(trajectoryFile, 'w', newline="\n")
 
@@ -111,3 +119,23 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
         csvfile.close()
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trajectoryFile} Error: {IOError}{bcolors.ENDC}")
+
+def checkFile(filePath: str) -> str:
+    """Comprueba si el archivo existe en la ruta recibida y si existe renombra el archivo de salida"""
+
+    if path.exists(filePath):
+
+        print(f"{bcolors.WARNING}Advertencia: Ya existe el archivo {filePath} {bcolors.ENDC}")
+        
+        num = 1
+        name = path.splitext(filePath) # Separe el nombre del archivo de la extension
+
+        while True:
+            newPath = f"{name[0]}({num}){name[1]}"
+            if path.exists(newPath):
+                num += 1
+            else:
+                print(f"{bcolors.FAIL}Se guardara en {newPath} {bcolors.ENDC}")
+                return newPath
+
+    return filePath

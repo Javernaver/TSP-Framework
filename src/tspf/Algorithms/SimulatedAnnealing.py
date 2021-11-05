@@ -1,6 +1,6 @@
 """Modulo que contiene la clase la cual representa la metaheuristica de Simulated Annealing"""
 
-from . import csv, datetime, Path, timer, math
+from . import csv, datetime, Path, timer, math, PrettyTable
 from .. import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove, plot, bcolors, Trajectory, utilities
 
 class SimulatedAnnealing():
@@ -90,6 +90,10 @@ class SimulatedAnnealing():
     def search(self, first_solution: Tour = None) -> None:
         """ Ejecuta la busqueda de Simulated Annealing desde una solucion inicial """
 
+        table = PrettyTable()
+
+        table.field_names = [f"{bcolors.BOLD}Iteraciones", "Temperatura", "Tiempo", f"Detalles{bcolors.ENDC}"]
+
         # Si el atributo opcional de la solucion inicial no esta incluido
         if not first_solution:
             first_solution = Tour(type_initial_sol=self.options.initial_solution, problem=self.problem)
@@ -102,40 +106,45 @@ class SimulatedAnnealing():
         neighbor_tour = Tour(tour=first_solution) # variable del tour vecino generado 
         
         self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
-        # Guardar trayectoria
-        self.trajectory.append( Trajectory(current_tour.current.copy(),
-                                current_tour.cost, self.evaluations, self.evaluations,
+        # Guardar trayectoria Final
+        self.trajectory.append( Trajectory(
+                                tour=self.best_tour.current.copy(),
+                                cost=self.best_tour.cost, 
+                                iterations=self.evaluations-1, 
+                                evaluations=self.evaluations-1,
                                 temperature=temperature) ) 
+                                
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
 
         # tiempo inicial para iteraciones y condicion de termino por tiempo
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
-            print(f"{bcolors.HEADER}\nEjecutando Simulated Annealing...{bcolors.ENDC}")
-            print(f"{bcolors.BOLD}\nIteracion; Temperatura; Tiempo; Detalle{bcolors.ENDC}", end='')
+            print(f"{bcolors.HEADER}\nEjecutando Simulated Annealing...\n{bcolors.ENDC}")
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations, end-start)):
+
+            details = '' # variable de texto con los detalles
             
-            end = timer() # tiempo actual de iteracion
+            
             # Generar un vecino aleatoriamente a traves de un movimiento
             neighbor_tour.randomMove(self.move_type)
-
-            # Mostrar avance iteracion
-            if not self.options.silent:
-                print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}; {bcolors.ENDC}", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
                 current_tour.copy(neighbor_tour)
-                # Guardar trayectoria
-                self.trajectory.append( Trajectory(current_tour.current.copy(),
-                                        current_tour.cost, self.evaluations, self.evaluations,
+                # Guardar trayectoria Final
+                self.trajectory.append( Trajectory(
+                                        tour=self.best_tour.current.copy(),
+                                        cost=self.best_tour.cost, 
+                                        iterations=self.evaluations, 
+                                        evaluations=self.evaluations,
                                         temperature=temperature) ) 
-                if not self.options.silent:
-                    print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
+
+                details += f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}"
+
             else:
                 # Calcular criterio de aceptacion
                 prob = self.getAcceptanceProbability(neighbor_tour.cost, current_tour.cost, temperature)
@@ -143,36 +152,46 @@ class SimulatedAnnealing():
                 if (utilities.random.random() <= prob):
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
-                    # self.trajectory.append(current_tour.current.copy()) # Guardar trayectoria
-                    if not self.options.silent:
-                        print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
+                    
+                    details += f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}"
                 else:
                     # No se acepta la solucion
-                    if not self.options.silent:
-                        print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}", end='')
+                    details += f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}"
+
                     neighbor_tour.copy(current_tour)
 
 			# Revisar si la nueva solucion es la mejor hasta el momento
             if (current_tour.cost < self.best_tour.cost):
-                if not self.options.silent:
-                    print(f"{bcolors.OKGREEN} -> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
+                
+                details += f"{bcolors.OKGREEN} -> ¡Mejor solucion global encontrada! {bcolors.ENDC}"
+
                 self.best_tour.copy(current_tour)
-                # Guardar trayectoria
-                """ self.trajectory.append( Trajectory(self.best_tour.current.copy(),
-                                        self.best_tour.cost, self.evaluations, self.evaluations,
-                                        temperature=temperature) )  """
+
+            # Agregar la informacion a la tabla
+            table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
+                        f"{temperature:.2f}", 
+                        f"{end-start:.4f}{bcolors.ENDC}", 
+                        f"{details}"
+                        ])
                     
             # reducir la temperatura y aumentar las evaluaciones
             temperature = self.reduceTemperature(temperature, self.evaluations)
             self.evaluations += 1
-        
+            end = timer() # tiempo actual de iteracion
+
         # actualizar tiempo total de busqueda de Simulated Annealing
         self.total_time = timer() - start
-        # Guardar trayectoria
-        self.trajectory.append( Trajectory(self.best_tour.current.copy(),
-                                self.best_tour.cost, self.evaluations-1, self.evaluations-1,
+        # Guardar trayectoria Final
+        self.trajectory.append( Trajectory(
+                                tour=self.best_tour.current.copy(),
+                                cost=self.best_tour.cost, 
+                                iterations=self.evaluations-1, 
+                                evaluations=self.evaluations-1,
                                 temperature=temperature) ) 
-        print()   
+
+        # Mostrar tabla
+        if not self.options.silent:
+            print(table)  
 		
 
     def terminationCondition(self, termperature: float, evaluations: int, time: float) -> bool:

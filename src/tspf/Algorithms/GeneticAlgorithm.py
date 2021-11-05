@@ -1,6 +1,6 @@
 """Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico"""
 
-from . import Population, csv, datetime, Path, timer
+from . import Population, csv, datetime, Path, timer, PrettyTable
 from .. import Tour, Tsp, AlgorithmsOptions, SelectionStrategy, plot, bcolors, Trajectory, utilities
 
 class GeneticAlgorithm():
@@ -111,6 +111,12 @@ class GeneticAlgorithm():
 
     def search(self) -> None:
         """ Ejecuta la busqueda del Algoritmo Genetico desde una poblacion generada aleatoriamente """
+
+        # Tabla para almacenar la informacion de la ejecucion
+        table = PrettyTable()
+        # cabezeras de la tabla
+        table.field_names = [f"{bcolors.BOLD}Iteraciones", "Evaluaciones", "Tiempo", "Minimo",
+        "Promedio", "Desv. Estandar", f"Detalles{bcolors.ENDC}"]
         
         parents = []
         # Inicializar poblacion
@@ -132,20 +138,21 @@ class GeneticAlgorithm():
         
         # Guardar trayectoria
         self.trajectory.append( Trajectory(self.best_tour.current.copy(),
-                                self.best_tour.cost, self.iterations, self.evaluations,
+                                self.best_tour.cost, 0, self.evaluations,
                                 population.getAverage(), population.getDeviation()) ) 
         self.evaluations += self.offspring_size
 
         # tiempo para iteraciones y condicion de termino por tiempo
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
-            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...{bcolors.ENDC}")
-            print(f"{bcolors.BOLD}\nIteraciones; Evaluaciones; Tiempo; Mejor hijo(Minimo); Promedio; Desviacion Estandar; Detalle{bcolors.ENDC}", end='')
+            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...\n{bcolors.ENDC}")
+
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(self.iterations, self.evaluations, end-start)):
-            
-            end = timer() # tiempo actual de iteracion
+
+            details = '' # variable de texto con los detalles 
+               
             # Aplicar cruzamiento para generar poblacion de hijos
             while (offspring.pop_size < self.offspring_size):
                 parents = population.selectParents(self.pselection_type)
@@ -153,17 +160,12 @@ class GeneticAlgorithm():
             
             # Aplicar mutacion
             offspring.mutation(self.mutation_prob, self.mutation_type)
-            
-            # Reportar el mejor hijo
-            if not self.options.silent:
-                print(f"{bcolors.BOLD}\n{self.iterations}; {self.evaluations}; {end-start:.4f}; {offspring.getBestTour().cost}; {offspring.getAverage():.2f}; {offspring.getDeviation():.2f}{bcolors.ENDC};", end='')
-
+             
             # Revisar si algun hijo es la mejor solucion hasta el momento
             if (offspring.getBestTour().cost < self.best_tour.cost):
         
-                if not self.options.silent:
-                    print(f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} ¡Actualizado!{bcolors.ENDC}", end='')
-
+                details = f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} ¡Actualizado!{bcolors.ENDC}"
+                    
                 self.best_tour.copy(offspring.getBestTour())
                 # Guardar trayectoria
                 self.trajectory.append( Trajectory(self.best_tour.current.copy(),
@@ -171,8 +173,17 @@ class GeneticAlgorithm():
                                         population.getAverage(), population.getDeviation()) ) 
                 
             else: 
-                if not self.options.silent:
-                    print(f"{bcolors.OKBLUE} Mejor actual: {self.best_tour.cost}{bcolors.ENDC}", end='')
+                details = f"{bcolors.OKBLUE} Mejor actual: {self.best_tour.cost}{bcolors.ENDC}"
+
+            # Agregar la informacion de la iteracion a la tabla la tabla
+            table.add_row([f"{bcolors.BOLD}{self.iterations}", 
+                        f"{self.evaluations}", 
+                        f"{end-start:.4f}", 
+                        f"{offspring.getBestTour().cost}", 
+                        f"{offspring.getAverage():.2f}", 
+                        f"{offspring.getDeviation():.2f}{bcolors.ENDC}", 
+                        f"{details}"
+                        ])
 
             # Seleccionar nueva poblacion
             if (self.selection_strategy == SelectionStrategy.MULAMBDA):
@@ -188,16 +199,23 @@ class GeneticAlgorithm():
                 offspring.joinPopulation(population)
                 # Seleccionar desde estas poblaciones
                 offspring.selectPopulation(self.pop_size, self.gselection_type)
-                population.copy(offspring)
+                population.copy(offspring)            
                     
             # Actualizar contadores de iteraciones y evaluaciones, luego limpiar la poblacion de hijos
             self.evaluations += self.offspring_size
             self.iterations += 1
             offspring.clear()
+            end = timer() # tiempo actual de iteracion
+
+        # Mostrar la tabla con toda la informacion de la ejecucion del algoritmo
+        if not self.options.silent:
+            print(table)
+            #text = table.get_csv_string(delimiter=';')
+            #print(text)
 
         # actualizar tiempo total de busqueda de Algoritmo Genetico
         self.total_time = timer() - start
-        print()
+
 
     def terminationCondition(self, iterations: int, evaluations: int, time: float) -> bool:
         """ Condicion de termino para el ciclo principal de Algoritmo Genetico, 
