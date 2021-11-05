@@ -17,7 +17,7 @@ o
 ```sh
 pip install git+https://github.com/Javernaver/TSP-Framework.git
 ```
-Una vez instalado tendra acceso al comando **tspf** el cual podra ser utilizado desde cualquier directorio. Recuerde que para utilizar estos tipos de scripts debe agregar el directorio con ellos en las variables de entorno o PATH del sistema operativo.
+Una vez instalado tendra acceso al comando **tspf** el cual podra ser utilizado desde cualquier directorio. Recuerde que para utilizar estos comandos debe tener el directorio en las variables de entorno o PATH del sistema operativo.
 ### Importante sobre comando tspf
 Al utilizar el comando **tspf** debe agregar igualmente el parametro con la instancia, ya que de otro modo no funcionara la instancia por defecto, debe utilizar una con el parametro -i o --instance <PATH> al archivo en formato TSPlib (http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/). Ejemplo de uso:
 
@@ -26,7 +26,20 @@ tspf --instance archivo.tsp
 ```
 
 ## Uso sin instalacion
-Ejecutar python (python3 en Linux) tspf.py + los argumentos a utilizar definidos  desde la carpeta donde tenga el framework
+
+Para ejecutar de forma local, puede descargar el repositorio e instalar los requerimientos con:
+```sh
+pip install -r requirements.txt
+```
+
+Luego, ejecutar python (python3 en Linux) tspf.py + los argumentos a utilizar definidos  desde la carpeta donde tenga el framework
+```sh
+python tspf.py --instance instances/burma14.tsp
+```
+
+## Uso Online con Replit
+
+Puede utilizar el framework de forma online con Replit: https://replit.com/@Javernaver/TSP-Framework
 
 ## Descripcion
 
