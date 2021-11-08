@@ -6,6 +6,18 @@ Framework para resolver el problema del vendedor viajero aplicando algoritmos me
 
 * **instancias:** instancias en formato TSPlib en la carpeta instances/
 
+## Uso sin instalacion
+
+Para ejecutar de forma local, puede descargar el repositorio e instalar los requerimientos con:
+```sh
+pip install -r requirements.txt
+```
+
+Luego, ejecutar python (python3 en Linux) tspf.py + los argumentos a utilizar definidos  desde la carpeta donde tenga el framework
+```sh
+python tspf.py --instance instances/burma14.tsp
+```
+
 ## Instalacion
 
 El framework puede ser instaladado como paquete desde PyPi (https://pypi.org/project/TSP-Framework/) o GitHub, para esto utilice:
@@ -23,18 +35,6 @@ Al utilizar el comando **tspf** debe agregar igualmente el parametro con la inst
 
 ```sh
 tspf --instance archivo.tsp
-```
-
-## Uso sin instalacion
-
-Para ejecutar de forma local, puede descargar el repositorio e instalar los requerimientos con:
-```sh
-pip install -r requirements.txt
-```
-
-Luego, ejecutar python (python3 en Linux) tspf.py + los argumentos a utilizar definidos  desde la carpeta donde tenga el framework
-```sh
-python tspf.py --instance instances/burma14.tsp
 ```
 
 ## Uso Online con Replit
