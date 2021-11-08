@@ -1,6 +1,6 @@
 """Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico"""
 
-from . import Population, csv, datetime, Path, timer, PrettyTable
+from . import Population, csv, datetime, Path, timer, PrettyTable, path
 from .. import Tour, Tsp, AlgorithmsOptions, SelectionStrategy, plot, bcolors, Trajectory, utilities
 
 class GeneticAlgorithm():
@@ -100,13 +100,13 @@ class GeneticAlgorithm():
 
     def print_best_solution(self) -> None:
         """ Escribir la mejor solucion """
+        self.updateLog()
         print()
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol(True)
         print(f"{bcolors.BOLD}Total de iteraciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.iterations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-self.offspring_size}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Tiempo total de busqueda con Algoritmo Genetico:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
-        self.updateLog()
 
 
     def search(self) -> None:
@@ -146,6 +146,7 @@ class GeneticAlgorithm():
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
             print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...\n{bcolors.ENDC}")
+            #print(f"{bcolors.BOLD}\nIteraciones; Evaluaciones; Tiempo; Mejor hijo(Minimo); Promedio; Desviacion Estandar; Detalle{bcolors.ENDC}", end='')
 
 
         # Bucle principal del algoritmo
@@ -160,9 +161,16 @@ class GeneticAlgorithm():
             
             # Aplicar mutacion
             offspring.mutation(self.mutation_prob, self.mutation_type)
+
+            # Reportar el mejor hijo
+            #if not self.options.silent:
+            #    print(f"{bcolors.BOLD}\n{self.iterations}; {self.evaluations}; {end-start:.4f}; {offspring.getBestTour().cost}; {offspring.getAverage():.2f}; {offspring.getDeviation():.2f}{bcolors.ENDC};", end='')
              
             # Revisar si algun hijo es la mejor solucion hasta el momento
             if (offspring.getBestTour().cost < self.best_tour.cost):
+
+                #if not self.options.silent:
+                #    print(f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} ¡Actualizado!{bcolors.ENDC}", end='')
         
                 details = f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} ¡Actualizado!{bcolors.ENDC}"
                     
@@ -173,6 +181,8 @@ class GeneticAlgorithm():
                                         population.getAverage(), population.getDeviation()) ) 
                 
             else: 
+                #if not self.options.silent:
+                #    print(f"{bcolors.OKBLUE} Mejor actual: {self.best_tour.cost}{bcolors.ENDC}", end='')
                 details = f"{bcolors.OKBLUE} Mejor actual: {self.best_tour.cost}{bcolors.ENDC}"
 
             # Agregar la informacion de la iteracion a la tabla la tabla
@@ -210,6 +220,7 @@ class GeneticAlgorithm():
         # Mostrar la tabla con toda la informacion de la ejecucion del algoritmo
         if not self.options.silent:
             print(table)
+            #print()
             #text = table.get_csv_string(delimiter=';')
             #print(text)
 
@@ -248,9 +259,11 @@ class GeneticAlgorithm():
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
         # crea la carpeta en caso de que no exista (python 3.5+)
         Path("log/").mkdir(exist_ok=True)
+        logFile = "log/GAlog.csv"
         # usar el archivo en modo append
-        with open("log/GAlog.csv", "a", newline="\n") as csvfile:
+        with open(logFile, "a", newline="\n") as csvfile:
             
+            print(f"{bcolors.OKGREEN}\nActualizando log con mejores soluciones en archivo... {bcolors.ENDC}{path.abspath(logFile)}")
             # Headers
             fields = ["solution","cost","instance","date","pop_size","offspring_size", 
                      "pselection_type","crossover_type","mutation_type","mutation_prob", 

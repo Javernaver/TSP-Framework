@@ -76,7 +76,7 @@ def printSolToFile(outputFile: str, tour: list) -> None:
     if not outputFile or not tour:
         return
     try:
-        print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{outputFile}")
+        print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{path.abspath(outputFile)}")
         # Comprobar si existe el archivo y renombrar si es el caso
         outputFile = checkFile(outputFile)
 
@@ -89,13 +89,14 @@ def printSolToFile(outputFile: str, tour: list) -> None:
         file.close()
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {outputFile} Error: {IOError}{bcolors.ENDC}")
+        print(f"{bcolors.FAIL}Asegurese de tener permisos de escritura en la ruta y que esta bien escrita{bcolors.ENDC}")
 
 def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
     """ Guardar la trayectoria de una solucion para una instacia y ejecucion en un archivo recibido por parametro """
-    if not trajectoryFile or not trajectoryFile:
+    if not trajectoryFile or not trajectory:
         return
     try:
-        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{trajectoryFile}")
+        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{path.abspath(trajectoryFile)}")
         # Comprobar si existe el archivo y renombrar si es el caso
         trajectoryFile = checkFile(trajectoryFile)
 
@@ -119,23 +120,37 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
         csvfile.close()
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trajectoryFile} Error: {IOError}{bcolors.ENDC}")
+        print(f"{bcolors.FAIL}Asegurese de tener permisos de escritura en la ruta y que esta bien escrita{bcolors.ENDC}")
 
 def checkFile(filePath: str) -> str:
     """Comprueba si el archivo existe en la ruta recibida y si existe renombra el archivo de salida"""
 
     if path.exists(filePath):
 
-        print(f"{bcolors.WARNING}Advertencia: Ya existe el archivo {filePath} {bcolors.ENDC}")
+        #print(f"{bcolors.WARNING}Advertencia: Ya existe el archivo{bcolors.ENDC} {path.abspath(filePath)}")
+        print(f"{bcolors.WARNING}Advertencia: Ya existe el archivo{bcolors.ENDC}")
         
         num = 1
         name = path.splitext(filePath) # Separe el nombre del archivo de la extension
-
+        files = [] # lista con las rutas para utilizar en el limite
+        files.append(filePath)
+        
         while True:
-            newPath = f"{name[0]}({num}){name[1]}"
+            # Limite de archivos para evitar llenar de exceso de archivos
+            if num > 3:
+                # obtener archivo mas antiguo de las rutas
+                old = min(files, key=lambda pth: path.getmtime(pth))
+                #print(old)
+                print(f"{bcolors.FAIL}Se ha superado el limite de archivos con el mismo nombre, se reemplazara el mas viejo {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Guardando en... {bcolors.ENDC} {path.abspath(old)}")
+                return old
+            
+            newPath = f"{name[0]}_{num}{name[1]}"
+            files.append(newPath)
             if path.exists(newPath):
                 num += 1
             else:
-                print(f"{bcolors.FAIL}Se guardara en {newPath} {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Se guardara en{bcolors.ENDC} {path.abspath(newPath)}")
                 return newPath
 
     return filePath

@@ -1,6 +1,6 @@
 """Modulo que contiene la clase la cual representa la metaheuristica de Simulated Annealing"""
 
-from . import csv, datetime, Path, timer, math, PrettyTable
+from . import path, csv, datetime, Path, timer, math, PrettyTable
 from .. import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove, plot, bcolors, Trajectory, utilities
 
 class SimulatedAnnealing():
@@ -80,12 +80,12 @@ class SimulatedAnnealing():
 
     def print_best_solution(self) -> None:
         """ Escribir la mejor solucion """
+        self.updateLog()
         print()
         print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol(True)
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Tiempo total de busqueda con Simulated Annealing:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
-        self.updateLog()
 
     def search(self, first_solution: Tour = None) -> None:
         """ Ejecuta la busqueda de Simulated Annealing desde una solucion inicial """
@@ -121,6 +121,7 @@ class SimulatedAnnealing():
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
             print(f"{bcolors.HEADER}\nEjecutando Simulated Annealing...\n{bcolors.ENDC}")
+            #print(f"{bcolors.BOLD}\nIteracion; Temperatura; Tiempo; Detalle{bcolors.ENDC}", end='')
 
         # Bucle principal del algoritmo
         while (self.terminationCondition(temperature, self.evaluations, end-start)):
@@ -130,6 +131,10 @@ class SimulatedAnnealing():
             
             # Generar un vecino aleatoriamente a traves de un movimiento
             neighbor_tour.randomMove(self.move_type)
+
+            # Mostrar avance iteracion
+            #if not self.options.silent:
+            #    print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}; {bcolors.ENDC}", end='')
 
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
@@ -143,6 +148,9 @@ class SimulatedAnnealing():
                                         evaluations=self.evaluations,
                                         temperature=temperature) ) 
 
+                #if not self.options.silent:
+                #    print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
+
                 details += f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}"
 
             else:
@@ -153,8 +161,13 @@ class SimulatedAnnealing():
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
                     
+                    #if not self.options.silent:
+                    #    print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
+                    
                     details += f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}"
                 else:
+                    #if not self.options.silent:
+                    #    print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}", end='')
                     # No se acepta la solucion
                     details += f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}"
 
@@ -162,6 +175,8 @@ class SimulatedAnnealing():
 
 			# Revisar si la nueva solucion es la mejor hasta el momento
             if (current_tour.cost < self.best_tour.cost):
+                #if not self.options.silent:
+                #    print(f"{bcolors.OKGREEN} -> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
                 
                 details += f"{bcolors.OKGREEN} -> ¡Mejor solucion global encontrada! {bcolors.ENDC}"
 
@@ -191,7 +206,8 @@ class SimulatedAnnealing():
 
         # Mostrar tabla
         if not self.options.silent:
-            print(table)  
+            print(table)
+            #print()
 		
 
     def terminationCondition(self, termperature: float, evaluations: int, time: float) -> bool:
@@ -202,9 +218,9 @@ class SimulatedAnnealing():
             if (termperature <= self.options.tmin):
                 return False
 		
-        # Criterio de termino de las evaluciones
-        if (self.options.max_evaluations > 0):
-            if (evaluations > self.options.max_evaluations):
+        # Criterio de termino de las evaluciones | iteraciones
+        if (self.options.max_evaluations > 0 or self.options.max_iterations):
+            if (evaluations > self.options.max_evaluations or evaluations > self.options.max_iterations):
                 return False
         
         # Criterio de termino por tiempo
@@ -249,9 +265,11 @@ class SimulatedAnnealing():
         """ Actualiza el registro de mejores soluciones con todas las caracteristicas de su ejecución """
         # crea la carpeta en caso de que no exista (python 3.5+)
         Path("log/").mkdir(exist_ok=True)
+        logFile = "log/SAlog.csv"
         # usar el archivo en modo append
-        with open("log/SAlog.csv", "a", newline="\n") as csvfile:
+        with open(logFile, "a", newline="\n") as csvfile:
             
+            print(f"{bcolors.OKGREEN}\nActualizando log con mejores soluciones en archivo... {bcolors.ENDC}{path.abspath(logFile)}")
             # Headers
             fields = ["solution","cost","instance","date","alpha","t0","tmin",
                      "cooling","seed","move","max_evaluations","max_time","initial_solution"]

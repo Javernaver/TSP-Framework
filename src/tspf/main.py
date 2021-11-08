@@ -44,7 +44,7 @@ def main(argv=sys.argv) -> None:
         solver.search()
 
     # Guardar la solucion y trayectoria en archivo
-    solver.printSolFile(options.output)
+    solver.printSolFile(options.solution)
     solver.printTraFile(options.trajectory)
     # Escribir la solucion por consola
     solver.print_best_solution()

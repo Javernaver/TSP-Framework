@@ -134,7 +134,7 @@ class AlgorithmsOptions():
     
     # OPCIONES GENERALES
     
-    output = "solution.txt"	# Archivo para imprimir la solucion
+    solution = "solution.txt"	# Archivo para imprimir la solucion
 
     trajectory = "trajectory.csv"	# Archivo para imprimir la trayectoria de solucion
     
@@ -172,7 +172,7 @@ class AlgorithmsOptions():
 
     # OPCIONES PARA ALGORITMO GENETICO 
     
-    pop_size = 10 # Tamaño de la poblacion 
+    pop_size = 10 # Cantidad de individuos de la poblacion 
 	
     offspring_size = 20 # Cantidad de hijos
     
@@ -220,7 +220,7 @@ class AlgorithmsOptions():
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
-        parser.add_argument("-out", "--output", help="Nombre del archivo de salida para la solucion")
+        parser.add_argument("-sol", "--solution", help="Nombre del archivo de salida para la solucion")
         parser.add_argument("-tra", "--trajectory", help="Nombre del archivo de salida para la trayectoria de la solucion")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
@@ -235,7 +235,7 @@ class AlgorithmsOptions():
         parser.add_argument("-c", "--cooling", help="Esquema de enfriamiento de la temperatura [ geometric | log | linear ]")
 
         # Definir argumentos de Algoritmo Genetico
-        parser.add_argument("-p", "--psize", help="Tamaño de la poblacion ]0,INT_MAX]")
+        parser.add_argument("-p", "--psize", help="Cantidad de individuos de la poblacion ]0,INT_MAX]")
         parser.add_argument("-o", "--osize", help="Cantidad de hijos a generar ]0,INT_MAX]")
         parser.add_argument("-ps", "--pselection", help="Operador de seleccion de padres [ random | best | roulette | tournament ]")
         parser.add_argument("-cr", "--crossover", help="Operador de crossover [ ox | opx | pmx ]")
@@ -253,12 +253,12 @@ class AlgorithmsOptions():
             # Procesar argumentos de Simulated Annealing
             self.argsSA(args, kwargs)
             # Validar logica de opciones
-            self.validOptSA()
+            self.validateSA()
         elif self.metaheuristic == MHType.GA:
             # Procesar argumentos de Algoritmo Genetico
             self.argsGA(args, kwargs) 
             # Validar logica de opciones
-            self.validOptGA() 
+            self.validateGA() 
         
 
     def argsGeneral(self, args: argparse.Namespace, kwargs: dict) -> None:
@@ -268,22 +268,26 @@ class AlgorithmsOptions():
             try:
                 self.max_time = float(args.time) if args.time else float(kwargs['time'])
             except: 
-                print(f"{bcolors.FAIL}Error: El tiempo maximo debe ser un numero (-t o --time){bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El tiempo maximo debe ser un numero (-t | --time){bcolors.ENDC}")
 
         # Semilla 
         if (args.seed or 'seed' in kwargs):
             try:
                 self.seed = int(args.seed) if args.seed else int(kwargs['seed'])
             except: 
-                print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s o --seed){bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s | --seed){bcolors.ENDC}")
 
         # Archivo de salida para solucion
-        if (args.output or 'output' in kwargs):
-            self.output = args.output if args.output else kwargs['output']
+        if (args.solution or 'output' in kwargs):
+            self.solution = args.solution if args.solution else kwargs['solution']
+            if not '.txt' in self.solution:
+                self.solution += '.txt'
 
         # Archivo de salida para trayectoria
         if (args.trajectory or 'trajectory' in kwargs):
             self.trajectory = args.trajectory if args.trajectory else kwargs['trajectory']
+            if not '.csv' in self.trajectory:
+                self.trajectory += '.csv'
 
         # Si se visualizara la trayectoria
         if (args.visualize or 'graphic' in kwargs):
@@ -304,21 +308,21 @@ class AlgorithmsOptions():
                 self.metaheuristic = MHType.SA
             elif (val == 'GA'):
                 self.metaheuristic = MHType.GA
-            else: print(f"{bcolors.FAIL}Error: Metaheuristica no reconocida (-mh o --metaheristic) {bcolors.ENDC}")  
+            else: print(f"{bcolors.FAIL}Error: Metaheuristica no reconocida (-mh | --metaheristic) {bcolors.ENDC}")  
         
         # Numero maximo de evaluaciones
         if (args.evaluations or 'evaluations' in kwargs):
             try:
                 self.max_evaluations = int(args.evaluations) if args.evaluations else int(kwargs['evaluations'])
             except: 
-                print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e o --evaluations) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El numero de evaluaciones debe ser un numero entero (-e | --evaluations) {bcolors.ENDC}")
 
         # Numero maximo de iteraciones
         if (args.iterations or 'iterations' in kwargs):
             try:
                 self.max_iterations = int(args.iterations) if args.iterations else int(kwargs['iterations'])
             except: 
-                print(f"{bcolors.FAIL}Error: El numero de iteraciones debe ser un numero entero (-it o --iterations) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El numero de iteraciones debe ser un numero entero (-it | --iterations) {bcolors.ENDC}")
 
         # Seleccion del movimiento para la metaheuristica
         if (args.move or 'move' in kwargs):
@@ -327,7 +331,7 @@ class AlgorithmsOptions():
                 self.move = TSPMove.TWO_OPT
             elif (val == 'swap'):
                 self.move = TSPMove.SWAP
-            else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm o --move) {bcolors.ENDC}") 
+            else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm | --move) {bcolors.ENDC}") 
 
         # Modo de salida reducido para no mostrar todos los cambios en los ciclos de los algoritmos
         if (args.silent):
@@ -345,7 +349,7 @@ class AlgorithmsOptions():
                 self.initial_solution = InitialSolution.NEAREST_N
             elif (val == 'DETERMINISTIC'):
                 self.initial_solution = InitialSolution.DETERMINISTIC
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is o --inso) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is | --inso) {bcolors.ENDC}")
 
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
@@ -356,45 +360,45 @@ class AlgorithmsOptions():
                 self.cooling = CoolingType.LOG
             elif (val == 'linear'):
                 self.cooling = CoolingType.LINEAR    
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en COOLING (-tc o --cooling) {bcolors.ENDC}")    
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en COOLING (-tc | --cooling) {bcolors.ENDC}")    
 
         # Parametro alpha
         if (args.alpha or 'alpha' in kwargs):
             try:
                 self.alpha = float(args.alpha) if args.alpha else float(kwargs['alpha'])
             except: 
-                print(f"{bcolors.FAIL}Error: El valor de alpha debe ser un numero en (-a o --alpha) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de alpha debe ser un numero en (-a | --alpha) {bcolors.ENDC}")
         
         # Temperatura inicial
         if (args.tini or 'tini' in kwargs):
             try:
                 self.t0 = float(args.tini) if args.tini else float(kwargs['tini'])
             except:
-                print(f"{bcolors.FAIL}Error: El valor de la temperatura inicial debe ser un numero (-t0 o --tini) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de la temperatura inicial debe ser un numero (-t0 | --tini) {bcolors.ENDC}")
 
         # Temperatura minima
         if (args.tmin or 'tmin' in kwargs):
             try:
                 self.tmin = float(args.tmin) if args.tmin else float(kwargs['tmin'])
             except:
-                print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin o --tmin) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de la temperatura minima debe ser un numero (-tmin | --tmin) {bcolors.ENDC}")
 
 
     def argsGA(self, args: argparse.Namespace, kwargs: dict) -> None:
         """Procesar los argumentos de Algoritmo Genetico"""
-        # Tamaño de la poblacion
+        # Cantidad de individuos de la poblacion
         if (args.psize or 'psize' in kwargs):
             try:
                 self.pop_size = int(args.psize) if args.psize else int(kwargs['psize'])
             except: 
-                print(f"{bcolors.FAIL}Error: El tamaño de la poblacion debe ser un numero entero (-p o --psize){bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El tamaño de la poblacion debe ser un numero entero (-p | --psize){bcolors.ENDC}")
 
         # Cantidad de hijos a generar
         if (args.osize or 'osize' in kwargs):
             try:
                 self.offspring_size = int(args.osize) if args.osize else int(kwargs['osize'])
             except: 
-                print(f"{bcolors.FAIL}Error: La cantidad de hijos debe ser un numero entero (-o o --osize){bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: La cantidad de hijos debe ser un numero entero (-o | --osize){bcolors.ENDC}")
 
         # Seleccion de padres
         if (args.pselection or 'pselection' in kwargs):
@@ -407,7 +411,7 @@ class AlgorithmsOptions():
                 self.pselection_type = SelectionType.ROULETTE
             elif (val == 'tournament'):
                 self.pselection_type = SelectionType.TOURNAMENT   
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Seleccion de padres (-ps o --pselection) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Seleccion de padres (-ps | --pselection) {bcolors.ENDC}")
         
         # Operador de Cruzamiento
         if (args.crossover or 'crossover' in kwargs):
@@ -418,7 +422,7 @@ class AlgorithmsOptions():
                 self.crossover_type = CrossoverType.OPX
             elif (val == 'pmx'):
                 self.crossover_type = CrossoverType.PMX
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Operador de Cruzamiento (-o o --crossover) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Operador de Cruzamiento (-o | --crossover) {bcolors.ENDC}")
 
         # Operador de mutacion
         if (args.mutation or 'mutation' in kwargs):
@@ -427,14 +431,14 @@ class AlgorithmsOptions():
                 self.mutation_type = TSPMove.TWO_OPT
             elif (val == 'swap'):
                 self.mutation_type = TSPMove.SWAP
-            else: print(f"{bcolors.FAIL}Error: Tipo de mutacion no reconocido (-mu o --mutation) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Tipo de mutacion no reconocido (-mu | --mutation) {bcolors.ENDC}")
 
         # Probabilidad de mutacion
         if (args.mprobability or 'mprobability' in kwargs):
             try:
                 self.mutation_prob = float(args.mprobability) if args.mprobability else float(kwargs['mprobability'])
             except: 
-                print(f"{bcolors.FAIL}Error: El valor de probabilidad de mutacion debe ser un numero en (-mp o --mprobability) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: El valor de probabilidad de mutacion debe ser un numero en (-mp | --mprobability) {bcolors.ENDC}")
         
         # Operador de seleccion de poblacion
         if (args.gselection or 'gselection' in kwargs):
@@ -447,7 +451,7 @@ class AlgorithmsOptions():
                 self.gselection_type = SelectionType.ROULETTE
             elif (val == 'tournament'):
                 self.gselection_type = SelectionType.TOURNAMENT   
-            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Seleccion de poblacion (-gs o --gselection) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en Seleccion de poblacion (-gs | --gselection) {bcolors.ENDC}")
 
         # Estrategia de seleccion de padres
         if (args.gstrategy or 'gstrategy' in kwargs):
@@ -456,37 +460,43 @@ class AlgorithmsOptions():
                 self.selection_strategy = SelectionStrategy.MULAMBDA
             elif (val == 'mu+lambda'):
                 self.selection_strategy = SelectionStrategy.MUPLUSLAMBDA
-            else: print(f"{bcolors.FAIL}Error: Tipo de seleccion de padres no reconocido (-g o --gstrategy) {bcolors.ENDC}")
+            else: print(f"{bcolors.FAIL}Error: Tipo de seleccion de padres no reconocido (-g | --gstrategy) {bcolors.ENDC}")
 
 
-    def validOptSA(self) -> None:
+    def validateSA(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
+        error = False
         if (self.max_evaluations <= 0 or self.max_iterations <= 0):
             print(f"{bcolors.FAIL}Error: iteraciones o evaluaciones maximas deben ser > 0 Iteraciones: {self.max_iterations} Evaluaciones: {self.max_evaluations}{bcolors.ENDC}")
-            exit()
+            error = True
         if (self.tmin <= 0 or self.t0 <= 0):
             print(f"{bcolors.FAIL}Error: Las temperatura minima y la temperatura inicial maximas deben ser > 0, tmin: {self.tmin} t0: {self.t0} evaluaciones: {self.max_evaluations} {bcolors.ENDC}")
-            exit()
+            error = True
         if (self.alpha <= 0 or self.alpha > 1):
-            print(f"{bcolors.FAIL}Error: alfa debe ser > 0 y <= 1, valor: {self.alpha} {bcolors.ENDC}")
-            exit()
+            print(f"{bcolors.FAIL}Error: alfa debe ser > 0 y <= 1, valor: {self.alpha} (-a | --alpha){bcolors.ENDC}")
+            error = True
         if (self.t0 <= self.tmin):
-            print(f"{bcolors.FAIL}Error: t0 debe ser > tmin, valor tmin: {self.tmin} valor t0: {self.t0}{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: t0 debe ser > tmin, valor tmin: {self.tmin} valor t0: {self.t0} (-t0 | --tini y -tm | --tmin){bcolors.ENDC}")
+            error = True
+        if error:
             exit()
     
-    def validOptGA(self) -> None:
+    def validateGA(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
+        error = False
         if (self.max_evaluations <= 0 or self.max_iterations <= 0):
             print(f"{bcolors.FAIL}Error: iteraciones o evaluaciones maximas deben ser > 0 Iteraciones: {self.max_iterations} Evaluaciones: {self.max_evaluations}{bcolors.ENDC}")
-            exit()
+            error = True
         if (self.mutation_prob > 1.0 or self.mutation_prob < 0.0 ):
-            print(f"{bcolors.FAIL}Error: la probabilidad de mutacion debe ser [0.0, 1.0]: {self.mutation_prob}{bcolors.ENDC}")
-            exit()
+            print(f"{bcolors.FAIL}Error: La probabilidad de mutacion debe ser [0.0, 1.0]: {self.mutation_prob}{bcolors.ENDC}")
+            error = True
         if (self.selection_strategy == SelectionStrategy.MULAMBDA and self.pop_size > self.offspring_size):
-            print(f"{bcolors.FAIL}Error: con (mu,lambda) la poblacion (-p/psize) debe ser >= que los hijos (-o/osize){bcolors.ENDC}")
-            exit()
+            print(f"{bcolors.FAIL}Error: En (mu,lambda) la poblacion (-p | --psize) debe ser >= que los hijos (-o | --osize){bcolors.ENDC}")
+            error = True
         if (self.pop_size <= 1):
-            print(f"{bcolors.FAIL}Error: tamaño de la poblacion (-p/psize) debe ser > 1{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: La cantidad de individuos de la poblacion (-p | --psize) debe ser > 1{bcolors.ENDC}")
+            error = True
+        if error:
             exit()
                    
     def printOptions(self) -> None:
@@ -494,7 +504,7 @@ class AlgorithmsOptions():
         # Opciones generales
         print(f"{bcolors.HEADER}\n\t\tOPCIONES GENERALES\n {bcolors.ENDC}")        
         print(f"{bcolors.OKBLUE}Archivo de instancia: {bcolors.ENDC}{self.instance}")
-        print(f"{bcolors.OKBLUE}Archivo para imprimir la solucion: {bcolors.ENDC}{self.output}")
+        print(f"{bcolors.OKBLUE}Archivo para imprimir la solucion: {bcolors.ENDC}{self.solution}")
         print(f"{bcolors.OKBLUE}Tipo de metaheuristica a ejecutar: {bcolors.ENDC}{self.metaheuristic.value}")
         print(f"{bcolors.OKBLUE}Tipo del movimiento para la metaheuristica: {bcolors.ENDC}{self.move.value}")
         print(f"{bcolors.OKBLUE}Semilla para el generador de numero aleatorios: {bcolors.ENDC}{self.seed}")
@@ -512,7 +522,7 @@ class AlgorithmsOptions():
             print(f"{bcolors.OKBLUE}Tipo de enfriamiento: {bcolors.ENDC}{self.cooling.value}")
         elif (self.metaheuristic == MHType.GA): # Opciones para Algoritmo Genetico
             print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA ALGORITMO GENETICO\n {bcolors.ENDC}")        
-            print(f"{bcolors.OKBLUE}Tamaño de la poblacion: {bcolors.ENDC}{self.pop_size}")
+            print(f"{bcolors.OKBLUE}Cantidad de individuos de la poblacion: {bcolors.ENDC}{self.pop_size}")
             print(f"{bcolors.OKBLUE}Cantidad de hijos: {bcolors.ENDC}{self.offspring_size}")
             print(f"{bcolors.OKBLUE}Seleccion de padres: {bcolors.ENDC}{self.pselection_type.value}")
             print(f"{bcolors.OKBLUE}Tipo de cruzamiento: {bcolors.ENDC}{self.crossover_type.value}")
