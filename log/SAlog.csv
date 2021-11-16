@@ -1,2 +1,0 @@
-solution;cost;instance;date;alpha;t0;tmin;cooling;seed;move;max_evaluations;max_time;initial_solution
-45 19 22 25 14 18 36 11 48 6 2 16 34 49 33 0 15 1 29 27 42 10 43 23 38 13 46 40 50 21 3 12 5 26 9 17 41 24 28 35 4 31 8 7 44 20 39 30 32 47 37 45;1698;instances/eil51.tsp;2021-11-16 20:29:35.131472;0.98;1000.0;900.0;GEOMETRIC;1637105375116;SWAP;1000;3.0;RANDOM

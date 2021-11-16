@@ -1,2 +1,0 @@
-solution;cost;instance;date;pop_size;offspring_size;pselection_type;crossover_type;mutation_type;mutation_prob;selection_strategy;gselection_type;seed;move;max_evaluations;max_iterations;max_time;initial_solution
-28 2 6 42 5 47 19 33 29 39 12 14 43 32 44 1 31 10 26 22 11 37 48 24 45 46 21 25 30 7 0 35 15 3 41 18 13 17 23 27 20 49 34 36 40 4 38 8 9 16 50 28;1111;instances/eil51.tsp;2021-11-16 20:29:27.767207;10;20;TOURNAMENT;OPX;TWO_OPT;1.0;MUPLUSLAMBDA;TOURNAMENT;1637105367723;SWAP;1000;20;3.0;DETERMINISTIC
