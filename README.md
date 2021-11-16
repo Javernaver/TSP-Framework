@@ -135,12 +135,9 @@ Argumentos Generales:
 * **Iteraciones:** Numero maximo de iteraciones para el ciclo principal de un algoritmo. Por defecto se utiliza 20
 	 * (-e o --evaluations **entero**). **Ejemplo:** python tspf.py -it 500
 	 
-* **Archivo de solucion:** Nombre del archivo de salida para almacenar la solucion. Por defecto se utiliza solution.txt
-	 * (-sol o --solution <PATH>). **Ejemplo:** python tspf.py --solution test.txt
+* **Archivo de solucion y trayectoria:** Nombre del archivo de salida para almacenar la solucion y la trayectoria. Por defecto se utiliza solution.txt y trajectory.csv
+	 * (-sol o --solution <PATH>). **Ejemplo:** python tspf.py --solution test
 	 
-* **Archivo de trayectoria:** Nombre del archivo de salida apra almacenar la trayectoria de la solucion. Por defecto se utiliza trajectory.csv
-	 * (-tra o --trajectory <PATH>). **Ejemplo:** python tspf.py --trajectory tra.csv
-
 * **Visualizacion de trayectoria:** Parametro de tipo flag que indica si se quiere o no visualizar la trayectoria de la solucion.
 	 * (-vi o --visualize). **Ejemplo:** python tspf.py --visualize
 

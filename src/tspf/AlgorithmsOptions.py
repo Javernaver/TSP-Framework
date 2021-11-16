@@ -220,8 +220,7 @@ class AlgorithmsOptions():
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
-        parser.add_argument("-sol", "--solution", help="Nombre del archivo de salida para la solucion")
-        parser.add_argument("-tra", "--trajectory", help="Nombre del archivo de salida para la trayectoria de la solucion")
+        parser.add_argument("-sol", "--solution", help="Nombre del archivo de salida para la solucion y trayectoria")
         parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
@@ -277,20 +276,17 @@ class AlgorithmsOptions():
             except: 
                 print(f"{bcolors.FAIL}Error: La semilla debe ser un numero entero (-s | --seed){bcolors.ENDC}")
 
-        # Archivo de salida para solucion
-        if (args.solution or 'output' in kwargs):
+        # Archivo de salida para solucion y trayectoria
+        if (args.solution or 'solution' in kwargs):
             self.solution = args.solution if args.solution else kwargs['solution']
+            self.trajectory = args.solution if args.solution else kwargs['solution']
             if not '.txt' in self.solution:
                 self.solution += '.txt'
-
-        # Archivo de salida para trayectoria
-        if (args.trajectory or 'trajectory' in kwargs):
-            self.trajectory = args.trajectory if args.trajectory else kwargs['trajectory']
             if not '.csv' in self.trajectory:
                 self.trajectory += '.csv'
 
         # Si se visualizara la trayectoria
-        if (args.visualize or 'graphic' in kwargs):
+        if (args.visualize or 'visualize' in kwargs):
             self.visualize = args.visualize if args.visualize else kwargs['visualize']
 
         # Si se ejecuta en Replit.com
