@@ -142,8 +142,8 @@ class SimulatedAnnealing():
                 current_tour.copy(neighbor_tour)
                 # Guardar trayectoria Final
                 self.trajectory.append( Trajectory(
-                                        tour=self.best_tour.current.copy(),
-                                        cost=self.best_tour.cost, 
+                                        tour=current_tour.current.copy(),
+                                        cost=current_tour.cost, 
                                         iterations=self.evaluations, 
                                         evaluations=self.evaluations,
                                         temperature=temperature) ) 

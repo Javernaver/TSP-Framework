@@ -55,14 +55,15 @@ class Trajectory():
     """
     def __init__(self, tour: list, cost: int, iterations: int,
                  evaluations: int, average: float = 0.0, deviation: float = 0.0,
-                 temperature: float = -1.0) -> None:
+                 temperature: float = -1.0, worst: int = -1) -> None:
         self.tour = tour
         self.cost = cost
         self.iterations = iterations
         self.evaluations = evaluations
-        self.average = average # promedio
-        self.deviation = deviation # desviacion estandar
-        self.temperature = temperature
+        self.worst = worst # peor costo de la poblacion (algoritmo genetico)
+        self.average = average # promedio de la poblacion (algoritmo genetico)
+        self.deviation = deviation # desviacion estandar (algoritmo genetico)
+        self.temperature = temperature # temperatura (simulated annealing)
 
 def dtrunc (x: float) -> float:
     """ Truncar un numero float """

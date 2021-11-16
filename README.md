@@ -6,9 +6,9 @@ Framework para resolver el problema del vendedor viajero aplicando algoritmos me
 
 * **instancias:** instancias en formato TSPlib en la carpeta instances/
 
-## Uso sin instalacion
+## Uso sin instalacion (Recomendado)
 
-Para ejecutar de forma local, puede descargar el repositorio e instalar los requerimientos con:
+Para ejecutar de forma local, puede descargar el repositorio e instalar los requerimientos abriendo una terminal dentro de la carpeta del proyecto y luego ejecutar:
 ```sh
 pip install -r requirements.txt
 ```
@@ -18,7 +18,7 @@ Luego, ejecutar python (python3 en Linux) tspf.py + los argumentos a utilizar de
 python tspf.py --instance instances/burma14.tsp
 ```
 
-## Instalacion
+## Instalacion como script Python
 
 El framework puede ser instaladado como paquete desde PyPi (https://pypi.org/project/TSP-Framework/) o GitHub, para esto utilice:
 
@@ -40,6 +40,7 @@ tspf --instance archivo.tsp
 ## Uso Online con Replit
 
 Puede utilizar el framework de forma online con Replit: https://replit.com/@Javernaver/TSP-Framework
+Se recomienda tener una cuenta en Replit y hacer fork del proyecto para una mejor experiencia y edicion del codigo fuente.
 
 ## Descripcion
 
@@ -74,6 +75,10 @@ Puede utilizar el framework de forma online con Replit: https://replit.com/@Jave
  
 
 * **AlgorithmsOptions.py:** Modulo con la clase que configura y lee todos los argumentos que puedan tener uno de los algoritmos a aplicar
+ 
+* **utilities.py:** Modulo distintas utilidades utilizadas por los demas modulos
+
+* **plot.py:** Modulo encargado de generar y mostrar los distintos graficos utilizados como los generados en la trayectoria de las soluciones 
 
 ### Algoritmos
 
@@ -116,7 +121,7 @@ Argumentos Generales:
 	*  (-mh o --metaheuristic). **Ejemplo:** python tspf.py -mh SA
 
 * **Instancia:** Ruta al archivo de la instancia de TSP a resolver. Por defecto instances/burma14.tsp.
-	*  (-i o --instance **<PATH>**). **Ejemplo:** python tspf.py -i hola.tsp
+	*  (-i o --instance **<PATH>**). **Ejemplo:** python tspf.py -i instances/eil51.tsp
   
 * **Semilla**: Semilla para el generador de numeros aleatorios y todo los relacionado al modulo random de Python.
 	*  (-s o --seed **entero**). **Ejemplo:** python tspf.py -s 4854
@@ -130,6 +135,15 @@ Argumentos Generales:
 * **Iteraciones:** Numero maximo de iteraciones para el ciclo principal de un algoritmo. Por defecto se utiliza 20
 	 * (-e o --evaluations **entero**). **Ejemplo:** python tspf.py -it 500
 	 
+* **Archivo de solucion:** Nombre del archivo de salida para almacenar la solucion. Por defecto se utiliza solution.txt
+	 * (-sol o --solution <PATH>). **Ejemplo:** python tspf.py --solution test.txt
+	 
+* **Archivo de trayectoria:** Nombre del archivo de salida apra almacenar la trayectoria de la solucion. Por defecto se utiliza trajectory.csv
+	 * (-tra o --trajectory <PATH>). **Ejemplo:** python tspf.py --trajectory tra.csv
+
+* **Visualizacion de trayectoria:** Parametro de tipo flag que indica si se quiere o no visualizar la trayectoria de la solucion.
+	 * (-vi o --visualize). **Ejemplo:** python tspf.py --visualize
+
 Argumentos para Simulated Annealing:
 
 * **Solucion Inicial:** Tipo de solucion inicial en formato InitialSolution que se utilizara. Los valores posibles son: InitialSolution.RANDOM, InitialSolution.NEAREST_N y InitialSolution.DETERMINISTIC. Por defecto se utiliza random. 

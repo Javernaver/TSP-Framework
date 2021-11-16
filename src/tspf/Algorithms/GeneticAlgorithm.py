@@ -137,9 +137,10 @@ class GeneticAlgorithm():
             self.best_tour.copy(population.getBestTour())
         
         # Guardar trayectoria
-        self.trajectory.append( Trajectory(self.best_tour.current.copy(),
-                                self.best_tour.cost, 0, self.evaluations,
-                                population.getAverage(), population.getDeviation()) ) 
+        self.trajectory.append( Trajectory(tour=self.best_tour.current.copy(),
+                                cost=self.best_tour.cost, iterations=0, evaluations=self.evaluations,
+                                average=population.getAverage(), deviation=population.getDeviation(),
+                                worst=population.getWorstTour().cost) ) 
         self.evaluations += self.offspring_size
 
         # tiempo para iteraciones y condicion de termino por tiempo
@@ -176,9 +177,11 @@ class GeneticAlgorithm():
                     
                 self.best_tour.copy(offspring.getBestTour())
                 # Guardar trayectoria
-                self.trajectory.append( Trajectory(self.best_tour.current.copy(),
-                                        self.best_tour.cost, self.iterations, self.evaluations,
-                                        population.getAverage(), population.getDeviation()) ) 
+                # Guardar trayectoria
+                self.trajectory.append( Trajectory(tour=self.best_tour.current.copy(),
+                                        cost=self.best_tour.cost, iterations=self.iterations, evaluations=self.evaluations,
+                                        average=population.getAverage(), deviation=population.getDeviation(),
+                                        worst=population.getWorstTour().cost) ) 
                 
             else: 
                 #if not self.options.silent:

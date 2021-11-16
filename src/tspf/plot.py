@@ -16,12 +16,16 @@ coords = [] # lista de coordenadas
 trajectory = [] # lista de con la trayectoria de la solucion
 x, y = [], [] # lista de coordenadas x e y
 annotations = [] # lista de anotaciones en el grafico que serian las numeraciones, flechas de union, etc.
+iterations, cost, avg, worst = [], [], [], []
 
 replit = False # bool si se ejecuta en replit o no
+MAXLEN = 100 # numero maximo de puntos de coordenada para animar la trayectoria
 
-fig, ax = plt.subplots(figsize=(16, 9), dpi=90) # Crear figura y grafico
+fig, (ax, ax1) = plt.subplots(figsize=(16, 9), gridspec_kw={'height_ratios': [5, 1]}, dpi=90, nrows=2, ncols=1) # Crear figura y graficos
+
+#fig, ax = plt.subplots(figsize=(16, 9), dpi=90) # Crear figura y grafico
+
 #plt.style.use('ggplot')
-
 
 def putCoords() -> None:
     """Obtiene, pone y numera en el grafico los puntos con las coordenadas a recorrer"""
@@ -35,15 +39,18 @@ def putCoords() -> None:
         y.append(p.y)
 
     # Generar los puntos con las coordenadas
-    ax.scatter(x, y, color='red', s=100, edgecolors='black')
+    ax.scatter(x, y, color='red', s=70, edgecolors='black', label='Punto Normal')
     
     ax.set_title('Visualizacion del Tour')
-    ax.set_xlabel('Eje X\n\nControles\n')
-    ax.set_ylabel('Eje Y')
-  
-    # expandir al tamaño de la ventana
-    plt.tight_layout()
-    plt.grid(color='black', linestyle='-', linewidth=0.1)
+    #ax.set_xlabel('Eje X')
+    #ax.set_ylabel('Eje Y')
+    
+    ax1.grid(color='black', linestyle='-', linewidth=0.1)
+    ax1.set_title('Variacion por iteracion')
+    ax1.set_ylabel('Calidad')
+    ax1.set_xlabel('Iteraciones\n\n')
+    
+    ax.grid(color='black', linestyle='-', linewidth=0.1)
     
     # Numerar puntos con las coordenadas 
     for i in range(len(coords)):
@@ -51,57 +58,93 @@ def putCoords() -> None:
             xy=(x[i], y[i]), 
             xytext=(x[i], y[i]+0.05))
 
+    # expandir al tamaño de la ventana
+    plt.tight_layout()
 
 def generateMap(i: int) -> None:
     """Genera la visualizacion uniendo los puntos con las coordenadas en cada tour de la trayectoria"""
     
-    try:
-        # obtener tour de la trayectoria
-        tour = trajectory[i].tour
-        # limpiar todas las anotaciones de la graficacion anterior
-        clearAnnotations()
-
-        # generar texto con detalle de la graficacion
-        textstr = '\n'.join((
-        f'Tour: {trajectory[i].tour}',
-        f'Costo: {trajectory[i].cost}',
-        f'Iteraciones para esta solucion: {trajectory[i].iterations}',
-        f'Evaluaciones para esta solucion: {trajectory[i].evaluations}'
-        ))
-        
-        # si hay temperatura
-        if trajectory[i].temperature >= 0:
-            textstr += f'\nTemperatura: {trajectory[i].temperature:.2f}'
-
-        # si hay promedio y desviacion estandar
-        if trajectory[i].average > 0 and trajectory[i].deviation > 0:
-            textstr += f'\nPromedio Poblacion: {trajectory[i].average:.2f}\nDesviacion Estandar Poblacion: {trajectory[i].deviation:.2f}'
-        
-        #ax.set_title(textstr)
-        # generar cuadro de texto con los detalles de la graficacion
-        props = dict(boxstyle='round', facecolor='lightblue', alpha=0.77)
-
-        # poner el cuadro de texto en la esquina superior izquierda del grafico
-        a = ax.text(0.01, 0.98, textstr, transform=ax.transAxes, fontsize=12,
-                verticalalignment='top', bbox=props)
-
-        annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-        
-    except:
+    if i >= len(trajectory):
         return
+    
+    # obtener tour de la trayectoria
+    tour = trajectory[i].tour
+    # limpiar todas las anotaciones de la graficacion anterior
+    clearAnnotations()
+
+    # generar texto con detalle de la graficacion
+    textstr = '\n'.join((
+    f'Tour: {trajectory[i].tour}',
+    f'Costo: {trajectory[i].cost}',
+    f'Iteraciones: {trajectory[i].iterations}',
+    f'Evaluaciones: {trajectory[i].evaluations}'
+    ))
+    
+    # si hay temperatura
+    if trajectory[i].temperature >= 0:
+        textstr += f'\nTemperatura: {trajectory[i].temperature:.2f}'
+
+    # si hay promedio y desviacion estandar
+    if trajectory[i].average > 0 and trajectory[i].deviation > 0:
+        textstr += f'\nPromedio Poblacion: {trajectory[i].average:.2f}\nDesviacion Estandar Poblacion: {trajectory[i].deviation:.2f}'
+    
+    #ax.set_title(textstr)
+    # generar cuadro de texto con los detalles de la graficacion
+    props = dict(boxstyle='round', facecolor='lightblue', alpha=0.77)
+
+    # poner el cuadro de texto en la esquina superior izquierda del grafico
+    a = ax.text(0.01, 0.98, textstr, transform=ax.transAxes, fontsize=12,
+            verticalalignment='top', bbox=props)
+
+    annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
+
    
     #ax.cla()
     #ax.scatter(x,y, color='blue')
     # marcar punto de inicio del tour
-    a = ax.annotate('Inicio',
-            xy=(x[tour[0]], y[tour[0]]), 
-            xytext=(x[tour[0]] - 0.1, y[tour[0]] - 0.15))
+    a = ax.scatter(x[tour[0]], y[tour[0]], s=70, edgecolors='black', color='lime', label='Punto de Partida') 
 
     annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-
+    a = ax.legend(loc='upper right')
+    annotations.append(a)
     # Poner la figura en el grafico
     drawFig(tour)
+    
+    drawStats(i)
 
+def drawStats(i: int) -> None:
+    """Grafica los cambios en la calidad de los tour a lo largo de la iteraciones"""
+    
+    # graficar completamente los cambios de calidad en las iteraciones
+    if len(coords) > MAXLEN:
+        ax1.plot([tra.iterations for tra in trajectory],
+                [tra.cost for tra in trajectory],
+                label="Mejor Actual", linestyle='-', marker='', color='green')
+        return
+    
+    ax1.cla()
+    
+    ax1.grid(color='black', linestyle='-', linewidth=0.1)
+    ax1.set_title('Variacion por iteracion')
+    ax1.set_ylabel('Calidad')
+    ax1.set_xlabel('Iteraciones')
+    #x_data = [tra.iterations for tra in trajectory]
+    #y_data = [tra.cost for tra in trajectory]
+    iterations.append(trajectory[i].iterations)
+    cost.append(trajectory[i].cost)
+    
+    ax1.plot(iterations, cost, label="Mejor", linestyle='-', marker='', color='green')
+
+    if trajectory[i].average > 0 and trajectory[i].worst > 0:
+        avg.append(trajectory[i].average)
+        worst.append(trajectory[i].worst)
+        ax1.plot(iterations, avg, label="Promedio", linestyle='-', marker='', color= 'blue')
+        ax1.plot(iterations, worst, label="Peor", linestyle='-', marker='', color='red')
+        
+    ax1.legend(loc='upper right')
+    
+    #ax1.plot(trajectory[i].iterations, trajectory[i].average, label="", linestyle='--')
+    
 
 def clearAnnotations() -> None:
     """Elimina todas las anotaciones de la figura"""
@@ -123,7 +166,7 @@ def drawFig(tour: list) -> None:
                         xytext=(x[tour[i]], y[tour[i]]), 
                         arrowprops=dict(arrowstyle="->",
                                         connectionstyle="arc3", 
-                                        color="blue"))
+                                        color="royalblue"))
         annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
 
 
@@ -137,9 +180,15 @@ def show() -> None:
 
     # generar la animacion de la graficacion de la trayectoria
     if replit:
-        ani = FuncAnimation(fig, generateMap, interval=500, blit=False)
+        if len(coords) > MAXLEN:
+            generateMap(len(trajectory)-1)
+        else:
+            ani = FuncAnimation(fig, generateMap, interval=500, blit=False)
     else:
-        ani = Player(fig, generateMap, maxi=len(trajectory)-1, interval=500, blit=False)
+        if len(coords) > MAXLEN:
+            generateMap(len(trajectory)-1)
+        else:
+            ani = Player(fig, generateMap, maxi=len(trajectory)-1, interval=500, blit=False)
         
     # poner el grafico en pantalla maximizada para evitar conflictos con los distitos tipos de pantallas 
     plt_set_fullscreen()

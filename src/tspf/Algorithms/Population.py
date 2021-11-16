@@ -147,6 +147,11 @@ class Population():
         if (self.best_index > -1):
             return self.pop[self.best_index]
         return None
+    
+    def getWorstTour(self) -> Tour:
+        """Retorna el peor individuo de la poblacion"""
+        worst = max(self.pop, key=lambda tour: tour.cost)
+        return worst
 
     def getIndividuals(self, index: list) -> list:
         """Retorna individuos segun una lista con indices
