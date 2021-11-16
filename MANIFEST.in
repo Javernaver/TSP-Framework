@@ -1,2 +1,1 @@
 include instances/*
-include src/tspf/instances/*.tsp
