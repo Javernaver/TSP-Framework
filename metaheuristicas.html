@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="shortcut icon" href="images/favicon.ico"/>
+    <title>TSP Framework - Metaheurísticas</title>
+  </head>
+  <body style="background-image:url(images/TSP\ Tour.png)">
+    <nav class="navbar navbar-center navbar-expand-lg navbar-light fixed-top" style="background-color:rgb(74, 74, 75);">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="https://www.inf.ucv.cl/"><img src="images/logo_escuela.png" style="width:120px;height:40px;"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link active " aria-current="page" href="./index.html" style="color: white; font-weight: bold;">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Instalacion
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./github.html">GitHub</a></li>
+                <li><a class="dropdown-item" href="./pip.html">Instalador de Paquete</a></li>
+                <li><a class="dropdown-item" href="./replit.html">Online</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Parametros
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./pgeneral.html">Generales</a></li>
+                <li><a class="dropdown-item" href="./psimulated.html">Simulated Annealing</a></li>
+                <li><a class="dropdown-item" href="./pgeneticos.html">Algoritmos Genéticos</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Modulos
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./mgeneral.html">Generales</a></li>
+                <li><a class="dropdown-item" href="./malgoritmos.html">Algoritmos</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Marco Teorico
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./vendedorviajero.html">Problema del Vendedor Viajero</a></li>
+                <li><a class="dropdown-item" href="./metaheuristicas.html">Metaheurísticas</a></li>
+                <li><a class="dropdown-item" href="./simulatedannealing.html">Simulated Annealing</a></li>
+                <li><a class="dropdown-item" href="./algoritmogenetico.html">Algoritmos Genéticos</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="navbar-nav" style="--bs-scroll-height: 100px">
+              <button type="button" class="btn btn-light" style="width:90px;height:45px; background-color: rgba(207, 207, 207, 0.925)">
+                  <a href="https://github.com/Javernaver/TSP-Framework"><img src="images/GitHub-Logo.png" style="width:60px;height:30px"></a>
+              </button>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div>
+        <div class="row">
+            <div class="mt-5 col-md-10 offset-md-1" style="background-color: rgba(207, 207, 207, 0.925);">
+              <h1 class="mt-4 d-flex justify-content-center">Metaheurísticas</h1>
+              <p></p>
+              <div class="col-md-10 offset-md-1">
+                <p>
+                  Con el fin de comprender el concepto de metaheurística, se debe entender el término de
+                  heurística. Conceptualmente, la heurística está relacionada con la capacidad de solucionar
+                  inteligentemente problemas reales usando el conocimiento disponible.
+                </p>
+                <p>
+                  A nivel práctico, las heurísticas son técnicas de resolución de problemas, las cuales se
+                  conforman por reglas metodológicas con el fin de encontrar la solución que más se acerque al
+                  resultado óptimo de un problema en específico, manteniendo un costo de cómputo razonable.
+                </p>
+                <p>
+                  Sin embargo, estos resultados no garantizan una solución que sea factible, por tanto, no se
+                  puede determinar qué tan próximo se encuentran a la solución óptima. Además, que la técnica
+                  desarrollada para solucionar el problema solo es válida para este, siendo necesario generar otros
+                  métodos que satisfagan diversos tipos de problemas.
+                </p>
+                <p>
+                  Es en estos escenarios, que existe otra técnica de solución de problemas, las denominadas
+                  metaheurísticas, las cuales son estrategias generales para aplicar una o más heurísticas, y que
+                  permiten solucionar problemas de forma general, es decir, que una misma metaheurística tiene
+                  la capacidad de encontrar soluciones factibles a diferentes problemáticas. De allí el significado
+                  de su nombre, pues meta significa “más allá” o “nivel superior”, haciendo referencia de la
+                  capacidad de abarcar mayor número de problemas en contraparte de las heurísticas.
+                </p>
+                <p>
+                  Para lograr esta característica de generalidad, las metaheurísticas generan soluciones
+                  usando el concepto de exploración y explotación del espacio de búsqueda, evitando así el
+                  estancamiento en los óptimos locales (en un área acotada del total de soluciones posibles).
+                </p>
+                <p>
+                  Cuando se habla de exploración del espacio de búsqueda, se hace referencia a la
+                  indagación de soluciones en toda el área de búsqueda, permitiendo encontrar sectores
+                  prometedores de mejores soluciones. En el caso de la explotación, se enfoca en intensificar uno
+                  de estos sectores prometedores, buscando el óptimo local.
+                </p>
+                <p>
+                  El enfoque del software se centra en el desarrollo de dos metaheurísticas con el fin de
+                  solucionar el problema del vendedor viajero, las cuales se basan en las estrategias de búsqueda
+                  trayectoria y poblacional.
+                </p>
+                <ul>
+                  <li>
+                    <b>Trayectoria:</b> método de búsqueda global, en donde se maneja una sola solución
+                    del espacio de búsqueda en cada iteración (solución actual), aplicando heurísticas
+                    perturbativas para encontrar la siguiente solución, generando una trayectoria de
+                    soluciones, un ejemplo de ello es el Simulated Annealing.
+                    <p></p>
+                    <img src="images/Trayectoria.png" alt="Estrategia de busqueda trayectoria" class="rounded mx-auto d-block img-thumbnail">
+                    <p></p>
+                  </li>
+                  <li>
+                    <b>Poblacional:</b> método de búsqueda global, en donde se analiza un conjunto de
+                    soluciones del espacio de búsqueda en cada iteración, las cuales son modificadas
+                    y refinadas en cada repetición del algoritmo, un ejemplo de ello es el Algoritmo
+                    Genético.
+                    <p></p>
+                    <img src="images/Poblacional.png" alt="Estrategia de busqueda poblacional" class="rounded mx-auto d-block img-thumbnail">
+                    <p></p>
+                  </li>
+                </ul>
+              </div>
+              <hr/>
+              <p></p>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-md-12" style="background-color:rgb(74, 74, 75);">
+            <p class="mt-4 d-flex justify-content-center" style="color: antiquewhite;">
+              Pagina creada como manual de uso del proyecto "FRAMEWORK DE ALGORITMOS PARA RESOLVER EL PROBLEMA DEL VENDEDOR VIAJERO".
+            </p>
+            <div class="mt-4 d-flex justify-content-center" style="color: antiquewhite; text-align: center;">
+              <dl>
+                <dt>Pontificia Universidad Católica de Valparaíso</dt>
+                <dt>Facultad de Ingenería</dt>
+                <dt>Escuela de Ingeniería Informática</dt>
+              </dl>
+            </div>
+            <p class="mt-4 d-flex justify-content-center" style="color: antiquewhite;">
+              Desarrollado por Jorge Polanco & Javier del Canto
+            </p>
+          </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="shortcut icon" href="images/favicon.ico"/>
+    <title>TSP Framework - Parámetros de Ejecución Simulated Annealing</title>
+  </head>
+  <body style="background-image:url(images/TSP\ Tour.png)">
+    <nav class="navbar navbar-center navbar-expand-lg navbar-light fixed-top" style="background-color:rgb(74, 74, 75);">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="https://www.inf.ucv.cl/"><img src="images/logo_escuela.png" style="width:120px;height:40px;"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+              <a class="nav-link active " aria-current="page" href="./index.html" style="color: white; font-weight: bold;">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Instalacion
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./github.html">GitHub</a></li>
+                <li><a class="dropdown-item" href="./pip.html">Instalador de Paquete</a></li>
+                <li><a class="dropdown-item" href="./replit.html">Online</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Parametros
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./pgeneral.html">Generales</a></li>
+                <li><a class="dropdown-item" href="./psimulated.html">Simulated Annealing</a></li>
+                <li><a class="dropdown-item" href="./pgeneticos.html">Algoritmos Genéticos</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Modulos
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./mgeneral.html">Generales</a></li>
+                <li><a class="dropdown-item" href="./malgoritmos.html">Algoritmos</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white">
+                Marco Teorico
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                <li><a class="dropdown-item" href="./vendedorviajero.html">Problema del Vendedor Viajero</a></li>
+                <li><a class="dropdown-item" href="./metaheuristicas.html">Metaheurísticas</a></li>
+                <li><a class="dropdown-item" href="./simulatedannealing.html">Simulated Annealing</a></li>
+                <li><a class="dropdown-item" href="./algoritmogenetico.html">Algoritmos Genéticos</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="navbar-nav" style="--bs-scroll-height: 100px">
+              <button type="button" class="btn btn-light" style="width:90px;height:45px; background-color: rgba(207, 207, 207, 0.925)">
+                  <a href="https://github.com/Javernaver/TSP-Framework"><img src="images/GitHub-Logo.png" style="width:60px;height:30px"></a>
+              </button>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div>
+        <div class="row">
+            <div class="mt-5 col-md-10 offset-md-1" style="background-color: rgba(207, 207, 207, 0.925);">
+                <h1 class="mt-4 d-flex justify-content-center">Parámetros de Ejecución Simulated Annealing</h1>
+                <p></p>
+                <div class="col-md-10 offset-md-1">
+                  <p>
+                    Los parámetros de ejecución de la metaheurística simulated annealing pueden ser modificados directamente desde el código 
+                    fuente en la clase <samp>AlgorithmsOptions.py</samp>, permitiendo cambiar las condiciones de funcionamiento del programa, 
+                    dando como resultado una ampliación de los resultados posibles de una misma instancia o la sustitución de este última.
+                  </p>
+                  <p>
+                    De igual manera, es posible configurar estos parámetros de ejecución al iniciar el software desde la línea de comandos. 
+                    A continuación, se entregan los comandos de ejecucion de simulated annealing:
+                  </p>
+                  <ul>
+                    <li>
+                      <b>--insol (-is):</b> método de generación de la solución inicial, por defecto <samp>random</samp>
+                      <ul type="circle">
+                        <li><b>random:</b> cada nodo o ciudad de la instancia es ordenada aleatoriamente, independiente de la distancia entre estas</li>
+                        <li><b>nearest_n:</b> primer nodo o ciudad seleccionado aleatoriamente, los siguientes elementos son elegidos en función a la menor distancia a su antecesor</li>
+                        <li><b>deterministic:</b> existe un orden preestablecido de la ciudad o nodo</li>
+                      </ul>
+                      <div class="d-flex justify-content-center">
+                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                          <samp>python tspf.py -mh SA --insol deterministic</samp>
+                        </div>
+                      </div>
+                      <hr>
+                    </li>
+                    <li>
+                      <b>--cooling (-c):</b> determina el esquema de enfriamiento para la ejecución del algoritmo, por defecto <samp>geometric</samp>
+                      <ul type="circle">
+                        <li><b>linear:</b> cada nodo o ciudad de la instancia es ordenada aleatoriamente, independiente de la distancia entre estas</li>
+                        <li><b>geometric:</b> primer nodo o ciudad seleccionado aleatoriamente, los siguientes elementos son elegidos en función a la menor distancia a su antecesor</li>
+                        <li><b>log:</b> existe un orden preestablecido de la ciudad o nodo</li>
+                      </ul>
+                      <div class="d-flex justify-content-center">
+                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                          <samp>python tspf.py -mh SA -c linear</samp>
+                        </div>
+                      </div>
+                      <hr>
+                    </li>
+                    <li>
+                      <b>--alpha (-a) [0,1]:</b> valor del parámetro alpha que permite el enfriamiento en el esquema lineal, por defecto <samp>0.98</samp>
+                      <div class="d-flex justify-content-center">
+                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                          <samp>python tspf.py -mh SA -a 0.3</samp>
+                        </div>
+                      </div>
+                      <hr>
+                    </li>
+                    <li>
+                      <b>--tini (-t0):</b> valor de la temperatura inicial, por defecto <samp>1000.0</samp>
+                      <div class="d-flex justify-content-center">
+                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                          <samp>python tspf.py -mh SA -t0 956.45</samp>
+                        </div>
+                      </div>
+                      <hr>
+                    </li>
+                    <li>
+                      <b>--tmin (-tmin):</b> valor de la temperatura minima aceptable para ejecución del algoritmo, por defecto <samp>10</samp>
+                      <div class="d-flex justify-content-center">
+                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                          <samp>python tspf.py -mh SA -tmin 800.87</samp>
+                        </div>
+                      </div>
+                      <hr>
+                    </li>
+                    <li>
+                      <b>--move (-mhm):</b> tipo de movimiento en formato TSPMove que se utilizara para la ejecución, por defecto se utiliza <samp>swap</samp>
+                      <ul type="circle">
+                        <li><b>swap:</b> operador de movimiento swap, dos nodos o ciudades aleatorios cambian su posición</li>
+                        <li><b>2opt:</b> operador de movimiento 2-opt, se invierte un tramo del tour en puntos aleatorios</li>
+                      </ul>
+                      <div class="d-flex justify-content-center">
+                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                          <samp>python tspf.py -mh SA --move 2opt</samp>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <hr>    
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="background-color:rgb(74, 74, 75);">
+            <p class="mt-4 d-flex justify-content-center" style="color: antiquewhite;">
+              Pagina creada como manual de uso del proyecto "FRAMEWORK DE ALGORITMOS PARA RESOLVER EL PROBLEMA DEL VENDEDOR VIAJERO".
+            </p>
+            <div class="mt-4 d-flex justify-content-center" style="color: antiquewhite; text-align: center;">
+              <dl>
+                <dt>Pontificia Universidad Católica de Valparaíso</dt>
+                <dt>Facultad de Ingenería</dt>
+                <dt>Escuela de Ingeniería Informática</dt>
+              </dl>
+            </div>
+            <p class="mt-4 d-flex justify-content-center" style="color: antiquewhite;">
+              Desarrollado por Jorge Polanco & Javier del Canto
+            </p>
+          </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
