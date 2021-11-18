@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="shortcut icon" href="images/favicon.ico"/>
-    <title>TSP Framework - Parámetros de Ejecución Generales</title>
+    <title>TSP Framework - Información de Salida por Consola</title>
   </head>
   <body style="background-image:url(images/TSP\ Tour.png)">
     <nav class="navbar navbar-center navbar-expand-lg navbar-light fixed-top" style="background-color:rgb(74, 74, 75);">
@@ -81,103 +81,115 @@
         </div>
       </div>
     </nav>
-
     <div>
         <div class="row">
             <div class="mt-5 col-md-10 offset-md-1" style="background-color: rgba(207, 207, 207, 0.925);">
-                <h1 class="mt-4 d-flex justify-content-center">Parámetros de Ejecución Generales</h1>
+                <h1 class="mt-4 d-flex justify-content-center">Información de Salida por Consola</h1>
                 <p></p>
                 <div class="col-md-10 offset-md-1">
                   <p>
-                    Los parámetros de ejecución del framework pueden ser modificados directamente desde el código 
-                    fuente en la clase <samp>AlgorithmsOptions.py</samp>, permitiendo cambiar las condiciones de funcionamiento del programa, 
-                    dando como resultado una ampliación de los resultados posibles de una misma instancia o la sustitución de este última.
+                    La salida de información por la consola de comandos es generada de forma automática, 
+                    en ella se detallan información acerca de la instancia, las configuraciones de ejecución del algoritmo, 
+                    el recorrido en la en búsqueda de soluciones y la mejor solución final. Se destaca el uso de colores 
+                    en la consola que facilitan la lectura de los datos entregados.
                   </p>
                   <p>
-                    De igual manera, es posible configurar estos parámetros de ejecución al iniciar el software desde la línea de comandos. 
-                    A continuación, se entregan los comandos generales:
+                    A continuación, se detalla la información entregada directamente por la consola:
                   </p>
-                  <ul>
-                    <li>
-                      <b>--help (-h):</b> entrega la lista de comandos disponibles del framwork
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --help</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--metaheuristic (-mh):</b> tipo de metaheurística a usar, por defecto <samp>SA</samp>
-                      <ul type="circle">
-                        <li><b>SA:</b> Simulated Annealing</li>
-                        <li><b>GA:</b> Algoritmo Genetico</li>
-                      </ul>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -mh GA</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--instance (-i):</b> ruta al archivo de la instancia de TSP a resolver, por defecto <samp>instances/burma14.tsp</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -i instances/2000-5.tsp</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--seed (-s):</b> semilla para la generación de números aleatorios, relacionado al módulo random de Python
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -s 4854</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--evaluations (-e):</b> numero máximo de evaluaciones a calcular, por defecto se utiliza <samp>1000</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -e 2000</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--iterations (-it):</b> numero máximo de iteraciones a calcular, por defecto se utiliza <samp>20</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -it 500</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--visualize (-vi):</b> activa la función de visualizar gráficamente el recorrido de las mejores soluciones encontradas
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --visualize</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--solution (-sol) [nombre_archivo]:</b> permite personalizar el nombre de los archivos de salida de la ejecución, tanto 
-                      para el archivo <samp>.txt</samp> como el <samp>.csv</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --solution ejecucion10</samp>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                  <h5>Opciones Generales</h5>
+                  <p>
+                    En esta sección del código se entregan los valores de configuración comunes para los dos algoritmos, 
+                    Simulated Annealing y Algoritmos Genéticos.
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/Opciones Generales.JPG" alt="Opciones generales de ejecución">
+                  </div>
+                  <p class="mt-3">
+                    Los valores que son demostrados anteriormente pueden ser modificados por los <a href="/pgeneral.html">parámetros de 
+                      configuración generales</a> para posteriores ejecuciones.
+                  </p>
+                  <hr>
+                  <h5>Opciones para Simulated Annealing</h5>
+                  <p>
+                    Luego de los parámetros generales, se entrega la configuracion del algoritmo a ejecutar, siendo este caso Simulated Annealing.
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/Opciones Simulated.JPG" alt="Opciones de Simulated Annealing de ejecución">
+                  </div>
+                  <p class="mt-3">
+                    Los valores que son demostrados anteriormente pueden ser modificados por los <a href="/psimulated.html">parámetros de 
+                    configuración de Simulated Annealing</a> para posteriores ejecuciones.
+                  </p>
+                  <hr>
+                  <h5>Opciones para Algoritmos Genéticos</h5>
+                  <p>
+                    En caso de realizar una ejecución de Algoritmos Genéticos, se entrega los parámetros de configuracion de esta metaheurística.
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/Opciones Genetico.JPG" alt="Opciones de Algoritmos Geneticos de ejecución">
+                  </div>
+                  <p class="mt-3">
+                    Los valores que son demostrados anteriormente pueden ser modificados por los <a href="/pgeneticos.html">parámetros de 
+                    configuración de Algoritmos Genéticos</a> para posteriores ejecuciones.
+                  </p>
+                  <hr>
+                  <h5>Lectura de instancia y generacion de solución inicial</h5>
+                  <p>
+                    La lectura de las instancias en formato TSP genera una matriz que calcula la distancia entre los nodos y determina los vecinos más cercanos.
+                  </p>
+                  <div class="row">
+                    <div class="col-md-6 d-flex justify-content-center">
+                      <img src="./images/Lectura Simulated.JPG" alt="Lectura de instancias Simulated Annealing">
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center">
+                      <img src="./images/Lectura Genetico.JPG" alt="Lectura de instancias Algoritmos Geneticos">
+                    </div>
+                  </div>
+                  <p class="mt-3">
+                    En el caso de Simulated Annealing se genera una solución a partir de la configuracion del parámetro de generación de solución inicial. 
+                    Para Algoritmos Genéticos selecciona la mejor solución dentro de la población generada.
+                  </p>
+                  <hr>
+                  <h5>Ejecución de Simulated Annealing</h5>
+                  <p>
+                    El proceso de ejecución del algoritmo registra el número, temperatura y tiempo que lleva cada iteración, además de mostrar el proceso
+                    de actualización de la mejor solución actual, indicando cuando se acepta o no el criterio de metrópolis.
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/Ejecucion Simulated.JPG" alt="Ejecucion de Simulated Annealing" style="width:980px;height:350px">
+                  </div>
+                  <p class="mt-3">
+                    Luego de realizar la ejecución del código, se generan archivos de salida tipo <a href="">.txt</a> y <a href="">.csv</a> indicando el directorio de guardado. 
+                    Se incluye un nuevo registro en el <a href="">archivo log</a> de Simulated Annealing con la mejor solución encontrada.
+                  </p>
+                  <hr>
+                  <h5>Ejecución de Algoritmo Genetico</h5>
+                  <p>
+                    El proceso de ejecución presenta el numero de iteraciones, evaluaciones, tiempo por cada iteración, además del menor costo encontrado en la población, 
+                    incluyendo el promedio y desviación estándar del costo del conjunto de soluciones que representan la población.
+                  </p>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/Ejecucion Genetico.JPG" alt="Ejecucion de Algoritmo Genetico" style="width:770px;height:500px">
+                  </div>
+                  <p class="mt-3">
+                    De manera similar a la ejecucion de Simulated Annealing, se generan archivos de salida tipo <a href="">.txt</a> y <a href="">.csv</a> y el nuevo registro en el <a href="">log</a>.
+                  </p>
+                  <hr>
+                  <h5>Resumen de mejor solucion encontrada</h5>
+                  <p>
+                    Ya finalizado la ejecución del algoritmo, se entrega el costo y el tour de la mejor solución encontrada, agregando un resumen con la información necesaria para llegar al resultado.
+                  </p>
+                  <div class="row">
+                    <div class="col-md-6 d-flex justify-content-center">
+                      <img src="./images/Resumen Simulated.JPG" alt="Resumen solucion Simulated Annealing" style="width:430px;height:120px">
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-center">
+                      <img src="./images/Resumen Genetico.JPG" alt="Resumen solucion Algoritmos Geneticos" style="width:430px;height:120px">
+                    </div>
+                  </div>
                 </div>
-                <hr>    
-            </div>
+                <hr>
+            </div>    
         </div>
         <div class="row">
           <div class="col-md-12" style="background-color:rgb(74, 74, 75);">

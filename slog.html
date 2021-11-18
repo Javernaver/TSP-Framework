@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="shortcut icon" href="images/favicon.ico"/>
-    <title>TSP Framework - Parámetros de Ejecución Generales</title>
+    <title>TSP Framework - Registro de Ejecuciones</title>
   </head>
   <body style="background-image:url(images/TSP\ Tour.png)">
     <nav class="navbar navbar-center navbar-expand-lg navbar-light fixed-top" style="background-color:rgb(74, 74, 75);">
@@ -85,99 +85,61 @@
     <div>
         <div class="row">
             <div class="mt-5 col-md-10 offset-md-1" style="background-color: rgba(207, 207, 207, 0.925);">
-                <h1 class="mt-4 d-flex justify-content-center">Parámetros de Ejecución Generales</h1>
+                <h1 class="mt-4 d-flex justify-content-center">Registro de Ejecuciones</h1>
                 <p></p>
                 <div class="col-md-10 offset-md-1">
                   <p>
-                    Los parámetros de ejecución del framework pueden ser modificados directamente desde el código 
-                    fuente en la clase <samp>AlgorithmsOptions.py</samp>, permitiendo cambiar las condiciones de funcionamiento del programa, 
-                    dando como resultado una ampliación de los resultados posibles de una misma instancia o la sustitución de este última.
+                    El archivo de registro almacena diversa información de todas las ejecuciones hechas por el framework de manera local. 
+                    Por cada tipo de algoritmo se tiene un archivo de registro almacenando datos generales y específicos de la metaheurística.
                   </p>
                   <p>
-                    De igual manera, es posible configurar estos parámetros de ejecución al iniciar el software desde la línea de comandos. 
-                    A continuación, se entregan los comandos generales:
+                    La información actualizada es cargada en los archivos <samp>SAlog.csv</samp> para Simulated Annealing y <samp>GAlog.csv</samp> para Algoritmos Genéticos, ubicados en la carpeta <samp>log</samp>.
                   </p>
-                  <ul>
-                    <li>
-                      <b>--help (-h):</b> entrega la lista de comandos disponibles del framwork
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --help</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--metaheuristic (-mh):</b> tipo de metaheurística a usar, por defecto <samp>SA</samp>
-                      <ul type="circle">
-                        <li><b>SA:</b> Simulated Annealing</li>
-                        <li><b>GA:</b> Algoritmo Genetico</li>
-                      </ul>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -mh GA</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--instance (-i):</b> ruta al archivo de la instancia de TSP a resolver, por defecto <samp>instances/burma14.tsp</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -i instances/2000-5.tsp</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--seed (-s):</b> semilla para la generación de números aleatorios, relacionado al módulo random de Python
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -s 4854</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--evaluations (-e):</b> numero máximo de evaluaciones a calcular, por defecto se utiliza <samp>1000</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -e 2000</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--iterations (-it):</b> numero máximo de iteraciones a calcular, por defecto se utiliza <samp>20</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -it 500</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--visualize (-vi):</b> activa la función de visualizar gráficamente el recorrido de las mejores soluciones encontradas
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --visualize</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--solution (-sol) [nombre_archivo]:</b> permite personalizar el nombre de los archivos de salida de la ejecución, tanto 
-                      para el archivo <samp>.txt</samp> como el <samp>.csv</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --solution ejecucion10</samp>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                  <p>
+                    Dentro de la información general registrada tenemos:
+                  </p>
+                  <ol>
+                    <li>Tour de la mejor solución</li>
+                    <li>Costo de la mejor solución</li>
+                    <li>Fecha de ejecución</li>
+                    <li>Instancia analizada</li>
+                    <li>Semilla generadora</li>
+                    <li>Movimiento de exploración</li>
+                    <li>Método de generación de solución inicial</li>
+                    <li>Limitaciones de evaluación, iteración y tiempo</li>
+                  </ol>
+                  <h5>Datos Simulated Annealing</h5>
+                  <p>
+                    La información específica almacenada de la metaheurística de Simulated Annealing es:
+                  </p>
+                  <ol>
+                    <li>Constante de enfriamiento (alpha)</li>
+                    <li>Temperatura inicial</li>
+                    <li>Temperatura minima de ejecución</li>
+                    <li>Esquema de enfriamiento</li>
+                  </ol>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/SAlog.JPG" alt="Archivo registro Simulated Annealing" style="width:980px;height:250px">
+                  </div>
+                  <hr>
+                  <h5>Datos Algoritmo Genético</h5>
+                  <p>
+                    La información específica almacenada de la metaheurística de Algoritmo Genético es:
+                  </p>
+                  <ol>
+                    <li>Tamaño de población</li>
+                    <li>Cantidad de hijos</li>
+                    <li>Método de selección de padres</li>
+                    <li>Tipo de cruzamiento</li>
+                    <li>Esquema de mutación y probabilidad de ocurrencia</li>
+                    <li>Estrategia y selección de nueva población</li>
+                  </ol>
+                  <div class="d-flex justify-content-center">
+                    <img src="./images/GAlog.JPG" alt="Archivo registro Algoritmo Genético" style="width:980px;height:130px">
+                  </div>
                 </div>
-                <hr>    
-            </div>
+                <hr>
+            </div>    
         </div>
         <div class="row">
           <div class="col-md-12" style="background-color:rgb(74, 74, 75);">
