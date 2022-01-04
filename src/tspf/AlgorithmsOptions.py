@@ -6,16 +6,20 @@ class MHType(Enum):
     """Tipos de Metaheristicas disponibles
     SA: Simulated Annealing
     GA: Genetic Algorithm
+    LS: Local Search
     """
     SA = 'SA'
     GA = 'GA'
+    LS = 'LS'
 
 class TSPMove(Enum):
     """Tipos de movimientos disponibles para el TSP 
     TWO_OPT: Operador 2-opt
+    THREE_OPT: Operador 3-opt
     SWAP: Operador swap
     """
     TWO_OPT = 'TWO_OPT'
+    THREE_OPT = 'THREE_OPT'
     SWAP = 'SWAP'
 
 """ Simulated Annealing """
@@ -217,7 +221,8 @@ class AlgorithmsOptions():
         parser.add_argument("-vi", "--visualize", help="Muestra la visualizacion de trayectoria a la mejor solucion de forma grafica", action="store_true")
         parser.add_argument("-re", "--replit", help="Si se ejecuta en Replit.com ya que la visualizacion puede tener inconvenientes", action="store_true")
 
-        parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm")
+        parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm\n LS: Local Search")
+        parser.add_argument("-al", "--algorithm", help="Tipo de Algoritmo a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm\n LS: Local Search")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
         parser.add_argument("-sol", "--solution", help="Nombre del archivo de salida para la solucion y trayectoria")
@@ -304,6 +309,8 @@ class AlgorithmsOptions():
                 self.metaheuristic = MHType.SA
             elif (val == 'GA'):
                 self.metaheuristic = MHType.GA
+            elif (val == 'LS'):
+                self.metaheuristic = MHType.LS
             else: print(f"{bcolors.FAIL}Error: Metaheuristica no reconocida (-mh | --metaheristic) {bcolors.ENDC}")  
         
         # Numero maximo de evaluaciones

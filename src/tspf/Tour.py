@@ -88,6 +88,9 @@ class Tour():
     def printCost(self) -> None:
         """ Escribe el costo de un tour """
         print(f"Costo: {self.cost}", end='')
+        
+        
+    """ S W A P """
 
     def delta_cost_swap(self, tour: list, cost: int, n1: int, n2: int) -> int:
         """ Recalcula el costo de un tour al aplicar el movimiento swap  
@@ -167,6 +170,8 @@ class Tour():
         self.current = tour.copy()
 
 
+    """ 2 - O P T """
+
     def delta_cost_two_opt(self, tour: list, cost: int, s: int, e: int) -> int:
         """ Recalcula el costo de un tour al aplicar el movimiento 2-opt    
 
@@ -208,7 +213,7 @@ class Tour():
         return cost
     
     def twoOptSwap(self, n1: int, n2: int) -> None:
-        """ Aplica el movimiento 2-opt entre dos nodos modificando la solucion actual y su costo"""
+        """ Aplica el movimiento 2-opt entre dos nodos modificando la solucion actual y su costo """
         # Si es el mismo nodo, no hay swap
         if (n1 == n2): return
         # Indice fuera de los limites
@@ -240,8 +245,133 @@ class Tour():
         self.current = new_tour.copy()
 
 
+    """ 3 - O P T """
+    
+    def get_delta_case(self, tour: list, i: int, j: int, k: int) -> dict:
+        """ Retorna un diccionario con los posibles casos para aplicar el movimiento 3-opt """
+        
+        a, b = tour[i], tour[i+1]
+        c, d = tour[j], tour[j+1]
+        e, f = tour[k], tour[k+1]
+
+        
+        deltacase = {
+            1:   self.problem.get_distance(a,e) \
+               + self.problem.get_distance(b,f) \
+               - self.problem.get_distance(a,b) \
+               - self.problem.get_distance(e,f)
+               ,
+            2:   self.problem.get_distance(a,c) \
+               + self.problem.get_distance(b,d) \
+               - self.problem.get_distance(a,b) \
+               - self.problem.get_distance(c,d)
+               ,
+
+            3:   self.problem.get_distance(c,e) \
+               + self.problem.get_distance(d,f) \
+               - self.problem.get_distance(c,d) \
+               - self.problem.get_distance(e,f)
+               , 
+            4:   self.problem.get_distance(a,d) \
+               + self.problem.get_distance(e,c) \
+               + self.problem.get_distance(b,f) \
+               - self.problem.get_distance(a,b) \
+               - self.problem.get_distance(c,d) \
+               - self.problem.get_distance(e,f)
+               , 
+            5:   self.problem.get_distance(a,e) \
+               + self.problem.get_distance(d,b) \
+               + self.problem.get_distance(c,f) \
+               - self.problem.get_distance(a,b) \
+               - self.problem.get_distance(c,d) \
+               - self.problem.get_distance(e,f)
+               ,
+            6:   self.problem.get_distance(a,c) \
+               + self.problem.get_distance(b,e) \
+               + self.problem.get_distance(d,f) \
+               - self.problem.get_distance(a,b) \
+               - self.problem.get_distance(c,d) \
+               - self.problem.get_distance(e,f)
+               ,
+            7:   self.problem.get_distance(a,d) \
+               + self.problem.get_distance(e,b) \
+               + self.problem.get_distance(c,f) \
+               - self.problem.get_distance(a,b) \
+               - self.problem.get_distance(c,d) \
+               - self.problem.get_distance(e,f)
+               ,
+        }
+        
+        return deltacase
+        
+    
+    def delta_cost_three_opt(self, tour: list, cost: int, i: int, j: int, k: int, case: int) -> int:
+        """ Recalcula el costo de un tour al aplicar el movimiento 3-opt    
+
+            Parameters
+            ----------
+            tour : list
+                Lista del tour a modificar sin haber sido modificado aun
+            cost : int
+                El costo actual del tour
+            i, j, k : int
+                Indices de los nodos para aplicar 3-opt
+
+            Returns
+            -------
+                int
+                    El nuevo costo luego de aplicar 3-opt
+        """
+        deltacase = self.get_delta_case(tour, i, j, k)
+        cost += deltacase[case]
+        return cost
+         
+    
+    def threeOptSwap(self, i: int, j: int, k: int, case: int) -> None:
+        """ Aplica el movimiento 3-opt entre dos nodos modificando la solucion actual y su costo """
+        
+        new_tour = []
+        
+        if case == 1:
+            self.twoOptSwap(i, k)
+        elif case == 2:
+            self.twoOptSwap(i, j)
+        elif case == 3:
+            self.twoOptSwap(j, k)
+        
+        elif case == 4:
+            new_tour = self.current[:i+1]
+            new_tour.extend(self.current[j+1:k+1])
+            new_tour.extend( reversed(self.current[i+1:j+1]) )
+            new_tour.extend(self.current[k+1:])
+       
+        elif case == 5:
+            new_tour = self.current[:i+1]
+            new_tour.extend( reversed(self.current[j+1:k+1]) )
+            new_tour.extend(self.current[i+1:j+1])
+            new_tour.extend(self.current[k+1:])
+            
+        elif case == 6:
+            new_tour = self.current[:i+1]
+            new_tour.extend( reversed(self.current[i+1:j+1]) )
+            new_tour.extend( reversed(self.current[j+1:k+1]) )
+            new_tour.extend(self.current[k+1:])
+            
+        elif case == 7:
+            new_tour = self.current[:i+1]
+            new_tour.extend(self.current[j+1:k+1])
+            new_tour.extend(self.current[i+1:j+1])
+            new_tour.extend(self.current[k+1:])
+            
+        # Igualar inicio y final
+        new_tour[len(self.current)-1] = new_tour[0]
+            
+        self.cost = self.delta_cost_three_opt(self.current, self.cost, i, j, k, case)
+        self.current = new_tour.copy()
+
+
     def randomMove(self, move_type: TSPMove) -> None:
-        """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove"""
+        """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove """
         
         n1 = utilities.random.randint(0, self.problem.getSize()-1)
         n2 = utilities.random.randint(0, self.problem.getSize()-1)
@@ -259,12 +389,12 @@ class Tour():
 
 
     def getPosition(self, node: int) -> int:
-        """Retorna el indice de un nodo"""
+        """ Retorna el indice de un nodo """
         try:
             return self.current.index(node)
         except:
             return -1
 
     def getNode(self, pos: int) -> int:
-        """Retorna el nodo de un indice recibido"""
+        """ Retorna el nodo de un indice recibido """
         return self.current[pos]

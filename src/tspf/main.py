@@ -1,6 +1,6 @@
 """Modulo principal que utiliza todas las demas clases para ejecutar el framework"""
 
-from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, timer
+from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, timer
 from . import sys, os, AlgorithmsOptions, MHType, Tsp, Tour, bcolors
 
 def main(argv=sys.argv) -> None:
@@ -18,7 +18,6 @@ def main(argv=sys.argv) -> None:
 
     # leer e interpretar el problema TSP leido desde la instancia definida
     problem = Tsp(filename=options.instance)
-    #print(problema.random_tour())
 
     # Ejecutar Metaheuristica Simulated Annealing
     if (options.metaheuristic == MHType.SA):
@@ -36,6 +35,14 @@ def main(argv=sys.argv) -> None:
         solver = GeneticAlgorithm(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search()
+        
+    elif (options.metaheuristic == MHType.LS):
+        # Solucion inicial
+        first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
+        # Crear solver
+        solver = LocalSearch(options=options, problem=problem)
+        # Ejecutar la busqueda
+        solver.search(first_solution)
 
     else: 
         # Crear solver
@@ -55,6 +62,3 @@ def main(argv=sys.argv) -> None:
     if options.visualize:
         solver.visualize(options.replit)
  
-   
-if __name__ == '__main__':
-    main()

@@ -12,3 +12,4 @@ from prettytable import PrettyTable
 from src.tspf.Algorithms.Population import Population
 from src.tspf.Algorithms.GeneticAlgorithm import GeneticAlgorithm
 from src.tspf.Algorithms.SimulatedAnnealing import SimulatedAnnealing
+from src.tspf.Algorithms.LocalSearch import LocalSearch

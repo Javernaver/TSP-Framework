@@ -32,7 +32,7 @@ def putCoords() -> None:
 
     # Agregar titulo a la ventana
     fig = plt.gcf()
-    fig.canvas.manager.set_window_title('Visualizador Trayectoria para soluciones TSP')
+    fig.canvas.manager.set_window_title('Visualizador de trayectoria para soluciones TSP')
 
     for p in coords: # separar las coordenadas del eje x de los del eje y
         x.append(p.x)
@@ -47,7 +47,7 @@ def putCoords() -> None:
     
     ax1.grid(color='black', linestyle='-', linewidth=0.1)
     ax1.set_title('Variacion por iteracion')
-    ax1.set_ylabel('Calidad')
+    ax1.set_ylabel('Costo')
     ax1.set_xlabel('Iteraciones\n\n')
     
     ax.grid(color='black', linestyle='-', linewidth=0.1)
@@ -126,7 +126,7 @@ def drawStats(i: int) -> None:
     
     ax1.grid(color='black', linestyle='-', linewidth=0.1)
     ax1.set_title('Variacion por iteracion')
-    ax1.set_ylabel('Calidad')
+    ax1.set_ylabel('Costo')
     ax1.set_xlabel('Iteraciones')
     #x_data = [tra.iterations for tra in trajectory]
     #y_data = [tra.cost for tra in trajectory]
