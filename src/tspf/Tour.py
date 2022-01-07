@@ -261,6 +261,9 @@ class Tour():
                 delta para saber si se obtuvo una mejor solucion al aplicar el movimiento
         """
         
+        delta = 0
+        self.current.pop()
+        
         # Puntos de corte para calcular las distancias y el delta
         A, B = self.current[i-1], self.current[i]
         C, D = self.current[j-1], self.current[j]
@@ -276,26 +279,30 @@ class Tour():
         if d0 > d1:
             self.current[i:j] = reversed(self.current[i:j])
             #print(tour)
-            self.cost += -d0 + d1
-            return -d0 + d1
+            delta = -d0 + d1
+
         elif d0 > d2:
             self.current[j:k] = reversed(self.current[j:k])
             #print(tour)
-            self.cost += -d0 + d2
-            return -d0 + d2
+            delta = -d0 + d2
+
         elif d0 > d4:
             self.current[i:k] = reversed(self.current[i:k])
             #print(tour)
-            self.cost += -d0 + d4
-            return -d0 + d4
+            delta = -d0 + d4
+
         elif d0 > d3:
             tmp = self.current[j:k] + self.current[i:j]
             self.current[i:k] = tmp
             #print(tour)
-            self.cost += -d0 + d3
-            return -d0 + d3
+            delta = -d0 + d3
         
-        return 0
+        # Actualizar costo y completar tour con el valor delta
+        self.cost += delta
+        self.current.append(self.current[0])
+        
+        return delta
+    
 
     def randomMove(self, move_type: TSPMove) -> None:
         """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove """
