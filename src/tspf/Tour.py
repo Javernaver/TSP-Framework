@@ -246,129 +246,56 @@ class Tour():
 
 
     """ 3 - O P T """
-    
-    def get_delta_case(self, tour: list, i: int, j: int, k: int) -> dict:
-        """ Retorna un diccionario con los posibles casos para aplicar el movimiento 3-opt """
-        
-        a, b = tour[i], tour[i+1]
-        c, d = tour[j], tour[j+1]
-        e, f = tour[k], tour[k+1]
-
-        
-        deltacase = {
-            1:   self.problem.get_distance(a,e) \
-               + self.problem.get_distance(b,f) \
-               - self.problem.get_distance(a,b) \
-               - self.problem.get_distance(e,f)
-               ,
-            2:   self.problem.get_distance(a,c) \
-               + self.problem.get_distance(b,d) \
-               - self.problem.get_distance(a,b) \
-               - self.problem.get_distance(c,d)
-               ,
-
-            3:   self.problem.get_distance(c,e) \
-               + self.problem.get_distance(d,f) \
-               - self.problem.get_distance(c,d) \
-               - self.problem.get_distance(e,f)
-               , 
-            4:   self.problem.get_distance(a,d) \
-               + self.problem.get_distance(e,c) \
-               + self.problem.get_distance(b,f) \
-               - self.problem.get_distance(a,b) \
-               - self.problem.get_distance(c,d) \
-               - self.problem.get_distance(e,f)
-               , 
-            5:   self.problem.get_distance(a,e) \
-               + self.problem.get_distance(d,b) \
-               + self.problem.get_distance(c,f) \
-               - self.problem.get_distance(a,b) \
-               - self.problem.get_distance(c,d) \
-               - self.problem.get_distance(e,f)
-               ,
-            6:   self.problem.get_distance(a,c) \
-               + self.problem.get_distance(b,e) \
-               + self.problem.get_distance(d,f) \
-               - self.problem.get_distance(a,b) \
-               - self.problem.get_distance(c,d) \
-               - self.problem.get_distance(e,f)
-               ,
-            7:   self.problem.get_distance(a,d) \
-               + self.problem.get_distance(e,b) \
-               + self.problem.get_distance(c,f) \
-               - self.problem.get_distance(a,b) \
-               - self.problem.get_distance(c,d) \
-               - self.problem.get_distance(e,f)
-               ,
-        }
-        
-        return deltacase
-        
-    
-    def delta_cost_three_opt(self, tour: list, cost: int, i: int, j: int, k: int, case: int) -> int:
-        """ Recalcula el costo de un tour al aplicar el movimiento 3-opt    
+       
+    def bestThreeOptSwap(self, i: int, j: int, k: int) -> int:
+        """ Determina y realiza la mejor opcion para aplicar el moviemiento 3-opt  
 
             Parameters
             ----------
-            tour : list
-                Lista del tour a modificar sin haber sido modificado aun
-            cost : int
-                El costo actual del tour
             i, j, k : int
-                Indices de los nodos para aplicar 3-opt
-
+                Indices del recorrido al momento de aplicar 3-opt
+                
             Returns
             -------
-                int
-                    El nuevo costo luego de aplicar 3-opt
+            int
+                delta para saber si se obtuvo una mejor solucion al aplicar el movimiento
         """
-        deltacase = self.get_delta_case(tour, i, j, k)
-        cost += deltacase[case]
-        return cost
-         
-    
-    def threeOptSwap(self, i: int, j: int, k: int, case: int) -> None:
-        """ Aplica el movimiento 3-opt entre dos nodos modificando la solucion actual y su costo """
         
-        new_tour = []
+        # Puntos de corte para calcular las distancias y el delta
+        A, B = self.current[i-1], self.current[i]
+        C, D = self.current[j-1], self.current[j]
+        E, F = self.current[k-1], self.current[k % self.problem.getSize()]
         
-        if case == 1:
-            self.twoOptSwap(i, k)
-        elif case == 2:
-            self.twoOptSwap(i, j)
-        elif case == 3:
-            self.twoOptSwap(j, k)
-        
-        elif case == 4:
-            new_tour = self.current[:i+1]
-            new_tour.extend(self.current[j+1:k+1])
-            new_tour.extend( reversed(self.current[i+1:j+1]) )
-            new_tour.extend(self.current[k+1:])
-       
-        elif case == 5:
-            new_tour = self.current[:i+1]
-            new_tour.extend( reversed(self.current[j+1:k+1]) )
-            new_tour.extend(self.current[i+1:j+1])
-            new_tour.extend(self.current[k+1:])
-            
-        elif case == 6:
-            new_tour = self.current[:i+1]
-            new_tour.extend( reversed(self.current[i+1:j+1]) )
-            new_tour.extend( reversed(self.current[j+1:k+1]) )
-            new_tour.extend(self.current[k+1:])
-            
-        elif case == 7:
-            new_tour = self.current[:i+1]
-            new_tour.extend(self.current[j+1:k+1])
-            new_tour.extend(self.current[i+1:j+1])
-            new_tour.extend(self.current[k+1:])
-            
-        # Igualar inicio y final
-        new_tour[len(self.current)-1] = new_tour[0]
-            
-        self.cost = self.delta_cost_three_opt(self.current, self.cost, i, j, k, case)
-        self.current = new_tour.copy()
+        # Calculo de los puntos para determinara la mejor opcion para realizar el movimiento
+        d0 = self.problem.get_distance(A, B) + self.problem.get_distance(C, D) + self.problem.get_distance(E, F)
+        d1 = self.problem.get_distance(A, C) + self.problem.get_distance(B, D) + self.problem.get_distance(E, F)
+        d2 = self.problem.get_distance(A, B) + self.problem.get_distance(C, E) + self.problem.get_distance(D, F)
+        d3 = self.problem.get_distance(A, D) + self.problem.get_distance(E, B) + self.problem.get_distance(C, F)
+        d4 = self.problem.get_distance(F, B) + self.problem.get_distance(C, D) + self.problem.get_distance(E, A)
 
+        if d0 > d1:
+            self.current[i:j] = reversed(self.current[i:j])
+            #print(tour)
+            self.cost += -d0 + d1
+            return -d0 + d1
+        elif d0 > d2:
+            self.current[j:k] = reversed(self.current[j:k])
+            #print(tour)
+            self.cost += -d0 + d2
+            return -d0 + d2
+        elif d0 > d4:
+            self.current[i:k] = reversed(self.current[i:k])
+            #print(tour)
+            self.cost += -d0 + d4
+            return -d0 + d4
+        elif d0 > d3:
+            tmp = self.current[j:k] + self.current[i:j]
+            self.current[i:k] = tmp
+            #print(tour)
+            self.cost += -d0 + d3
+            return -d0 + d3
+        
+        return 0
 
     def randomMove(self, move_type: TSPMove) -> None:
         """ Aplica un movimiento aleatorio recibido por parametro del tipo TSPMove """

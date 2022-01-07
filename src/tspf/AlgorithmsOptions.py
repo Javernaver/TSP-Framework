@@ -332,6 +332,8 @@ class AlgorithmsOptions():
             val = args.move.lower() if args.move else kwargs['move'].lower()
             if (val == '2opt' or val == '2-opt'):
                 self.move = TSPMove.TWO_OPT
+            elif (val == '3opt' or val == '3-opt'):
+                self.move = TSPMove.THREE_OPT
             elif (val == 'swap'):
                 self.move = TSPMove.SWAP
             else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm | --move) {bcolors.ENDC}") 
