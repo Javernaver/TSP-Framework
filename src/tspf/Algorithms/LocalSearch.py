@@ -79,29 +79,79 @@ class LocalSearch():
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
             print(f"{bcolors.HEADER}\nEjecutando Local Search...\n{bcolors.ENDC}")
             #print(f"{bcolors.BOLD}\nIteracion; Temperatura; Tiempo; Detalle{bcolors.ENDC}", end='')
-        
+            
+            
+        # Ejecucion de la busqueda segun el metodo
         if self.move_type == TSPMove.SWAP:
-            pass
+            self.swapSearch(current_tour, table)
         elif self.move_type == TSPMove.TWO_OPT:
-            self.twoOPT(current_tour, table)
+            self.twoOptSearch(current_tour, table)
         elif self.move_type == TSPMove.THREE_OPT:
-            self.threeOPT(current_tour, table)
+            self.threeOptSearch(current_tour, table)
+        else:
+            self.twoOptSearch(current_tour, table)
         
-        
-        # Guardar trayectoria Final
-        self.trajectory.append( Trajectory(
-                                tour=self.best_tour.current.copy(),
-                                cost=self.best_tour.cost, 
-                                iterations=self.evaluations-1, 
-                                evaluations=self.evaluations-1) ) 
+
 
         # Mostrar tabla
         if not self.options.silent:
             print(table)
             #print()
             
+    def swapSearch(self, tour: Tour, table: PrettyTable, improved: bool = False) -> None:
+        """ Aplica la busqueda por 3-opt """
+        #print(tour.current)   
+        n = self.problem.getSize()
+        if n < 2: 
+            return
+        
+        # tiempo inicial para iteraciones y condicion de termino por tiempo
+        start = end = timer()
+        
+        while not improved:
             
-    def twoOPT(self, tour: Tour, table: PrettyTable, improved: bool = False) -> None:
+            details = '' # variable de texto con los detalles
+
+            improved = False
+            
+            for i in range(n):
+                for j in range(i + 1, n):
+                   
+                    if tour.delta_cost_swap(tour.current, tour.cost, i, j) < self.best_tour.cost:
+                        
+                        tour.swap(i, j)
+                        
+                        self.trajectory.append( Trajectory(
+                            tour=tour.current.copy(),
+                            cost=tour.cost, 
+                            iterations=self.evaluations-1, 
+                            evaluations=self.evaluations-1) )
+                        
+                        self.best_tour.copy(tour)
+                        details = f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {tour.cost}{bcolors.ENDC}"
+                        improved = True
+                    else:
+                        
+                        details = f"{bcolors.OKBLUE} Solucion actual: {tour.cost}{bcolors.ENDC}"
+                                            
+                        
+                    # Agregar la informacion a la tabla
+                    table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
+                                f"{end-start:.4f}{bcolors.ENDC}", 
+                                f"{details}"
+                                ])
+                    self.evaluations += 1
+                    end = timer() # tiempo actual de iteracion
+                    if not self.terminationCondition(self.evaluations, end-start):
+                        self.total_time = timer() - start
+                        return
+                        
+            
+        # actualizar tiempo total de busqueda de Simulated Annealing
+        self.total_time = timer() - start
+            
+            
+    def twoOptSearch(self, tour: Tour, table: PrettyTable, improved: bool = False) -> None:
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
@@ -120,9 +170,10 @@ class LocalSearch():
             for i in range(n):
                 for j in range(i + 2, n):
                     
-                    tour.twoOptSwap(i, j)
                     
-                    if tour.cost < self.best_tour.cost:
+                    if tour.delta_cost_two_opt(tour.current, tour.cost, i, j) < self.best_tour.cost:
+                        
+                        tour.twoOptSwap(i, j)
                         
                         self.trajectory.append( Trajectory(
                             tour=tour.current.copy(),
@@ -156,7 +207,7 @@ class LocalSearch():
 
     """ 3 - O P T """
     
-    def threeOPT(self, tour: Tour, table: PrettyTable, improved: bool = False) -> None:
+    def threeOptSearch(self, tour: Tour, table: PrettyTable, improved: bool = False) -> None:
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
