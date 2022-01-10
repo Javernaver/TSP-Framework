@@ -434,6 +434,8 @@ class AlgorithmsOptions():
             val = args.mutation.lower() if args.mutation else kwargs['mutation'].lower()
             if (val == '2opt' or val == '2-opt'):
                 self.mutation_type = TSPMove.TWO_OPT
+            elif (val == '3opt' or val == '3-opt'):
+                self.mutation_type = TSPMove.THREE_OPT
             elif (val == 'swap'):
                 self.mutation_type = TSPMove.SWAP
             else: print(f"{bcolors.FAIL}Error: Tipo de mutacion no reconocido (-mu | --mutation) {bcolors.ENDC}")

@@ -155,7 +155,7 @@ class LocalSearch():
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
-        if n < 2: 
+        if n < 3: 
             return
         
         # tiempo inicial para iteraciones y condicion de termino por tiempo
@@ -211,7 +211,7 @@ class LocalSearch():
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
-        if n < 2: 
+        if n < 4:
             return
         
         # tiempo inicial para iteraciones y condicion de termino por tiempo
@@ -246,10 +246,6 @@ class LocalSearch():
                             details = f"{bcolors.OKBLUE} Solucion actual: {tour.cost}{bcolors.ENDC}"
                             
                             
-                        
-                        if delta >= 0:
-                            improved = True
-                            
                         # Agregar la informacion a la tabla
                         table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
                                     f"{end-start:.4f}{bcolors.ENDC}", 
@@ -260,6 +256,9 @@ class LocalSearch():
                         if not self.terminationCondition(self.evaluations, end-start):
                             self.total_time = timer() - start
                             return
+                        
+            if delta >= 0:
+                improved = True
                         
             
         # actualizar tiempo total de busqueda de Simulated Annealing

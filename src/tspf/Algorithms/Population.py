@@ -140,7 +140,13 @@ class Population():
             print(f"{bcolors.UNDERLINE}Individuo {i+1}{bcolors.ENDC}")
             self.pop[i].printSol()
 
-    """ METODOS VARIOS """
+    """ 
+    
+    
+    M E T O D O S   V A R I O S
+    
+    
+    """
 
     def getBestTour(self) -> Tour:
         """Retorna el mejor individuo de la poblacion"""
@@ -404,7 +410,13 @@ class Population():
         return sel
     	
     
-    """ METODOS DE CRUZAMIENTO """
+    """ 
+    
+    
+    M E T O D O S   D E   C R U Z A M I E N T O
+    
+    
+    """
 
     def crossover(self, parents_id: list, ctype: CrossoverType) -> list:
         """Aplica el operador cruzamiento
@@ -610,7 +622,16 @@ class Population():
         return offspring
 
 
-    """ METODOS DE MUTACION """
+
+
+    """
+    
+    
+    M E T O D O S   D E   M U T A C I O N 
+    
+    
+    """
+    
 
     def mutation(self, mut_probability: float, mtype: TSPMove) -> None:
         """ Aplica el operador de mutacion
@@ -626,6 +647,8 @@ class Population():
             self.swapMutation(mut_probability)
         elif (mtype == TSPMove.TWO_OPT):
             self.twoOptMutation(mut_probability)
+        elif (mtype == TSPMove.THREE_OPT):
+            self.threeOptMutation(mut_probability)
         else:
             self.swapMutation(mut_probability)
 
@@ -661,9 +684,31 @@ class Population():
             r = utilities.random.random()
             if (mut_probability > r):
                 self.pop[i].randomMove(TSPMove.TWO_OPT)
+    
+    
+    def threeOptMutation(self, mut_probability: float) -> None:
+        """Aplica el movimiento 2opt aleatoriamente a toda la poblacion segun la probabilidad recibida
+
+            Parameters
+            ----------
+            mut_probability : float
+                probabilidad de mutacion
+        """
+        r = 0.0
+        for i in range(self.pop_size):
+            # obtener probabilidad de [0,1]
+            r = utilities.random.random()
+            if (mut_probability > r):
+                self.pop[i].randomMove(TSPMove.THREE_OPT)
 
     
-    """ SELECCION DE POBLACION """
+    """ 
+    
+    
+    S E L E C C I O N   D E   P O B L A C I O N
+    
+    
+    """
 
     def selectPopulation(self, size: int, stype: SelectionType) -> None:
         """ Selecciona individuos para permanecer en la poblacion

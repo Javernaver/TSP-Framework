@@ -260,10 +260,8 @@ class Tour():
             int
                 delta para saber si se obtuvo una mejor solucion al aplicar el movimiento
         """
-        
         delta = 0
         self.current.pop()
-        
         # Puntos de corte para calcular las distancias y el delta
         A, B = self.current[i-1], self.current[i]
         C, D = self.current[j-1], self.current[j]
@@ -296,7 +294,6 @@ class Tour():
             self.current[i:k] = tmp
             #print(tour)
             delta = -d0 + d3
-        
         # Actualizar costo y completar tour con el valor delta
         self.cost += delta
         self.current.append(self.current[0])
@@ -312,15 +309,33 @@ class Tour():
         # Determinar que sean numeros diferentes
         while (n1 == n2):
             n2 = utilities.random.randint(0, self.problem.getSize()-1)
+            
+        if move_type == TSPMove.THREE_OPT:
+            i, j, k = self.getIndThreeOpt()
+            #print(i,j,k)
 
         # Seleccionar el tipo de movimiento
         if (move_type == TSPMove.TWO_OPT):
             self.twoOptSwap(n1, n2)
         elif (move_type == TSPMove.SWAP):
             self.swap(n1, n2)
+        elif (move_type == TSPMove.THREE_OPT):
+            self.bestThreeOptSwap(i, j, k)
         else:
             self.swap(n1, n2)
-
+            
+    def getIndThreeOpt(self) -> int:
+        """ Retorna 3 indices aleatorios para realizar el movimiento 3 opt 
+        """
+        n = self.problem.getSize()
+        for i in range(n):
+            for j in range(i + 2, n):
+                for k in range(j + 2, n + (i > 0)):
+                    if utilities.random.randint(0, 100) <= 1: # probabilidad de retornar los indices en el ciclo for que cumple para 3opt
+                        return i, j, k
+                    
+        return 0, 2, 4 # si no se cumplio la probabilidad en algun casos se retornan los indices minimos
+                    
 
     def getPosition(self, node: int) -> int:
         """ Retorna el indice de un nodo """
