@@ -11,6 +11,7 @@ class MHType(Enum):
     SA = 'SA'
     GA = 'GA'
     LS = 'LS'
+    ILS = 'ILS'
 
 class TSPMove(Enum):
     """Tipos de movimientos disponibles para el TSP 
@@ -22,7 +23,7 @@ class TSPMove(Enum):
     THREE_OPT = 'THREE_OPT'
     SWAP = 'SWAP'
 
-""" Simulated Annealing """
+""" S I M U L A T E D  A N N E A L I N G """
 
 class InitialSolution(Enum):
     """ Metodos disponibles para crear una solucion inicial
@@ -44,7 +45,7 @@ class CoolingType(Enum):
     LINEAR = 'LINEAR'
     LOG = 'LOG'
 
-""" Algoritmo Genetico """
+""" A L G O R I T M O   G E N E T I C O """
 
 class SelectionType(Enum):
     """Tipos de seleccion de individuos
@@ -75,6 +76,18 @@ class SelectionStrategy(Enum):
     """
     MULAMBDA = 'MULAMBDA'
     MUPLUSLAMBDA = 'MUPLUSLAMBDA'
+    
+""" L O C A L  S E A R C H  E  I T E R A T E D  L O C A L  S E A R C H """  
+    
+class PerturbationType(Enum):
+    """Tipos de movimientos de perturbacion para Iterated Local Search
+    TWO_OPT: Operador 2-opt
+    THREE_OPT: Operador 3-opt
+    SWAP: Operador swap
+    """
+    TWO_OPT = 'TWO_OPT'
+    THREE_OPT = 'THREE_OPT'
+    SWAP = 'SWAP'
 
 class AlgorithmsOptions():
     """
@@ -136,7 +149,7 @@ class AlgorithmsOptions():
         Mostrar las opciones y parametros finales
     """
     
-    # OPCIONES GENERALES
+    """ O P C I O N E S  G E N E R A L E S """
     
     solution = "solution.txt"	# Archivo para imprimir la solucion
 
@@ -164,7 +177,9 @@ class AlgorithmsOptions():
 
     replit = False # Si se esta ejecutando en Replit.com ya que causa inconveniencia con la graficacion
 
-    # OPCIONES PARA SIMULATED ANNEALING 
+    verbose = False # modo verbose
+    
+    """ O P C I O N E S  P A R A  S I M U L A T E D  A N N E A L I N G """
     
     alpha = 0.98 # Parametro alfa para el enfriamiento
     
@@ -174,7 +189,7 @@ class AlgorithmsOptions():
     
     cooling = CoolingType.GEOMETRIC # Tipo de enfriamiento
 
-    # OPCIONES PARA ALGORITMO GENETICO 
+    """ O P C I O N E S   P A R A   A L G O R I T M O   G E N E T I C O """
     
     pop_size = 10 # Cantidad de individuos de la poblacion 
 	
@@ -191,6 +206,12 @@ class AlgorithmsOptions():
     selection_strategy = SelectionStrategy.MULAMBDA # Estrategia de seleccion de la nueva poblacion
     
     gselection_type = SelectionType.RANDOM # Seleccion de la nueva poblacion
+    
+    """ O P C I O N E S   P A R A   L O C A L  S E A R C H  E  I T E R A T E D  L O C A L  S E A R C H """
+    
+    perturbation = PerturbationType.SWAP
+    
+    bestImprovement = False
 
     def __init__(self, argv=[], **kwargs) -> None:
 
@@ -220,7 +241,9 @@ class AlgorithmsOptions():
         parser.add_argument("-s", "--silent", help="Ejecuta sin mostrar los cambios en cada ciclo de los algoritmos", action="store_true")
         parser.add_argument("-vi", "--visualize", help="Muestra la visualizacion de trayectoria a la mejor solucion de forma grafica", action="store_true")
         parser.add_argument("-re", "--replit", help="Si se ejecuta en Replit.com ya que la visualizacion puede tener inconvenientes", action="store_true")
+        parser.add_argument("-v", "--verbose", help="Ejecuta mostrando todos los detalles de cada iteracion", action="store_true")
 
+                
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm\n LS: Local Search")
         parser.add_argument("-al", "--algorithm", help="Tipo de Algoritmo a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm\n LS: Local Search")
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
@@ -247,6 +270,11 @@ class AlgorithmsOptions():
         parser.add_argument("-mp", "--mprobability", help="Probabilidad de mutacion [0.0,1.0]")
         parser.add_argument("-gs", "--gselection", help="Operador de seleccion de poblacion [ random | best | roulette | tournament ]")
         parser.add_argument("-g", "--gstrategy", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda ]")
+        
+        # Definir argumentos de Local Search e Iterated Local Search
+        parser.add_argument("-b", "--best", help="Ejecuta Local Search en modo best improvement", action="store_true")
+        parser.add_argument("-per", "--perturbation", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda ]")
+        
         # Procesar argumentos
         args = parser.parse_args()
 
@@ -262,7 +290,10 @@ class AlgorithmsOptions():
             # Procesar argumentos de Algoritmo Genetico
             self.argsGA(args, kwargs) 
             # Validar logica de opciones
-            self.validateGA() 
+            self.validateGA()
+        elif self.metaheuristic == MHType.LS or self.metaheuristic == MHType.ILS:
+            # Procesar argumentos de Local Search e Iterated Local Search
+            self.argsLS(args, kwargs)
         
 
     def argsGeneral(self, args: argparse.Namespace, kwargs: dict) -> None:
@@ -289,6 +320,10 @@ class AlgorithmsOptions():
                 self.solution += '.txt'
             if not '.csv' in self.trajectory:
                 self.trajectory += '.csv'
+                
+        # Si se activa modo verbose
+        if (args.verbose or 'verbose' in kwargs):
+            self.verbose = args.verbose if args.verbose else kwargs['verbose']
 
         # Si se visualizara la trayectoria
         if (args.visualize or 'visualize' in kwargs):
@@ -337,14 +372,7 @@ class AlgorithmsOptions():
             elif (val == 'swap'):
                 self.move = TSPMove.SWAP
             else: print(f"{bcolors.FAIL}Error: Tipo de movimiento no reconocido (-mhm | --move) {bcolors.ENDC}") 
-
-        # Modo de salida reducido para no mostrar todos los cambios en los ciclos de los algoritmos
-        if (args.silent):
-            self.silent = True
-
-
-    def argsSA(self, args: argparse.Namespace, kwargs: dict) -> None:
-        """Procesar los argumentos de Simulated Annealing"""
+            
         # Solucion inicial
         if (args.insol or 'insol' in kwargs):
             val = args.insol.upper() if args.insol else kwargs['insol'].upper()
@@ -355,6 +383,14 @@ class AlgorithmsOptions():
             elif (val == 'DETERMINISTIC'):
                 self.initial_solution = InitialSolution.DETERMINISTIC
             else: print(f"{bcolors.FAIL}Error: Opcion no reconocida en solucion inicial (-is | --inso) {bcolors.ENDC}")
+
+        # Modo de salida reducido para no mostrar todos los cambios en los ciclos de los algoritmos
+        if (args.silent):
+            self.silent = True
+
+
+    def argsSA(self, args: argparse.Namespace, kwargs: dict) -> None:
+        """Procesar los argumentos de Simulated Annealing"""
 
         # Seleccion del esquema de enfriamiento
         if (args.cooling or 'cooling' in kwargs):
@@ -468,7 +504,26 @@ class AlgorithmsOptions():
             elif (val == 'mu+lambda'):
                 self.selection_strategy = SelectionStrategy.MUPLUSLAMBDA
             else: print(f"{bcolors.FAIL}Error: Tipo de seleccion de padres no reconocido (-g | --gstrategy) {bcolors.ENDC}")
-
+            
+            
+    def argsLS(self, args: argparse.Namespace, kwargs: dict) -> None:
+        """Procesar argumentos de Local Search"""
+        
+        # Seleccion del movimiento para la metaheuristica
+        if (args.perturbation or 'perturbation' in kwargs):
+            val = args.perturbation.lower() if args.move else kwargs['perturbation'].lower()
+            if (val == '2opt' or val == '2-opt'):
+                self.perturbation = PerturbationType.TWO_OPT
+            elif (val == '3opt' or val == '3-opt'):
+                self.perturbation = PerturbationType.THREE_OPT
+            elif (val == 'swap'):
+                self.perturbation = PerturbationType.SWAP
+            else: print(f"{bcolors.FAIL}Error: Tipo de perturbacion no reconocido (-per | --perturbation) {bcolors.ENDC}")
+        
+        # Si se ejecuta en Replit.com
+        if (args.best or 'best' in kwargs):
+            self.bestImprovement = args.best if args.best else kwargs['best']
+        
 
     def validateSA(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
@@ -537,5 +592,12 @@ class AlgorithmsOptions():
             print(f"{bcolors.OKBLUE}Probabilidad de mutacion: {bcolors.ENDC}{self.mutation_prob}")
             print(f"{bcolors.OKBLUE}Estrategia de seleccion para las nuevas poblaciones: {bcolors.ENDC}{self.selection_strategy.value}")
             print(f"{bcolors.OKBLUE}Tipo de seleccion de la nueva poblacion: {bcolors.ENDC}{self.gselection_type.value}")
+        elif (self.metaheuristic == MHType.LS or self.metaheuristic == MHType.ILS):
+            print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA LOCAL SEARCH\n {bcolors.ENDC}")        
+            print(f"{bcolors.OKBLUE}Tipo de movimiento para busqueda: {bcolors.ENDC}{self.move.value}")
+            print(f"{bcolors.OKBLUE}Best Improvement: {bcolors.ENDC}{self.bestImprovement}")
+            print(f"{bcolors.OKBLUE}Tipo de perturbacion para busqueda ILS: {bcolors.ENDC}{self.perturbation.value}")
+        
             
+                        
         print()

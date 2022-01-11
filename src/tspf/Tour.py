@@ -335,6 +335,11 @@ class Tour():
                         return i, j, k
                     
         return 0, 2, 4 # si no se cumplio la probabilidad en algun casos se retornan los indices minimos
+    
+    
+    def neighbourTour(self, start: int) -> None:
+        """ Aplica la heuristica del vecino mas cercano """
+        self.current = self.problem.greedy_nearest_n(start)
                     
 
     def getPosition(self, node: int) -> int:

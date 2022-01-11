@@ -188,7 +188,7 @@ def show() -> None:
         if len(coords) > MAXLEN:
             generateMap(len(trajectory)-1)
         else:
-            ani = Player(fig, generateMap, maxi=len(trajectory)-1, interval=500, blit=False)
+            ani = Player(fig, generateMap, maxi=len(trajectory)-1, interval=300, blit=False)
         
     # poner el grafico en pantalla maximizada para evitar conflictos con los distitos tipos de pantallas 
     plt_set_fullscreen()
