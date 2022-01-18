@@ -88,6 +88,7 @@ class PerturbationType(Enum):
     TWO_OPT = 'TWO_OPT'
     THREE_OPT = 'THREE_OPT'
     SWAP = 'SWAP'
+    RANDOM = 'RANDOM'
 
 class AlgorithmsOptions():
     """
@@ -169,7 +170,7 @@ class AlgorithmsOptions():
     
     max_time = 60.0 # Tiempo de ejecucion maximo
     
-    initial_solution = InitialSolution.DETERMINISTIC # Solucion Inicial
+    initial_solution = InitialSolution.RANDOM # Solucion Inicial
     
     silent = False # Modo silencioso
 
@@ -212,6 +213,8 @@ class AlgorithmsOptions():
     perturbation = PerturbationType.SWAP
     
     bestImprovement = False
+    
+    nPerturbations = 3
 
     def __init__(self, argv=[], **kwargs) -> None:
 
@@ -249,7 +252,7 @@ class AlgorithmsOptions():
         parser.add_argument("-i", "--instance", help="Archivo con la instancia a utilizar en formato TSPLIB")
         parser.add_argument("-se", "--seed", help="Numero para ser usado como semilla para el generador de numeros aleatorios")
         parser.add_argument("-sol", "--solution", help="Nombre del archivo de salida para la solucion y trayectoria")
-        parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap ]")
+        parser.add_argument("-mhm", "--move", help="Tipo de movimiento a utilizar en la heuristica [ 2opt | swap | 3opt ]")
         parser.add_argument("-e", "--evaluations", help="Numero maximo de soluciones a evaluar")
         parser.add_argument("-it", "--iterations", help="Numero maximo de iteraciones a realizar")
         parser.add_argument("-t", "--time", help="Limite de tiempo de ejecucion en segundos")
@@ -266,14 +269,15 @@ class AlgorithmsOptions():
         parser.add_argument("-o", "--osize", help="Cantidad de hijos a generar ]0,INT_MAX]")
         parser.add_argument("-ps", "--pselection", help="Operador de seleccion de padres [ random | best | roulette | tournament ]")
         parser.add_argument("-cr", "--crossover", help="Operador de crossover [ ox | opx | pmx ]")
-        parser.add_argument("-mu", "--mutation", help="Operador de mutacion [ swap | 2opt ]")
+        parser.add_argument("-mu", "--mutation", help="Operador de mutacion [ swap | 2opt | 3opt ]")
         parser.add_argument("-mp", "--mprobability", help="Probabilidad de mutacion [0.0,1.0]")
         parser.add_argument("-gs", "--gselection", help="Operador de seleccion de poblacion [ random | best | roulette | tournament ]")
         parser.add_argument("-g", "--gstrategy", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda ]")
         
         # Definir argumentos de Local Search e Iterated Local Search
         parser.add_argument("-b", "--best", help="Ejecuta Local Search en modo best improvement", action="store_true")
-        parser.add_argument("-per", "--perturbation", help="Estrategia de seleccion de padres [ mu,lambda | mu+lambda ]")
+        parser.add_argument("-per", "--perturbation", help="Tipo de perturbacion a aplicar en ITS [ 2opt | swap | 3opt ]")
+        parser.add_argument("-np", "--nperturbations", help="Cantidad de perturbaciones a aplicar en una iteracion ]0,INT_MAX]")
         
         # Procesar argumentos
         args = parser.parse_args()
@@ -346,6 +350,8 @@ class AlgorithmsOptions():
                 self.metaheuristic = MHType.GA
             elif (val == 'LS'):
                 self.metaheuristic = MHType.LS
+            elif (val == 'ILS'):
+                self.metaheuristic = MHType.ILS
             else: print(f"{bcolors.FAIL}Error: Metaheuristica no reconocida (-mh | --metaheristic) {bcolors.ENDC}")  
         
         # Numero maximo de evaluaciones
@@ -518,12 +524,21 @@ class AlgorithmsOptions():
                 self.perturbation = PerturbationType.THREE_OPT
             elif (val == 'swap'):
                 self.perturbation = PerturbationType.SWAP
+            elif (val == 'random'):
+                self.perturbation = PerturbationType.RANDOM
             else: print(f"{bcolors.FAIL}Error: Tipo de perturbacion no reconocido (-per | --perturbation) {bcolors.ENDC}")
         
         # Si se ejecuta en Replit.com
         if (args.best or 'best' in kwargs):
             self.bestImprovement = args.best if args.best else kwargs['best']
         
+        # Cantidad de hijos a generar
+        if (args.nperturbations or 'nperturbations' in kwargs):
+            try:
+                self.nPerturbations = int(args.nperturbations) if args.nperturbations else int(kwargs['nperturbations'])
+            except: 
+                print(f"{bcolors.FAIL}Error: El numero de perturbaciones debe ser un numero entero (-np | --nperturbations){bcolors.ENDC}")
+
 
     def validateSA(self) -> None:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
@@ -593,10 +608,11 @@ class AlgorithmsOptions():
             print(f"{bcolors.OKBLUE}Estrategia de seleccion para las nuevas poblaciones: {bcolors.ENDC}{self.selection_strategy.value}")
             print(f"{bcolors.OKBLUE}Tipo de seleccion de la nueva poblacion: {bcolors.ENDC}{self.gselection_type.value}")
         elif (self.metaheuristic == MHType.LS or self.metaheuristic == MHType.ILS):
-            print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA LOCAL SEARCH\n {bcolors.ENDC}")        
+            print(f"{bcolors.HEADER}\n\t\tOPCIONES PARA LOCAL SEARCH E ITERATED LOCAL SEARCH\n {bcolors.ENDC}")        
             print(f"{bcolors.OKBLUE}Tipo de movimiento para busqueda: {bcolors.ENDC}{self.move.value}")
             print(f"{bcolors.OKBLUE}Best Improvement: {bcolors.ENDC}{self.bestImprovement}")
             print(f"{bcolors.OKBLUE}Tipo de perturbacion para busqueda ILS: {bcolors.ENDC}{self.perturbation.value}")
+            print(f"{bcolors.OKBLUE}Numero de perturbaciones a aplicar para busqueda ILS: {bcolors.ENDC}{self.nPerturbations}")
         
             
                         

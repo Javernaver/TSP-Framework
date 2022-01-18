@@ -23,6 +23,8 @@ class LocalSearch():
 
         self.trajectory = [] # lista con la trayectoria de la solucion
         
+        self.bestImprovement = False # si es best improvement
+        
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
             self.options = AlgorithmsOptions()
@@ -34,7 +36,8 @@ class LocalSearch():
         else:
             self.problem = problem
 
-        self.move_type = self.options.move
+        self.move_type = options.move
+        self.bestImprovement = options.bestImprovement
         
         # inicializar mejor tour
         self.best_tour = Tour(problem=self.problem, type_initial_sol=InitialSolution.RANDOM)
@@ -78,7 +81,6 @@ class LocalSearch():
        
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
             print(f"{bcolors.HEADER}\nEjecutando Local Search...\n{bcolors.ENDC}")
-            #print(f"{bcolors.BOLD}\nIteracion; Temperatura; Tiempo; Detalle{bcolors.ENDC}", end='')
             
             
         # Ejecucion de la busqueda segun el metodo
@@ -91,7 +93,6 @@ class LocalSearch():
         else:
             self.twoOptSearch(current_tour, table)
         
-
 
         # Mostrar tabla
         if not self.options.silent:
@@ -106,49 +107,44 @@ class LocalSearch():
     
     """
             
-    def swapSearch(self, tour: Tour, table: PrettyTable, improved: bool = False) -> None:
+    def swapSearch(self, tour: Tour, table: PrettyTable = PrettyTable()) -> None:
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
-        if n < 2: 
+        if n < 3: 
             return
+        
         # tiempo inicial para iteraciones y condicion de termino por tiempo
         start = end = timer()
-        a, b = 0, 0
+        a, b = 0, 0 # indices auxiliares
+        improved = True
+        best_cost = self.best_tour.cost # mejor optimo local
         
-        while not improved:
+        while improved:
             
             details = '' # variable de texto con los detalles
 
             improved = False
             
             for i in range(n):
-                if improved and not self.options.bestImprovement:
+                if improved and not self.bestImprovement: # si es best improvement se continua el loop si no se corta al ser first improvement
                     break
                 for j in range(i + 1, n):
-                    if improved and not self.options.bestImprovement:
+                    if improved and not self.bestImprovement:
                         break
-                   
-                    if tour.delta_cost_swap(tour.current, tour.cost, i, j) < self.best_tour.cost:
+                    
+                    if tour.delta_cost_swap(tour.current, tour.cost, i, j) < best_cost:
                         
-                        tour.swap(i, j)
+                        a, b = i, j # se guardan los indices del optimo local si se encuentra uno mejor
+                        
+                        if self.bestImprovement: # cuando sea best improvement se sigue buscando por lo que se actualiza el mejor para esta busqueda
+                            best_cost = tour.delta_cost_swap(tour.current, tour.cost, i, j)
                             
-                        self.trajectory.append( Trajectory(
-                                tour=tour.current.copy(),
-                                cost=tour.cost, 
-                                iterations=self.evaluations-1, 
-                                evaluations=self.evaluations-1) )
-                        
-                        self.best_tour.copy(tour)
-                            
-                        details = f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {tour.cost}{bcolors.ENDC}"
-                        
                         improved = True
                     else:
                         if self.options.verbose:
                             details = f"{bcolors.OKBLUE} Solucion actual: {tour.cost}{bcolors.ENDC}"
                                             
-                        
                     # Agregar la informacion a la tabla
                     if details:
                         table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
@@ -156,16 +152,31 @@ class LocalSearch():
                                     f"{details}"
                                     ])
                         details = ''
+                        
                     self.evaluations += 1
                     end = timer() # tiempo actual de iteracion
                     
-                    """ if not self.terminationCondition(self.evaluations, end-start):
-                        self.total_time = timer() - start
-                        return """
-            
-                       
-            
-        # actualizar tiempo total de busqueda de Simulated Annealing
+                        
+            if improved: # se encontro una mejora en la busqueda
+                tour.swap(a, b)
+                self.best_tour.copy(tour)
+                best_cost = self.best_tour.cost
+                
+                details = f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {tour.cost}{bcolors.ENDC}"
+                table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
+                                    f"{end-start:.4f}{bcolors.ENDC}", 
+                                    f"{details}"
+                                    ])
+                details = ''
+                # Guardar Trayectoria
+                self.trajectory.append( Trajectory(
+                                    tour=tour.current.copy(),
+                                    cost=tour.cost, 
+                                    iterations=self.evaluations-1, 
+                                    evaluations=self.evaluations-1) )
+
+    
+        # actualizar tiempo total de busqueda 
         self.total_time = timer() - start
             
     """
@@ -177,7 +188,7 @@ class LocalSearch():
     """
 
             
-    def twoOptSearch(self, tour: Tour, table: PrettyTable, improved: bool = True) -> None:
+    def twoOptSearch(self, tour: Tour, table: PrettyTable = PrettyTable()) -> None:
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
@@ -187,6 +198,8 @@ class LocalSearch():
         # tiempo inicial para iteraciones y condicion de termino por tiempo
         start = end = timer()
         a, b = 0, 0
+        improved = True
+        best_cost = self.best_tour.cost
         
         while improved:
             
@@ -195,36 +208,24 @@ class LocalSearch():
             improved = False
             
             for i in range(n):
-                if improved and not self.options.bestImprovement:
+                if improved and not self.bestImprovement: # si es best improvement se continua el loop si no se corta al ser first improvement
                     break
                 for j in range(i + 2, n):
-                    if improved and not self.options.bestImprovement:
+                    if improved and not self.bestImprovement:
                         break
                     
-                    if tour.delta_cost_two_opt(tour.current, tour.cost, i, j) < self.best_tour.cost:
+                    if tour.delta_cost_two_opt(tour.current, tour.cost, i, j) < best_cost:
                         
-                        if self.options.bestImprovement:
-                            a, b = i, j
-                        else:
-                            tour.twoOptSwap(i, j)
+                        a, b = i, j # se guardan los indices del optimo local si se encuentra uno mejor
                         
-                            self.trajectory.append( Trajectory(
-                                tour=tour.current.copy(),
-                                cost=tour.cost, 
-                                iterations=self.evaluations-1, 
-                                evaluations=self.evaluations-1) )
-                            
-                            self.best_tour.copy(tour)
-                            
-                        if not self.options.bestImprovement:
-                            details = f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {tour.cost}{bcolors.ENDC}"
+                        if self.bestImprovement: # cuando sea best improvement se sigue buscando por lo que se actualiza el mejor para esta busqueda
+                            best_cost = tour.delta_cost_two_opt(tour.current, tour.cost, i, j)
                             
                         improved = True
                     else:
                         if self.options.verbose:
                             details = f"{bcolors.OKBLUE} Solucion actual: {tour.cost}{bcolors.ENDC}"
-                                            
-                        
+                                                   
                     # Agregar la informacion a la tabla
                     if details:
                         table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
@@ -235,26 +236,27 @@ class LocalSearch():
                         
                     self.evaluations += 1
                     end = timer() # tiempo actual de iteracion
-                    """ if not self.terminationCondition(self.evaluations, end-start):
-                        self.total_time = timer() - start
-                        return """
-            if self.options.bestImprovement and improved:
+                        
+                        
+            if improved: # se encontro una mejora en la busqueda
                 tour.twoOptSwap(a, b)
-                self.trajectory.append( Trajectory(
-                                tour=tour.current.copy(),
-                                cost=tour.cost, 
-                                iterations=self.evaluations-1, 
-                                evaluations=self.evaluations-1) )
                 self.best_tour.copy(tour)
+                best_cost = self.best_tour.cost
+                
                 details = f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {tour.cost}{bcolors.ENDC}"
                 table.add_row([f"{bcolors.BOLD}{self.evaluations}", 
                                     f"{end-start:.4f}{bcolors.ENDC}", 
                                     f"{details}"
                                     ])
                 details = ''
-                            
-            
-        # actualizar tiempo total de busqueda de Simulated Annealing
+                # Guardar Trayectoria
+                self.trajectory.append( Trajectory(
+                                    tour=tour.current.copy(),
+                                    cost=tour.cost, 
+                                    iterations=self.evaluations-1, 
+                                    evaluations=self.evaluations-1) )
+    
+        # actualizar tiempo total de busqueda
         self.total_time = timer() - start
         
 
@@ -266,13 +268,14 @@ class LocalSearch():
     
     """
     
-    def threeOptSearch(self, tour: Tour, table: PrettyTable, improved: bool = True) -> None:
+    def threeOptSearch(self, tour: Tour, table: PrettyTable = PrettyTable()) -> None:
         """ Aplica la busqueda por 3-opt """
         #print(tour.current)   
         n = self.problem.getSize()
         if n < 4:
             return
         
+        improved = True
         # tiempo inicial para iteraciones y condicion de termino por tiempo
         start = end = timer()
     
@@ -283,13 +286,13 @@ class LocalSearch():
             improved = False
             delta = 0
             for i in range(n):
-                if improved and not self.options.bestImprovement:
+                if improved and not self.bestImprovement:
                     break
                 for j in range(i + 2, n):
-                    if improved and not self.options.bestImprovement:
+                    if improved and not self.bestImprovement:
                         break
                     for k in range(j + 2, n + (i > 0)):
-                        if improved and not self.options.bestImprovement:
+                        if improved and not self.bestImprovement:
                             break
                         
                         delta = tour.bestThreeOptSwap(i, j, k)
@@ -321,40 +324,19 @@ class LocalSearch():
                             details = ''
                             
                         self.evaluations += 1
-                        """ if not self.terminationCondition(self.evaluations, end-start):
-                        self.total_time = timer() - start
-                        return """
-                        
-                        
-            
-        # actualizar tiempo total de busqueda de Simulated Annealing
+
+                                                        
+        # actualizar tiempo total de busqueda
         self.total_time = timer() - start
 
 
 
-    def terminationCondition(self, evaluations: int, time: float) -> bool:
-        """ Condicion de termino para el ciclo principal de Simulated Annealing, 
-        basado en los criterios de evaluaciones y tiempo, devuelve verdadero o falso si se debe continuar o no"""
-		
-        # Criterio de termino de las evaluciones | iteraciones
-        if (self.options.max_evaluations > 0):
-            if (evaluations > self.options.max_evaluations):
-                return False
-        
-        # Criterio de termino por tiempo
-        if (self.options.max_time > 0):
-            if (time > self.options.max_time):
-                return False
-        
-        return True
-        
-
     def printSolFile(self, outputSol: str) -> None:
-        """ Guarda la solucion en archivo de texto"""
+        """ Guarda la solucion en archivo de texto """
         utilities.printSolToFile(outputSol, self.best_tour.current)
 
     def printTraFile(self, outputTra: str) -> None:
-        """ Guarda la trayectoria de la solucion en archivo de texto"""
+        """ Guarda la trayectoria de la solucion en archivo de texto """
         utilities.printTraToFile(outputTra, self.trajectory)
 
     def updateLog(self) -> None:
@@ -390,7 +372,7 @@ class LocalSearch():
             })
 
     def visualize(self, replit: bool) -> None:
-        """ Visualiza la trayectoria de la solucion"""
+        """ Visualiza la trayectoria de la solucion """
         plot.replit = replit
         plot.trajectory = self.trajectory
         plot.show()

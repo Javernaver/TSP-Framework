@@ -1,6 +1,6 @@
 """Modulo principal que utiliza todas las demas clases para ejecutar el framework"""
 
-from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, timer
+from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
 from . import sys, os, AlgorithmsOptions, MHType, Tsp, Tour, bcolors
 
 def main(argv=sys.argv) -> None:
@@ -41,6 +41,14 @@ def main(argv=sys.argv) -> None:
         first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
         # Crear solver
         solver = LocalSearch(options=options, problem=problem)
+        # Ejecutar la busqueda
+        solver.search(first_solution)
+        
+    elif (options.metaheuristic == MHType.ILS):
+        # Solucion inicial
+        first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
+        # Crear solver
+        solver = IteratedLocalSearch(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search(first_solution)
 

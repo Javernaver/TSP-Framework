@@ -183,7 +183,7 @@ def show() -> None:
         if len(coords) > MAXLEN:
             generateMap(len(trajectory)-1)
         else:
-            ani = FuncAnimation(fig, generateMap, interval=500, blit=False)
+            ani = FuncAnimation(fig, generateMap, interval=300, blit=False)
     else:
         if len(coords) > MAXLEN:
             generateMap(len(trajectory)-1)
