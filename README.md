@@ -107,6 +107,23 @@ Se recomienda tener una cuenta en Replit y hacer fork del proyecto para una mejo
 	* **selectParents:** Metodo que selecciona dos padres aplicando un operador de seleccion
 
 	* **selectPopulation:** Metodo que selecciona la poblacion reduciendo su tamano en base a un operador de seleccion
+	
+* **LocalSearch.py:** Modulo con la clase que implementa el metodo de busqueda local
+
+	* **search:** Metodo que aplica la busqueda comenzando por una solucion inicial
+
+	* **swapSearch:** Metodo que aplica la busqueda local mediante movimientos swap
+
+	* **twoOptSearch:** Metodo que aplica la busqueda local mediante 2-opt
+
+	* **threeOptSearch:** Metodo que aplica la busqueda local mediante 3-opt
+
+	
+* **IteratedLocalSearch.py:** Modulo con la clase que implementa el metodo de busqueda local iterativo
+
+	* **search:** Metodo que aplica la busqueda comenzando por una solucion inicial
+
+	* **terminationCondition:** Metodo que revisa si la condicion de termino (numero de iteraciones o tiempo de ejecucion) se ha cumplido
   
 
 ## Argumentos
@@ -126,8 +143,8 @@ Argumentos Generales:
 * **Semilla**: Semilla para el generador de numeros aleatorios y todo los relacionado al modulo random de Python.
 	*  (-s o --seed **entero**). **Ejemplo:** python tspf.py -s 4854
 
-* **Movimiento:** Tipo de movimiento en formato TSPMove que se utilizara para la ejecucion. Los valores posibles son TSPMove.SWAP y TSPMove.TWO_OPT. Por defecto se utiliza swap. 
-	* (-mhm o --move **[ swap | 2opt ]**). **Ejemplo:** python tspf.py --move 2opt
+* **Movimiento:** Tipo de movimiento en formato TSPMove que se utilizara para la ejecucion. Los valores posibles son TSPMove.SWAP, TSPMove.TWO_OPT y TSPMove.THREE_OPT. Por defecto se utiliza swap. 
+	* (-mhm o --move **[ swap | 2opt | 3opt ]**). **Ejemplo:** python tspf.py --move 2opt
 	
 * **Evaluaciones:** Numero maximo de funciones de evaluacion calculadas. Por defecto se utiliza 1000
 	 * (-e o --evaluations **entero**). **Ejemplo:** python tspf.py -e 2000
@@ -179,9 +196,9 @@ Argumentos para Algoritmo Genetico:
 
 	* (-cr o --crossover **[ ox | opx | pmx ]**). **Ejemplo:** python tspf.py --crossover opx
 
-* **Operador de mutacion:** Los valores posibles son: MutationType.SWAP y MutationType.TWO_OPT. Por defecto swap 
+* **Operador de mutacion:** Los valores posibles son: TSPMove.SWAP, TSPMove.TWO_OPT y TSPMove.THREE_OPT. Por defecto swap 
 
-	* (-mu o --mutation **[ swap | 2opt ]**). **Ejemplo:** python tspf.py -mu 2opt
+	* (-mu o --mutation **[ swap | 2opt | 3opt ]**). **Ejemplo:** python tspf.py -mu 2opt
 
 * **Probabilidad de mutacion:** Valor de probabilidad de mutacion de los individuos. Por defecto 0.2.
 
@@ -195,3 +212,16 @@ Argumentos para Algoritmo Genetico:
 
 	* (-g o --gstrategy **[ mu,lambda | mu+lambda ]**). **Ejemplo:** python tspf.py --gstrategy mu,lambda
 
+Argumentos para Local Search e Iterated Local Search:
+
+* **Movimiento:** Tipo de movimiento en formato TSPMove que se utilizara para la ejecucion. Los valores posibles son TSPMove.SWAP, TSPMove.TWO_OPT y TSPMove.THREE_OPT. Por defecto se utiliza swap. 
+	* (-mhm o --move **[ swap | 2opt | 3opt ]**). **Ejemplo:** python tspf.py --move 2opt
+
+* **Best Improvemet:** Parametro de tipo flag que indica si la busqueda es del tipo best improvement o first improvement, se deja por defecto first improvement.
+	 * (-b o --best). **Ejemplo:** python tspf.py --best
+	 
+* **Perturbacion:** Tipo de movimiento en formato PerturbationType que se utilizara para la perturbacion. Los valores posibles son PerturbationType.SWAP, PerturbationType.TWO_OPT, PerturbationType.THREE_OPT y PerturbationType.RANDOM. Por defecto se utiliza swap. 
+	* (-per o --perturbation **[ swap | 2opt | 3opt | random ]**). **Ejemplo:** python tspf.py --move 2opt
+	 
+* **Numero de Perturbaciones:** Numero maximo de perturbaciones por iteracion en Itarated Local Search. Por defecto se utiliza 3
+	 * (-np o --nperturbations **entero**). **Ejemplo:** python tspf.py -np 5
