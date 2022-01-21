@@ -72,7 +72,6 @@ class IteratedLocalSearch():
 
  
         current_tour = Tour(tour=first_solution) # variable del tour actual 
-        neighbor_tour = Tour(tour=first_solution) # variable del tour vecino generado 
         
         self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
         # Guardar trayectoria Final
@@ -81,6 +80,12 @@ class IteratedLocalSearch():
                                 cost=self.best_tour.cost, 
                                 iterations=self.iterations-1, 
                                 evaluations=self.evaluations-1) )
+        if not self.options.replit:
+            self.trajectory.append( Trajectory(
+                                    tour=self.best_tour.current.copy(),
+                                    cost=self.best_tour.cost, 
+                                    iterations=self.iterations-1, 
+                                    evaluations=self.evaluations-1) )
                                 
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
@@ -164,7 +169,7 @@ class IteratedLocalSearch():
         self.trajectory.append( Trajectory(
                                 tour=self.best_tour.current.copy(),
                                 cost=self.best_tour.cost, 
-                                iterations=self.iterations-1, 
+                                iterations=self.iterations-1,
                                 evaluations=solver.evaluations-1) )
 
     

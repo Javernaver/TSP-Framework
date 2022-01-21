@@ -162,7 +162,7 @@ class AlgorithmsOptions():
      
     metaheuristic = MHType.SA # Tipo de metaheuristica a ejecutar   
      
-    move = TSPMove.SWAP # Tipo del movimiento para la metaheuristica
+    move = TSPMove.SWAP # Tipo del movimiento para la metaheuristica o bien tipo de busqueda Local Search
     
     max_evaluations = 1000 # Evaluaciones maximas
     

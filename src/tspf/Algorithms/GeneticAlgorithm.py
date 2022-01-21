@@ -140,7 +140,12 @@ class GeneticAlgorithm():
         self.trajectory.append( Trajectory(tour=self.best_tour.current.copy(),
                                 cost=self.best_tour.cost, iterations=0, evaluations=self.evaluations,
                                 average=population.getAverage(), deviation=population.getDeviation(),
-                                worst=population.getWorstTour().cost) ) 
+                                worst=population.getWorstTour().cost) )
+        if not self.options.replit:
+            self.trajectory.append( Trajectory(tour=self.best_tour.current.copy(),
+                                    cost=self.best_tour.cost, iterations=0, evaluations=self.evaluations,
+                                    average=population.getAverage(), deviation=population.getDeviation(),
+                                    worst=population.getWorstTour().cost) )
         self.evaluations += self.offspring_size
 
         # tiempo para iteraciones y condicion de termino por tiempo

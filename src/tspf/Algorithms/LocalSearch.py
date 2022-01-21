@@ -68,12 +68,18 @@ class LocalSearch():
         current_tour = Tour(tour=first_solution) # variable del tour actual
         
         self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
-        # Guardar trayectoria Final
+        # Guardar trayectoria Inicial
         self.trajectory.append( Trajectory(
                                 tour=self.best_tour.current.copy(),
                                 cost=self.best_tour.cost, 
-                                iterations=self.evaluations, 
-                                evaluations=self.evaluations) )
+                                iterations=self.evaluations-1, 
+                                evaluations=self.evaluations-1) )
+        if not self.options.replit:
+            self.trajectory.append( Trajectory(
+                                    tour=self.best_tour.current.copy(),
+                                    cost=self.best_tour.cost, 
+                                    iterations=self.evaluations-1, 
+                                    evaluations=self.evaluations-1) )
                                 
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
@@ -270,7 +276,7 @@ class LocalSearch():
     
     def threeOptSearch(self, tour: Tour, table: PrettyTable = PrettyTable()) -> None:
         """ Aplica la busqueda por 3-opt """
-        #print(tour.current)   
+        
         n = self.problem.getSize()
         if n < 4:
             return

@@ -106,13 +106,20 @@ class SimulatedAnnealing():
         neighbor_tour = Tour(tour=first_solution) # variable del tour vecino generado 
         
         self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
-        # Guardar trayectoria Final
+        # Guardar trayectoria Inicial
         self.trajectory.append( Trajectory(
                                 tour=self.best_tour.current.copy(),
                                 cost=self.best_tour.cost, 
                                 iterations=self.evaluations-1, 
                                 evaluations=self.evaluations-1,
                                 temperature=temperature) ) 
+        if not self.options.replit:
+            self.trajectory.append( Trajectory(
+                                    tour=self.best_tour.current.copy(),
+                                    cost=self.best_tour.cost, 
+                                    iterations=self.evaluations-1, 
+                                    evaluations=self.evaluations-1,
+                                    temperature=temperature) ) 
                                 
         print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
