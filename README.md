@@ -1,6 +1,8 @@
 # Framework de algoritmos para resolver el Problema del Vendedor Viajero
 Framework para resolver el problema del vendedor viajero aplicando algoritmos metaheuristicos como el Simulated Annealing o Algoritmo Genetico.
 
+![](https://media.giphy.com/media/uLzy84eyEANxqK83Iw/giphy.gif)
+
 ## Contenido
 * **codigo fuente:** codigo en lenguaje Python en la carpeta tspf/ para ser preparado y distribuido como paquete Python
 
