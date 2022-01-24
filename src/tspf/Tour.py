@@ -1,6 +1,10 @@
-"""Modulo que contiene la clase la cual represente un recorrido para una solucion de TSP"""
+"""
+Modulo que contiene la clase la cual represente un recorrido para una solucion de TSP
 
-from . import Tsp, InitialSolution, TSPMove, bcolors, utilities
+"""
+
+from . import Tsp, InitialSolution, TSPMove
+from .Tools import utilities, bcolors
 
 class Tour():
     """ Clase Tour la cual representa un recorrido para una solucion de TSP, debe inicializarse obligatoriamente como diccionario

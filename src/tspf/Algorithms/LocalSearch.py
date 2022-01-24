@@ -1,7 +1,11 @@
-"""Modulo que contiene la clase la cual representa el metodo de busqueda de LocalSearch"""
+"""
+Modulo que contiene la clase la cual representa el metodo de busqueda de LocalSearch
 
+"""
+
+from ..Tools import utilities, bcolors, plot, Trajectory
 from . import path, csv, datetime, Path, timer, PrettyTable
-from .. import AlgorithmsOptions, Tsp, Tour, TSPMove, Trajectory, utilities, plot, InitialSolution, bcolors
+from .. import AlgorithmsOptions, Tsp, Tour, TSPMove, InitialSolution
 
 class LocalSearch():
     
@@ -104,6 +108,13 @@ class LocalSearch():
         if not self.options.silent:
             print(table)
             #print()
+            
+        # Guardar Trayectoria Final
+        self.trajectory.append( Trajectory(
+                            tour=current_tour.current.copy(),
+                            cost=current_tour.cost, 
+                            iterations=self.evaluations, 
+                            evaluations=self.evaluations) )
 
     """
     
@@ -178,8 +189,8 @@ class LocalSearch():
                 self.trajectory.append( Trajectory(
                                     tour=tour.current.copy(),
                                     cost=tour.cost, 
-                                    iterations=self.evaluations-1, 
-                                    evaluations=self.evaluations-1) )
+                                    iterations=self.evaluations, 
+                                    evaluations=self.evaluations) )
 
     
         # actualizar tiempo total de busqueda 
@@ -259,8 +270,8 @@ class LocalSearch():
                 self.trajectory.append( Trajectory(
                                     tour=tour.current.copy(),
                                     cost=tour.cost, 
-                                    iterations=self.evaluations-1, 
-                                    evaluations=self.evaluations-1) )
+                                    iterations=self.evaluations, 
+                                    evaluations=self.evaluations) )
     
         # actualizar tiempo total de busqueda
         self.total_time = timer() - start
@@ -308,8 +319,8 @@ class LocalSearch():
                             self.trajectory.append( Trajectory(
                                     tour=tour.current.copy(),
                                     cost=tour.cost, 
-                                    iterations=self.evaluations-1, 
-                                    evaluations=self.evaluations-1) )
+                                    iterations=self.evaluations, 
+                                    evaluations=self.evaluations) )
                                 
                             self.best_tour.copy(tour)
                                    

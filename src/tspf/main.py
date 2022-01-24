@@ -1,7 +1,11 @@
-"""Modulo principal que utiliza todas las demas clases para ejecutar el framework"""
+"""
+Modulo principal que utiliza todas las demas clases para ejecutar el framework
+
+"""
 
 from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
-from . import sys, os, AlgorithmsOptions, MHType, Tsp, Tour, bcolors
+from .Tools import bcolors
+from . import sys, os, AlgorithmsOptions, MHType, Tsp, Tour
 
 def main(argv=sys.argv) -> None:
     """

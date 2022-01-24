@@ -1,5 +1,6 @@
 """
 Modulo Encargado de el manejo de la visualizacion o graficacion de las soluciones y su trayectoria
+
 """
 
 import os

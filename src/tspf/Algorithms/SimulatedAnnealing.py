@@ -1,7 +1,11 @@
-"""Modulo que contiene la clase la cual representa la metaheuristica de Simulated Annealing"""
+"""
+Modulo que contiene la clase la cual representa la metaheuristica de Simulated Annealing
 
+"""
+
+from ..Tools import utilities, bcolors, plot, Trajectory
 from . import path, csv, datetime, Path, timer, math, PrettyTable
-from .. import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove, plot, bcolors, Trajectory, utilities
+from .. import Tour, Tsp, AlgorithmsOptions, CoolingType, InitialSolution, TSPMove
 
 class SimulatedAnnealing():
     """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda

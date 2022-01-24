@@ -1,6 +1,10 @@
-"""Modulo que contiene las clases encargadas de todas las opciones que puedan tener los demas modulos"""
+"""
+Modulo que contiene las clases encargadas de todas las opciones que puedan tener los demas modulos
 
-from . import Enum, time, argparse, bcolors, utilities
+"""
+
+from .Tools import utilities, bcolors
+from . import Enum, time, argparse
 
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles
@@ -180,6 +184,8 @@ class AlgorithmsOptions():
 
     verbose = False # modo verbose
     
+    gui = False # modo Interfaz grafica
+    
     """ O P C I O N E S  P A R A  S I M U L A T E D  A N N E A L I N G """
     
     alpha = 0.98 # Parametro alfa para el enfriamiento
@@ -245,6 +251,7 @@ class AlgorithmsOptions():
         parser.add_argument("-vi", "--visualize", help="Muestra la visualizacion de trayectoria a la mejor solucion de forma grafica", action="store_true")
         parser.add_argument("-re", "--replit", help="Si se ejecuta en Replit.com ya que la visualizacion puede tener inconvenientes", action="store_true")
         parser.add_argument("-v", "--verbose", help="Ejecuta mostrando todos los detalles de cada iteracion", action="store_true")
+        parser.add_argument("-gui", "--gui", help="Ejecuta en modo interfaz grafica", action="store_true")
 
                 
         parser.add_argument("-mh", "--metaheuristic", help="Tipo de Metaherisitica a usar:\n SA: Simulated Annealing\n GA: Genetic Algorithm\n LS: Local Search")
@@ -332,6 +339,10 @@ class AlgorithmsOptions():
         # Si se visualizara la trayectoria
         if (args.visualize or 'visualize' in kwargs):
             self.visualize = args.visualize if args.visualize else kwargs['visualize']
+        
+        # Si se activa el modo interfaz grafica
+        if (args.gui or 'gui' in kwargs):
+            self.gui = args.gui if args.gui else kwargs['gui']
 
         # Si se ejecuta en Replit.com
         if (args.replit or 'replit' in kwargs):

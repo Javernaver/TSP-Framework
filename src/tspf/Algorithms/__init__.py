@@ -1,4 +1,7 @@
-"""Paquete que contiene los algoritmos con las metaheristicas de simulated annealing y algoritmo genetico"""
+""" 
+Paquete que contiene los algoritmos con los distintos metodos de busqueda para solucionar problemas TSP
+
+"""
 
 import csv
 import math

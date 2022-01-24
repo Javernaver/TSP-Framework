@@ -1,4 +1,8 @@
-"""Modulo con las utilidades utilizadas por los demas modulos"""
+"""
+Modulo con las utilidades utilizadas por los demas modulos
+
+"""
+
 import random
 import csv
 from os import path
@@ -65,12 +69,16 @@ class Trajectory():
         self.deviation = deviation # desviacion estandar (algoritmo genetico)
         self.temperature = temperature # temperatura (simulated annealing)
 
+
+
 def dtrunc (x: float) -> float:
     """ Truncar un numero float """
 
     k = int(x)
     x = float(k) # numero float sin parte decimal
     return x
+
+
 
 def printSolToFile(outputFile: str, tour: list) -> None:
     """ Guardar la solucion para una instacia y ejecucion en un archivo recibido por parametro """
@@ -91,6 +99,8 @@ def printSolToFile(outputFile: str, tour: list) -> None:
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {outputFile} Error: {IOError}{bcolors.ENDC}")
         print(f"{bcolors.FAIL}Asegurese de tener permisos de escritura en la ruta y que esta bien escrita{bcolors.ENDC}")
+
+
 
 def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
     """ Guardar la trayectoria de una solucion para una instacia y ejecucion en un archivo recibido por parametro """
@@ -122,6 +132,8 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
     except IOError:
         print(f"{bcolors.FAIL}No se pudo guardar el archivo... {trajectoryFile} Error: {IOError}{bcolors.ENDC}")
         print(f"{bcolors.FAIL}Asegurese de tener permisos de escritura en la ruta y que esta bien escrita{bcolors.ENDC}")
+
+
 
 def checkFile(filePath: str) -> str:
     """Comprueba si el archivo existe en la ruta recibida y si existe renombra el archivo de salida"""

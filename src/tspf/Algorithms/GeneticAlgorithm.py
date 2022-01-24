@@ -1,7 +1,11 @@
-"""Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico"""
+"""
+Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico
 
+"""
+
+from ..Tools import utilities, bcolors, plot, Trajectory
 from . import Population, csv, datetime, Path, timer, PrettyTable, path
-from .. import Tour, Tsp, AlgorithmsOptions, SelectionStrategy, plot, bcolors, Trajectory, utilities
+from .. import Tour, Tsp, AlgorithmsOptions, SelectionStrategy
 
 class GeneticAlgorithm():
     """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda

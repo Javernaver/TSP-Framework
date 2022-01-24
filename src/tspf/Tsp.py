@@ -1,5 +1,10 @@
-""" Modulo que contiene la clase la cual representa el problema TSP"""
-from . import TSPlibReader, plot, bcolors, utilities
+""" 
+Modulo que contiene la clase la cual representa el problema TSP
+
+"""
+
+from . import TSPlibReader
+from .Tools import utilities, bcolors, plot
 
 class Tsp():
     """

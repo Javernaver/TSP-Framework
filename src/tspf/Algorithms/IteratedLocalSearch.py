@@ -1,7 +1,11 @@
-"""Modulo que contiene la clase la cual representa el metodo de busqueda de IteratedLocalSearch"""
+"""
+Modulo que contiene la clase la cual representa el metodo de busqueda de IteratedLocalSearch
 
+"""
+
+from ..Tools import utilities, bcolors, plot, Trajectory
 from . import path, csv, datetime, Path, timer, PrettyTable, LocalSearch
-from .. import AlgorithmsOptions, Tsp, Tour, TSPMove, PerturbationType, Trajectory, utilities, plot, InitialSolution, bcolors
+from .. import AlgorithmsOptions, Tsp, Tour, TSPMove, PerturbationType, InitialSolution
 
 class IteratedLocalSearch():
     
@@ -102,7 +106,7 @@ class IteratedLocalSearch():
         
         
         # Loop principal de ITS   
-        while self.terminationCondition(self.iterations, end-start):
+        while self.terminationCondition(self.iterations, self.evaluations, end-start):
             
             details = ''
             
@@ -175,13 +179,17 @@ class IteratedLocalSearch():
     
 
 
-    def terminationCondition(self, iterations: int, time: float) -> bool:
+    def terminationCondition(self, iterations: int, evaluations: int, time: float) -> bool:
         """ Condicion de termino para el ciclo principal de Simulated Annealing, 
         basado en los criterios de evaluaciones y tiempo, devuelve verdadero o falso si se debe continuar o no"""
 		
-        # Criterio de termino de las evaluciones | iteraciones
+        # Criterio de termino de las  iteraciones
         if (self.options.max_iterations > 0):
             if (iterations > self.options.max_iterations):
+                return False
+        # Criterio de termino de las evaluciones
+        if (self.options.max_evaluations > 0):
+            if (evaluations > self.options.max_evaluations):
                 return False
         
         # Criterio de termino por tiempo
