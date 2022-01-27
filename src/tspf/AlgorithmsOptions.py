@@ -233,7 +233,7 @@ class AlgorithmsOptions():
         # definir semilla para el generador aleatorio
         utilities.random.seed(self.seed)
         # Mostrar Opciones 
-        self.printOptions()
+        #self.printOptions()
     
 
     def readOptions(self, argv: list, kwargs: dict) -> None:

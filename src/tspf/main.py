@@ -4,7 +4,7 @@ Modulo principal que utiliza todas las demas clases para ejecutar el framework
 """
 
 from .Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
-from .Tools import bcolors
+from .Tools import bcolors, gui
 from . import sys, os, AlgorithmsOptions, MHType, Tsp, Tour
 
 def main(argv=sys.argv) -> None:
@@ -19,6 +19,13 @@ def main(argv=sys.argv) -> None:
     start = timer() # tiempo inicial de ejecucion
     # leer e inicializar las opciones 
     options = AlgorithmsOptions(argv=argv)
+    
+    if options.gui:
+        gui.Gui.options = options
+        gui.main()
+        
+    # Mostrar Opciones 
+    options.printOptions()
 
     # leer e interpretar el problema TSP leido desde la instancia definida
     problem = Tsp(filename=options.instance)
