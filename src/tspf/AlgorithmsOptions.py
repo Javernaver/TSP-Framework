@@ -88,6 +88,7 @@ class PerturbationType(Enum):
     TWO_OPT: Operador 2-opt
     THREE_OPT: Operador 3-opt
     SWAP: Operador swap
+    RANDOM: Operador aleatorio entre los anteriores
     """
     TWO_OPT = 'TWO_OPT'
     THREE_OPT = 'THREE_OPT'
@@ -166,7 +167,7 @@ class AlgorithmsOptions():
      
     metaheuristic = MHType.SA # Tipo de metaheuristica a ejecutar   
      
-    move = TSPMove.SWAP # Tipo del movimiento para la metaheuristica o bien tipo de busqueda Local Search
+    move = TSPMove.TWO_OPT # Tipo del movimiento para la metaheuristica o bien tipo de busqueda Local Search
     
     max_evaluations = 1000 # Evaluaciones maximas
     

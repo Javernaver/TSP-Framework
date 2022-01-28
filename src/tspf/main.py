@@ -21,8 +21,7 @@ def main(argv=sys.argv) -> None:
     options = AlgorithmsOptions(argv=argv)
     
     if options.gui:
-        gui.Gui.options = options
-        gui.main()
+        gui.main(options)
         
     # Mostrar Opciones 
     options.printOptions()
