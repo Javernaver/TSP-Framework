@@ -9,7 +9,7 @@ setup(
     author_email='javier.delcanto.m@mail.pucv.cl, jorge.polanco.sanmartin@gmail.com',
     url='https://github.com/Javernaver/TSP-Framework',
     scripts=['tspf.py'],
-    packages=['src.tspf','src.tspf.Algorithms'],
+    packages=['src.tspf','src.tspf.Algorithms', 'src.tspf.Tools'],
     install_requires=['matplotlib', 'prettytable'], 
     zip_safe=False,
     classifiers=[

@@ -20,8 +20,10 @@ def main(argv=sys.argv) -> None:
     # leer e inicializar las opciones 
     options = AlgorithmsOptions(argv=argv)
     
+    # Si se esta en modo GUI
     if options.gui:
         gui.main(options)
+        return
         
     # Mostrar Opciones 
     options.printOptions()
@@ -78,5 +80,5 @@ def main(argv=sys.argv) -> None:
     print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
     
     if options.visualize:
-        solver.visualize(options.replit)
+        solver.visualize()
  

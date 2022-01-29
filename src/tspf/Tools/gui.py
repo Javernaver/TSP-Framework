@@ -5,8 +5,15 @@ Modulo dedicado a la interfaz grafica de usuario
 from . import bcolors
 from ..Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
 from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType
-from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END
-from tkinter import messagebox, filedialog, ttk
+
+if os.name == 'nt':
+    from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END
+    from tkinter import messagebox, filedialog, ttk
+else:
+    from Tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END
+    from Tkinter import messagebox, filedialog, ttk
+
+
 
 
 
@@ -49,7 +56,7 @@ class Gui():
         """ Configura la ventana principal de la interfaz """
         self.root.title('TSP-Framework')
         #self.root.resizable(0,0)
-        self.root.geometry('700x500')
+        self.root.geometry('700x300')
         #self.root.bind_all("<Button-1>", lambda event: event.widget.focus_set()) # fuerza el focus donde el usuario haga click
         #self.root.eval('tk::PlaceWindow . right')
         
@@ -99,37 +106,48 @@ class Gui():
                 tra += '.csv'
             self.options.trajectory = tra
             ar.set(tra)
+    
+    
+    """ S E L E C C I O N   D E   M E T O D O   D E   B U S Q U E D A """
         
     def mainScreen(self) -> None:
         
-        self.root.geometry('1366x768')
+        self.root.geometry('1280x720')
         self.frame.destroy()
         self.frame = LabelFrame(
                     self.root,
-                    text='Selecciona un metodo de busqueda para solucionar el problema',
+                    text='Metodo de Busqueda',
                     bg='#f0f0f0',
-                    font=('consolas', 15)
+                    font=('consolas', 20)
                 )
         
         self.frame.pack(anchor='center', pady=10)
         
-        b = Button(self.frame, text='Simulated Annealing', command=self.simulatedAnnealing)
+        f = Frame(self.frame)
+        f.grid(row=0, column=0)
+        
+        b = Button(f, text='Simulated Annealing', command=self.simulatedAnnealing)
         b.config()
-        b.pack(anchor='ne', side='left', padx=50, pady=50)
+        #b.pack(anchor='ne', side='left', padx=50, pady=50)
+        b.grid(row=0, column=0, padx=25, pady=25)
         
         b = Button(self.frame, text='Algoritmo Generico', command=self.geneticAlgorithm)
         b.config()
-        b.pack(anchor='se', side='left', padx=50, pady=50)
+        #b.pack(anchor='se', side='left', padx=50, pady=50)
+        b.grid(row=0, column=1, padx=25, pady=25)
         
         b = Button(self.frame, text='Iterated Local Search', command=self.iteratedLocalSearch)
         b.config()
-        b.pack(anchor='sw', side='right', padx=50, pady=50)
+        #b.pack(anchor='sw', side='right', padx=50, pady=50)
+        b.grid(row=1, column=0, padx=25, pady=25)
         
         b = Button(self.frame, text='Local Search', command=self.localSearch)
         b.config()
-        b.pack(anchor='nw', side='right', padx=50, pady=50)
+        #b.pack(anchor='nw', side='right', padx=50, pady=50)
+        b.grid(row=1, column=1, padx=25, pady=25)
         
         
+    """ S I M U L A T E D   A N N E A L I N G """
     
     def simulatedAnnealing(self) -> None:
         """ Configurar opciones de simulated annealing """
@@ -146,7 +164,7 @@ class Gui():
                 )
         
         #frameSA.pack(anchor='n', side='right', padx=25, pady=15)
-        frameSA.grid(row=0, column=3, padx=25, pady=10)
+        frameSA.grid(row=0, column=3, padx=15, pady=10)
         
         # movimiento
         lm = Label(frameSA, text='Tipo de movimiento a utilizar: ')
@@ -212,6 +230,9 @@ class Gui():
             return self.options.tmin
         return 0
     
+    
+    """ A L G O R I T M O   G E N E T I C O """
+    
     def geneticAlgorithm(self) -> None:
         """ Configurar opciones de algoritmo genetico """
         self.frame.destroy()
@@ -226,7 +247,7 @@ class Gui():
                 )
         
         #frameGA.pack(anchor='n', side='right', padx=25, pady=15)
-        frameGA.grid(row=0, column=3, padx=25, pady=10)
+        frameGA.grid(row=0, column=3, padx=10, pady=10)
         
         # cantidad de poblacion
         lps = Label(frameGA, text='Cantidad de individuos de la poblacion: ')
@@ -337,7 +358,7 @@ class Gui():
                 )
         
         #frameLS.pack(anchor='n', side='right', padx=25, pady=15)
-        frameLS.grid(row=0, column=3, padx=25, pady=10)
+        frameLS.grid(row=0, column=3, padx=10, pady=10)
         
         # tipo de busqueda
         lm = Label(frameLS, text='Tipo de busqueda local a utilizar: ')
@@ -370,7 +391,7 @@ class Gui():
                 )
         
         #frameLS.pack(anchor='n', side='right', padx=25, pady=15)
-        frameILS.grid(row=0, column=3, padx=25, pady=10)
+        frameILS.grid(row=0, column=3, padx=10, pady=10)
         
         # tipo de busqueda
         lm = Label(frameILS, text='Tipo de busqueda local a utilizar: ')
@@ -405,11 +426,19 @@ class Gui():
         cbi.deselect()
         cbi.grid(row=3, column=1, padx=5, pady=5, sticky='e')
         
-
+    
+    
+    """ P A N T A L L A   D E   O P C I O N E S """
 
     def optionsFrame(self) -> None:
         """ Configurar frame de opciones """
         
+        # Maximizar ventana para windows y linux
+        if os.name == 'nt':
+            self.root.state('zoomed')
+        else:
+            self.root.attributes('-zoomed', True)
+
         # Configurar seccion de opciones 
         self.frameOptions = LabelFrame(
                     self.root,
@@ -418,26 +447,32 @@ class Gui():
                     font=("consolas", 20)
                 )
         
-        self.frameOptions.pack(anchor='nw', side='left', padx=25, pady=5)
+        if not self.options.replit:
+            self.frameOptions.pack(anchor='nw', side='left', padx=5, pady=5)
+        else:
+            self.frameOptions.pack(anchor='center', side='top', padx=5, pady=5)
         #self.frameOptions.grid(column=0, row=0, padx=25, pady=15)
         
-        # configurar seccion de Feedback
-        self.frameFeedback = LabelFrame(
-                    self.root,
-                    text='Salida',
-                    bg='#f0f0f0',
-                    font=("consolas", 22)
-                )
         
-        self.frameFeedback.pack(anchor='ne', side='right', padx=25, pady=5)
-        #self.frameFeedback.grid(column=0, row=1, padx=25, pady=15)
-        
-        self.textFeed = Text(self.frameFeedback)
-        self.textFeed.config(state='disable', padx=10, pady=10, width=500, height=700)
-        self.textFeed.pack(fill="y", padx=5, pady=5)
-        
-        # Redireccionar todos los print desde el stdout a el texto de feedback
-        sys.stdout = TextRedirector(self.textFeed, "stdout")
+        if not self.options.replit:
+            
+            # configurar seccion de Feedback
+            self.frameFeedback = LabelFrame(
+                        self.root,
+                        text='Salida',
+                        bg='#f0f0f0',
+                        font=("consolas", 22)
+                    )
+
+            self.frameFeedback.pack(anchor='ne', side='right', padx=5, pady=5)
+            #self.frameFeedback.grid(column=0, row=1, padx=25, pady=15)
+            
+            self.textFeed = Text(self.frameFeedback)
+            self.textFeed.config(state='disable', padx=10, pady=10, width=500, height=700)
+            self.textFeed.pack(fill="y", padx=5, pady=5)
+            
+            # Redireccionar todos los print desde el stdout a el texto de feedback
+            sys.stdout = TextRedirector(self.textFeed, "stdout")
         
         
         # configurar seccion de opciones generales
@@ -449,7 +484,7 @@ class Gui():
                 )
         
         #frameGeneral.pack(anchor='n', side='left', padx=25, pady=15)
-        frameGeneral.grid(row=0, column=0, padx=25, pady=10)
+        frameGeneral.grid(row=0, column=0, padx=15, pady=10)
         
         # Opciones Generales
         # archivo de intancia
@@ -632,6 +667,10 @@ class Gui():
             return self.options.nPerturbations
         
         return 0
+    
+    
+    
+    """ P A N TA L L A   D E   I N I C I O """
 
     def welcomeScreen(self) -> None:
         """ Pantalla de inicio y lectura de archivo de instancia """
@@ -641,7 +680,7 @@ class Gui():
                     self.root,
                     text='Selecciona un archivo de instancia TSP',
                     bg='#f0f0f0',
-                    font=(20)
+                    font=("consolas", 12)
                 )
         
         self.frame.pack(anchor='center', pady=10)
@@ -669,31 +708,20 @@ class Gui():
         b2.grid(row=2, column=1, sticky='w', padx=5, pady=5)
 
         
-    def a(self):
-        print(self.options.instance, self.algorithm, self.options.solution, self.options.seed, self.options.initial_solution.value)
-        print(self.options.max_iterations, self.options.max_evaluations, self.options.max_time, self.options.visualize)
-        print(self.options.move.value, self.options.cooling.value, self.options.alpha, self.options.t0, self.options.tmin)
-        print(self.options.pop_size, self.options.offspring_size, self.options.pselection_type.value, self.options.crossover_type.value, self.options.mutation_type.value)
-        print(self.options.mutation_prob, self.options.gselection_type.value, self.options.selection_strategy.value)
-        print(self.options.move.value, self.options.bestImprovement)
-        print(self.options.perturbation.value, self.options.nPerturbations)
-  
-        
     
     """ E J E C U C I O N """   
      
     def run(self) -> None:
         """ Ejecuta el algoritmo con las opciones configuradas """
+        if not self.options.replit:
+            self.textFeed.delete(1.0, END)
         
-        self.textFeed.delete("1.0", "end")
-        
-
-        bcolors.disable(bcolors)
         
         start = timer() # tiempo inicial de ejecucion
         # leer e inicializar las opciones 
         options = self.options
-
+        if not options.replit:
+            bcolors.disable(bcolors)
         # Mostrar Opciones 
         options.printOptions()
 
@@ -749,11 +777,11 @@ class Gui():
         print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
         
         if options.visualize:
-            solver.visualize(options.replit)
+            solver.visualize()
 
-        self.textFeed.insert(END, "spam\n")
-        self.textFeed.see(END)
-        
+        if not self.options.replit:
+            self.textFeed.insert(END, "spam\n")
+            self.textFeed.see(END)
    
 
 def main(options: AlgorithmsOptions) -> None:
@@ -762,15 +790,12 @@ def main(options: AlgorithmsOptions) -> None:
 
     frame = Frame(root)
     frame.config(bd=10, relief='ridge')
-    frame.pack(anchor='center', side='top')
+    frame.pack(anchor='center', side='top', padx=5, pady=15)
     label = Label(frame, text='TSP-Framework')
     label.config(font=('consolas', 40))
-    label.pack()
+    label.pack(pady=10)
     
     gui = Gui(root=root, options=options)
-
-    Button(root, text='Seleccionar', command=gui.a).pack()
     
     root.protocol("WM_DELETE_WINDOW", gui.onQuit)
     root.mainloop()
-    

@@ -388,9 +388,12 @@ class LocalSearch():
                 "initial_solution": self.options.initial_solution.value
             })
 
-    def visualize(self, replit: bool) -> None:
+    def visualize(self) -> None:
         """ Visualiza la trayectoria de la solucion """
-        plot.replit = replit
+        plot.replit = self.options.replit
         plot.trajectory = self.trajectory
-        plot.show()
+        if self.options.gui:
+            plot.showGui()
+        else:
+            plot.show()
         
