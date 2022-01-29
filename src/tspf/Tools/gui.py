@@ -2,25 +2,38 @@
 Modulo dedicado a la interfaz grafica de usuario
 
 """
-
-from .. import Enum, AlgorithmsOptions, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType
-from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, BooleanVar
+from . import bcolors
+from ..Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
+from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType
+from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END
 from tkinter import messagebox, filedialog, ttk
-import os
+
+
+
+class TextRedirector(object):
+    """ Clase destinada a redireccionar el texto de los print (stdout) a el widget de tkinter """
+    def __init__(self, widget, tag="stdout"):
+        self.widget = widget
+        self.tag = tag
+        self.flush = sys.stdout.flush
+        
+    def write(self, str):
+        self.widget.configure(state="normal")
+        self.widget.insert("end", str, (self.tag,))
+        self.widget.configure(state="disabled")
 
 
 class Gui():
 
-
     options: AlgorithmsOptions
-    
-    algorithm: MHType
     
     frame: Frame
     
     frameOptions: Frame
     
     frameFeedback: Frame
+    
+    textFeed: Text
     
     
     def __init__(self, root: Tk, options: AlgorithmsOptions) -> None:
@@ -48,12 +61,19 @@ class Gui():
             quit(self.root)
             
             
-    def openFile(self) -> None:
+    def openFile(self, change: bool = True, var: StringVar = None) -> None:
         """ Abrir archivo de instancia TSP """
-        self.options.instance = filedialog.askopenfilename(title='Abrir archivo de instancia con problema TSP', 
-                                                    initialdir='instances/',
-                                                    filetypes=(('Archivo de instancia con problema TSP', '*.tsp'),))
-        if self.options.instance:
+        if change:
+            while True:
+                self.options.instance = filedialog.askopenfilename(title='Abrir archivo de instancia con problema TSP', 
+                                                            initialdir='instances/',
+                                                            filetypes=(('Archivo de instancia con problema TSP', '*.tsp'),))
+                if self.options.instance:
+                    break
+            if var:
+                var.set(self.options.instance)
+                
+        if self.options.instance and not var:
             self.mainScreen()
             
     def saveFile(self, extension: str, ar: StringVar) -> None:
@@ -116,7 +136,7 @@ class Gui():
         
         self.frame.destroy()
         self.optionsFrame()
-        self.algorithm = MHType.SA
+        self.options.metaheuristic = MHType.SA
         
         frameSA = LabelFrame(
                     self.frameOptions,
@@ -126,7 +146,7 @@ class Gui():
                 )
         
         #frameSA.pack(anchor='n', side='right', padx=25, pady=15)
-        frameSA.grid(row=6, column=0, padx=25, pady=15)
+        frameSA.grid(row=0, column=3, padx=25, pady=10)
         
         # movimiento
         lm = Label(frameSA, text='Tipo de movimiento a utilizar: ')
@@ -196,7 +216,7 @@ class Gui():
         """ Configurar opciones de algoritmo genetico """
         self.frame.destroy()
         self.optionsFrame()
-        self.algorithm = MHType.GA
+        self.options.metaheuristic = MHType.GA
         
         frameGA = LabelFrame(
                     self.frameOptions,
@@ -206,7 +226,7 @@ class Gui():
                 )
         
         #frameGA.pack(anchor='n', side='right', padx=25, pady=15)
-        frameGA.grid(row=6, column=0, padx=25, pady=15)
+        frameGA.grid(row=0, column=3, padx=25, pady=10)
         
         # cantidad de poblacion
         lps = Label(frameGA, text='Cantidad de individuos de la poblacion: ')
@@ -307,7 +327,7 @@ class Gui():
         """  """
         self.frame.destroy()
         self.optionsFrame()
-        self.algorithm = MHType.LS
+        self.options.metaheuristic = MHType.LS
         
         frameLS = LabelFrame(
                     self.frameOptions,
@@ -317,7 +337,7 @@ class Gui():
                 )
         
         #frameLS.pack(anchor='n', side='right', padx=25, pady=15)
-        frameLS.grid(row=6, column=0, padx=25, pady=15)
+        frameLS.grid(row=0, column=3, padx=25, pady=10)
         
         # tipo de busqueda
         lm = Label(frameLS, text='Tipo de busqueda local a utilizar: ')
@@ -340,17 +360,17 @@ class Gui():
         """  """
         self.frame.destroy()
         self.optionsFrame()
-        self.algorithm = MHType.ILS
+        self.options.metaheuristic = MHType.ILS
         
         frameILS = LabelFrame(
                     self.frameOptions,
-                    text='Local Search',
+                    text='Iterated Local Search',
                     bg='#f0f0f0',
-                    font=("consolas", 22)
+                    font=("consolas", 20)
                 )
         
         #frameLS.pack(anchor='n', side='right', padx=25, pady=15)
-        frameILS.grid(row=6, column=0, padx=25, pady=15)
+        frameILS.grid(row=0, column=3, padx=25, pady=10)
         
         # tipo de busqueda
         lm = Label(frameILS, text='Tipo de busqueda local a utilizar: ')
@@ -386,6 +406,7 @@ class Gui():
         cbi.grid(row=3, column=1, padx=5, pady=5, sticky='e')
         
 
+
     def optionsFrame(self) -> None:
         """ Configurar frame de opciones """
         
@@ -403,15 +424,21 @@ class Gui():
         # configurar seccion de Feedback
         self.frameFeedback = LabelFrame(
                     self.root,
-                    text='Output',
+                    text='Salida',
                     bg='#f0f0f0',
-                    width=720,
-                    height=900,
-                    font=(20)
+                    font=("consolas", 22)
                 )
         
-        self.frameFeedback.pack(anchor='n', side='right', padx=25, pady=5)
+        self.frameFeedback.pack(anchor='ne', side='right', padx=25, pady=5)
         #self.frameFeedback.grid(column=0, row=1, padx=25, pady=15)
+        
+        self.textFeed = Text(self.frameFeedback)
+        self.textFeed.config(state='disable', padx=10, pady=10, width=500, height=700)
+        self.textFeed.pack(fill="y", padx=5, pady=5)
+        
+        # Redireccionar todos los print desde el stdout a el texto de feedback
+        sys.stdout = TextRedirector(self.textFeed, "stdout")
+        
         
         # configurar seccion de opciones generales
         frameGeneral = LabelFrame(
@@ -422,42 +449,51 @@ class Gui():
                 )
         
         #frameGeneral.pack(anchor='n', side='left', padx=25, pady=15)
-        frameGeneral.grid(row=0, column=0, padx=25, pady=15)
+        frameGeneral.grid(row=0, column=0, padx=25, pady=10)
         
         # Opciones Generales
+        # archivo de intancia
+        lins = Label(frameGeneral, text='Archivo de instancia: ')
+        lins.grid(row=1, column=0, padx=5, pady=5, sticky='e')
+        ins = StringVar(frameGeneral, value=self.options.instance)
+        eins = Entry(frameGeneral, textvariable=ins, state='disabled')
+        eins.grid(row=1, column=1, padx=5, pady=5)
+        bins = Button(frameGeneral, text='Cambiar', command=lambda: self.openFile(True, ins))
+        bins.grid(row=1, column=2, padx=5, pady=5)
+        
         # archivo de solucion
         l = Label(frameGeneral, text='Archivo para la solucion: ')
-        l.grid(row=1, column=0, padx=5, pady=5, sticky='e')
+        l.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         sol = StringVar(frameGeneral, value=self.options.solution)
         e = Entry(frameGeneral, textvariable=sol, state='disabled')
-        e.grid(row=1, column=1, padx=5, pady=5)
+        e.grid(row=2, column=1, padx=5, pady=5)
         b = Button(frameGeneral, text='Cambiar', command=lambda: self.saveFile('.txt', sol))
-        b.grid(row=1, column=2, padx=5, pady=5)
+        b.grid(row=2, column=2, padx=5, pady=5)
         
         # archivo de trayectoria
         l = Label(frameGeneral, text='Archivo para la trayectoria: ')
-        l.grid(row=2, column=0, padx=5, pady=5, sticky='e')
+        l.grid(row=3, column=0, padx=5, pady=5, sticky='e')
         tra = StringVar(frameGeneral, value=self.options.trajectory)
         e = Entry(frameGeneral, textvariable=tra, state='disabled')
-        e.grid(row=2, column=1, padx=5, pady=5)
+        e.grid(row=3, column=1, padx=5, pady=5)
         b = Button(frameGeneral, text='Cambiar', command=lambda: self.saveFile('.csv', tra))
-        b.grid(row=2, column=2, padx=5, pady=5)
+        b.grid(row=3, column=2, padx=5, pady=5)
         
         # seed
         ls = Label(frameGeneral, text='Seed: ')
-        ls.grid(row=3, column=0, padx=5, pady=5, sticky='e')
+        ls.grid(row=4, column=0, padx=5, pady=5, sticky='e')
         svs = StringVar(frameGeneral, value=self.options.seed)
         es = Entry(frameGeneral, textvariable=svs, validate="focusout", validatecommand=lambda: self.validateNumberG(svs, 'seed'))
-        es.grid(row=3, column=1, padx=5, pady=5)
+        es.grid(row=4, column=1, padx=5, pady=5)
         
         # solucion inicial
         ls = Label(frameGeneral, text='Tipo de solucion inicial: ')
-        ls.grid(row=4, column=0, padx=5, pady=5, sticky='e')
+        ls.grid(row=5, column=0, padx=5, pady=5, sticky='e')
         comboIS = ttk.Combobox(frameGeneral, 
                                state='readonly', 
                                values=[ sol.value for sol in InitialSolution ])
         comboIS.set(self.options.initial_solution.value)
-        comboIS.grid(row=4, column=1, padx=5, pady=5)
+        comboIS.grid(row=5, column=1, padx=5, pady=5)
         comboIS.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboIS, InitialSolution))
         
         # Visualizar
@@ -465,7 +501,7 @@ class Gui():
         v = StringVar(frameGeneral)
         chv = Checkbutton(frameGeneral, text='Visualizar trayectoria', variable=v, onvalue=1, offvalue=0, command=lambda : self.setBool(v, 'visualize'))
         chv.select()
-        chv.grid(row=5, column=1, padx=5, pady=5, sticky='e')
+        chv.grid(row=6, column=1, padx=5, pady=5, sticky='e')
 
         
         # Opciones Condicion de termino
@@ -473,11 +509,11 @@ class Gui():
                     self.frameOptions,
                     text='Condicion de termino',                   
                     bg='#f0f0f0',
-                    font=("consolas", 15)
+                    font=("consolas", 20)
                 )
         
         #frameTermino.pack(anchor='ne', padx=25, pady=15)
-        frameTermino.grid(row=0, column=3, padx=10)
+        frameTermino.grid(row=7, column=0, padx=10, pady=10)
         
         # Iteraciones maximas
         li = Label(frameTermino, text='Iteraciones maximas: ')
@@ -494,11 +530,29 @@ class Gui():
         ee.grid(row=1, column=1, padx=5, pady=5)
         
         # Tiempo maximo
-        lt = Label(frameTermino, text='Tiempo maximo de ejecucion: ')
+        lt = Label(frameTermino, text='Tiempo maximo de ejecucion (segundos): ')
         lt.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         svt = StringVar(frameTermino, value=self.options.max_time)
         et = Entry(frameTermino, textvariable=svt, validate="focusout", validatecommand=lambda: self.validateNumberG(svt, 'time'))
         et.grid(row=2, column=1, padx=5, pady=5)
+        
+        
+        # boton ejecutar
+        frameEj = LabelFrame(
+                    self.frameOptions,
+                    text='',
+                    bg='#f0f0f0',
+                    font=("consolas", 22)
+                )
+        
+        #frameEj.pack(anchor='n', side='right', padx=25, pady=15)
+        frameEj.grid(row=7, column=3, padx=25, pady=10)
+        
+        """ st = ttk.Style()
+        st.configure('W.TButton', background='#345', foreground='black', font=('Arial', 14 )) """
+        bej = Button(frameEj, text='EJECUTAR', command=self.run)
+        bej.config()
+        bej.grid(row=0, column=0, padx=20, pady=20)
         
     
     def setBool(self, chk: StringVar, var: str) -> None:
@@ -592,10 +646,27 @@ class Gui():
         
         self.frame.pack(anchor='center', pady=10)
         
-        b = Button(self.frame, text='Seleccionar archivo', command=self.openFile)
+        f = Frame(self.frame)
+        f.grid(row=0, column=0)
+        
+        l = Label(f, text='Instancia del problema TSP: ')
+        l.grid(row=1, column=0, padx=2, pady=5, sticky='e')
+        #l.pack(anchor='nw')
+        sol = StringVar(f, value=self.options.instance)
+        e = Entry(f, textvariable=sol, state='disabled')
+        e.grid(row=1, column=1, padx=2, pady=5)
+        #e.pack(anchor='ne')
+        
+        
+        b = Button(f, text='Cambiar', command=self.openFile)
         b.config()
-        b.pack(anchor='center', padx=50, pady=25)
-        #b.grid(row=0, column=3, sticky='w', padx=10, pady=10)
+        #b.pack(anchor='center', padx=50, pady=25)
+        b.grid(row=1, column=2, sticky='w', padx=5, pady=5)
+        
+        b2 = Button(f, text='Siguiente', command=lambda: self.openFile(False))
+        b2.config()
+        #b2.pack(anchor='center', padx=50, pady=25)
+        b2.grid(row=2, column=1, sticky='w', padx=5, pady=5)
 
         
     def a(self):
@@ -606,6 +677,84 @@ class Gui():
         print(self.options.mutation_prob, self.options.gselection_type.value, self.options.selection_strategy.value)
         print(self.options.move.value, self.options.bestImprovement)
         print(self.options.perturbation.value, self.options.nPerturbations)
+  
+        
+    
+    """ E J E C U C I O N """   
+     
+    def run(self) -> None:
+        """ Ejecuta el algoritmo con las opciones configuradas """
+        
+        self.textFeed.delete("1.0", "end")
+        
+
+        bcolors.disable(bcolors)
+        
+        start = timer() # tiempo inicial de ejecucion
+        # leer e inicializar las opciones 
+        options = self.options
+
+        # Mostrar Opciones 
+        options.printOptions()
+
+        # leer e interpretar el problema TSP leido desde la instancia definida
+        problem = Tsp(filename=options.instance)
+
+        # Ejecutar Metaheuristica Simulated Annealing
+        if (options.metaheuristic == MHType.SA):
+
+            # Solucion inicial
+            first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
+            # Crear solver
+            solver = SimulatedAnnealing(options=options, problem=problem)
+            # Ejecutar la busqueda
+            solver.search(first_solution)
+
+        # Ejecutar Metaheuristica Algoritmo Genetico
+        elif (options.metaheuristic == MHType.GA):
+            # Crear solver
+            solver = GeneticAlgorithm(options=options, problem=problem)
+            # Ejecutar la busqueda
+            solver.search()
+            
+        elif (options.metaheuristic == MHType.LS):
+            # Solucion inicial
+            first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
+            # Crear solver
+            solver = LocalSearch(options=options, problem=problem)
+            # Ejecutar la busqueda
+            solver.search(first_solution)
+            
+        elif (options.metaheuristic == MHType.ILS):
+            # Solucion inicial
+            first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
+            # Crear solver
+            solver = IteratedLocalSearch(options=options, problem=problem)
+            # Ejecutar la busqueda
+            solver.search(first_solution)
+
+        else: 
+            # Crear solver
+            solver = GeneticAlgorithm(options=options, problem=problem)
+            # Ejecutar la busqueda
+            solver.search()
+
+        # Guardar la solucion y trayectoria en archivo
+        solver.printSolFile(options.solution)
+        solver.printTraFile(options.trajectory)
+        # Escribir la solucion por consola
+        solver.print_best_solution()
+        
+        end = timer() # tiempo final de ejecucion
+        print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
+        
+        if options.visualize:
+            solver.visualize(options.replit)
+
+        self.textFeed.insert(END, "spam\n")
+        self.textFeed.see(END)
+        
+   
 
 def main(options: AlgorithmsOptions) -> None:
     
