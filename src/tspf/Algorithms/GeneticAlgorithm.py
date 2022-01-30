@@ -315,9 +315,7 @@ class GeneticAlgorithm():
 
     def visualize(self) -> None:
         """ Visualiza la trayectoria de la solucion """
-        plot.replit = self.options.replit
-        plot.trajectory = self.trajectory
-        if self.options.gui:
-            plot.showGui()
-        else:
-            plot.show()
+        plot.Graph.replit = self.options.replit
+        plot.Graph.trajectory = self.trajectory
+        
+        plot.show(self.options.gui)

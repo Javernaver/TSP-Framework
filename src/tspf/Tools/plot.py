@@ -5,7 +5,7 @@ Modulo Encargado de el manejo de la visualizacion o graficacion de las solucione
 
 import os
 import tempfile
-from tkinter import Tk, Toplevel, Label, Frame
+from tkinter import Tk, Frame
 os.environ[ 'MPLCONFIGDIR' ] = tempfile.mkdtemp()
 
 import matplotlib.pyplot as plt
@@ -15,221 +15,236 @@ from matplotlib.widgets import Button
 import mpl_toolkits.axes_grid1
 
 
-coords = [] # lista de coordenadas
-trajectory = [] # lista de con la trayectoria de la solucion
-x, y = [], [] # lista de coordenadas x e y
-annotations = [] # lista de anotaciones en el grafico que serian las numeraciones, flechas de union, etc.
-iterations, cost, avg, worst = [], [], [], []
-
-replit = False # bool si se ejecuta en replit o no
 MAXLEN = 100 # numero maximo de puntos de coordenada para animar la trayectoria
-
-fig, (ax, ax1) = plt.subplots(figsize=(16, 9), gridspec_kw={'height_ratios': [5, 1]}, dpi=90, nrows=2, ncols=1) # Crear figura y graficos
-
-#fig, ax = plt.subplots(figsize=(16, 9), dpi=90) # Crear figura y grafico
-
-#plt.style.use('ggplot')
-
-def putCoords() -> None:
-    """Obtiene, pone y numera en el grafico los puntos con las coordenadas a recorrer"""
-
-    # Agregar titulo a la ventana
-    fig = plt.gcf()
-    fig.canvas.manager.set_window_title('Visualizador de trayectoria para soluciones TSP')
-
-    for p in coords: # separar las coordenadas del eje x de los del eje y
-        x.append(p.x)
-        y.append(p.y)
-
-    # Generar los puntos con las coordenadas
-    ax.scatter(x, y, color='red', s=70, edgecolors='black', label='Punto Normal')
-    
-    ax.set_title('Visualizacion del Tour')
-    #ax.set_xlabel('Eje X')
-    #ax.set_ylabel('Eje Y')
-    
-    ax1.grid(color='black', linestyle='-', linewidth=0.1)
-    ax1.set_title('Variacion por iteracion')
-    ax1.set_ylabel('Costo')
-    ax1.set_xlabel('Iteraciones\n\n')
-    
-    ax.grid(color='black', linestyle='-', linewidth=0.1)
-    
-    # Numerar puntos con las coordenadas 
-    for i in range(len(coords)):
-        ax.annotate(i,
-            xy=(x[i], y[i]), 
-            xytext=(x[i], y[i]+0.05))
-
-    # expandir al tamaño de la ventana
-    plt.tight_layout()
-
-def generateMap(i: int) -> None:
-    """Genera la visualizacion uniendo los puntos con las coordenadas en cada tour de la trayectoria"""
-    
-    if i >= len(trajectory):
-        return
-    
-    # obtener tour de la trayectoria
-    tour = trajectory[i].tour
-    # limpiar todas las anotaciones de la graficacion anterior
-    clearAnnotations()
-
-    # generar texto con detalle de la graficacion
-    textstr = '\n'.join((
-    f'Tour: {trajectory[i].tour}',
-    f'Costo: {trajectory[i].cost}',
-    f'Iteraciones: {trajectory[i].iterations}',
-    f'Evaluaciones: {trajectory[i].evaluations}'
-    ))
-    
-    # si hay temperatura
-    if trajectory[i].temperature >= 0:
-        textstr += f'\nTemperatura: {trajectory[i].temperature:.2f}'
-
-    # si hay promedio y desviacion estandar
-    if trajectory[i].average > 0 and trajectory[i].deviation > 0:
-        textstr += f'\nPromedio Poblacion: {trajectory[i].average:.2f}\nDesviacion Estandar Poblacion: {trajectory[i].deviation:.2f}'
-    
-    #ax.set_title(textstr)
-    # generar cuadro de texto con los detalles de la graficacion
-    props = dict(boxstyle='round', facecolor='lightblue', alpha=0.77)
-
-    # poner el cuadro de texto en la esquina superior izquierda del grafico
-    a = ax.text(0.01, 0.98, textstr, transform=ax.transAxes, fontsize=12,
-            verticalalignment='top', bbox=props)
-
-    annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-
-   
-    #ax.cla()
-    #ax.scatter(x,y, color='blue')
-    # marcar punto de inicio del tour
-    a = ax.scatter(x[tour[0]], y[tour[0]], s=70, edgecolors='black', color='lime', label='Punto de Partida') 
-
-    annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-    a = ax.legend(loc='upper right')
-    annotations.append(a)
-    # Poner la figura en el grafico
-    drawFig(tour)
-    
-    drawStats(i)
-
-def drawStats(i: int) -> None:
-    """Grafica los cambios en la calidad de los tour a lo largo de la iteraciones"""
-    
-    # graficar completamente los cambios de calidad en las iteraciones
-    if len(coords) > MAXLEN:
-        ax1.plot([tra.iterations for tra in trajectory],
-                [tra.cost for tra in trajectory],
-                label="Mejor Actual", linestyle='-', marker='', color='green')
-        return
-    
-    ax1.cla()
-    
-    ax1.grid(color='black', linestyle='-', linewidth=0.1)
-    ax1.set_title('Variacion por iteracion')
-    ax1.set_ylabel('Costo')
-    ax1.set_xlabel('Iteraciones')
-    #x_data = [tra.iterations for tra in trajectory]
-    #y_data = [tra.cost for tra in trajectory]
-    iterations.append(trajectory[i].iterations)
-    cost.append(trajectory[i].cost)
-    
-    ax1.plot(iterations, cost, label="Mejor", linestyle='-', marker='', color='green')
-
-    if trajectory[i].average > 0 and trajectory[i].worst > 0:
-        avg.append(trajectory[i].average)
-        worst.append(trajectory[i].worst)
-        ax1.plot(iterations, avg, label="Promedio", linestyle='-', marker='', color= 'blue')
-        ax1.plot(iterations, worst, label="Peor", linestyle='-', marker='', color='red')
+TOOLBARLEN = 50  # numero minimo de puntos de coordenada para agregar barra de herramientas de matplotlib en el grafico
         
-    ax1.legend(loc='upper right')
-    
-    #ax1.plot(trajectory[i].iterations, trajectory[i].average, label="", linestyle='--')
-    
-
-def clearAnnotations() -> None:
-    """Elimina todas las anotaciones de la figura"""
-    for an in annotations:
-        an.remove()
-    annotations[:] = []
-
-def drawFig(tour: list) -> None:
-    """Grafica el tour en el grafico conectando los puntos a traves de flechas"""
-
-    for i in range(len(tour)-1):
-               
-        #ax.plot([x[tour[i]], x[tour[i+1]]],
-        #[y[tour[i]], y[tour[i+1]]], color='red')
         
-        # conectar los puntos con flechas
-        a = ax.annotate("",
-                        xy=(x[tour[i+1]], y[tour[i+1]]), 
-                        xytext=(x[tour[i]], y[tour[i]]), 
-                        arrowprops=dict(arrowstyle="->",
-                                        connectionstyle="arc3", 
-                                        color="royalblue"))
-        annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-
-
-def show() -> None:
-    """Mostrar la figura y el grafico"""
-
-    global ani # variable con la animacion de la graficacion de la trayectoria
-
-    # poner los puntos de coordenadas
-    putCoords()
-
-    # generar la animacion de la graficacion de la trayectoria
-    if replit:
-        if len(coords) > MAXLEN:
-            generateMap(len(trajectory)-1)
-        else:
-            ani = FuncAnimation(fig, generateMap, interval=300, blit=False)
-    else:
-        if len(coords) > MAXLEN:
-            generateMap(len(trajectory)-1)
-        else:
-            ani = Player(fig, generateMap, maxi=len(trajectory)-1, interval=300, blit=False)
-        
-    # poner el grafico en pantalla maximizada para evitar conflictos con los distitos tipos de pantallas 
-    plt_set_fullscreen()
-    # mostrar el grafico y la figura
-    plt.show()
-   
-        
-def showGui() -> None:
+def show(onGui: bool = False) -> None:
+    """ Muestra y anima el grafico de la trayectoria a una solucion a problema TSP """
         
     gui = Tk()
+       
+    Graph(gui)
     
-    """ if replit:
-        # Maximizar ventana para windows y linux
+    # Si se ejecuta la visualizacion desde la terminal
+    if not onGui:
+        
+        """ # Maximizar ventana para windows y linux
         if os.name == 'nt':
             gui.state('zoomed')
         else:
             gui.attributes('-zoomed', True) """
-        
-    Window(gui)
+            
+        gui.protocol("WM_DELETE_WINDOW", lambda: quit(gui))
+        gui.mainloop()
         
 
-def plt_set_fullscreen() -> None:
-    """Poner el grafico en pantalla maximizada para evitar conflictos con los distitos tipos de pantallas """
 
-    backend = str(plt.get_backend())
-    mgr = plt.get_current_fig_manager()
+class Graph(Frame):
+    """ Clase que representa la graficacion de la trayectoria de una solucion a problema TSP """
     
-    if backend == 'TkAgg':
-        if os.name == 'nt':
-            mgr.window.state('zoomed')
+    coords = [] # lista de coordenadas
+    trajectory = [] # lista de con la trayectoria de la solucion
+    replit = False # bool si se ejecuta en replit o no
+  
+    def __init__(self, master: Tk = None):
+        Frame.__init__(self, master)
+        
+        self.fig, (self.ax, self.ax1) = plt.subplots(figsize=(16, 9), gridspec_kw={'height_ratios': [5, 1]}, dpi=90, nrows=2, ncols=1) # Crear figura y graficos
+
+        self.master = master
+        self.master.title('Visualizador de trayectoria para soluciones TSP')
+        
+        self.x, self.y = [], [] # lista de coordenadas x e y
+        self.annotations = [] # lista de anotaciones en el grafico que serian las numeraciones, flechas de union, etc.
+        self.iterations, self.cost, self.avg, self.worst = [], [], [], []
+        self.init_window()
+        
+        #plt.show()
+     
+     
+    def init_window(self):
+        
+        self.putCoords()
+        self.pack()     
+
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
+        #self.canvas.draw()
+        self.canvas.get_tk_widget().pack(fill='both', expand=1)
+        
+        
+        # Agregar barra de herramientas y maximizar si el grafico tiene determinados nodos
+        if len(self.coords) >= TOOLBARLEN:
+            
+            if os.name == 'nt':
+                self.master.state('zoomed')
+            else:
+                self.master.attributes('-zoomed', True)
+            
+            self.toolbar = NavigationToolbar2Tk(self.canvas, self.master, pack_toolbar=True)
         else:
-            mgr.resize(*mgr.window.maxsize())
-    elif backend == 'wxAgg':
-        mgr.frame.Maximize(True)
-    elif backend == 'Qt4Agg':
-        mgr.window.showMaximized()
+            self.toolbar = NavigationToolbar2Tk(self.canvas, self.master, pack_toolbar=False)
+        self.toolbar.update()
+        #self.canvas._tkcanvas.grid(column=0,row=0)
 
+        # generar la animacion de la graficacion de la trayectoria
+        if self.replit:
+            if len(self.coords) > MAXLEN:
+                self.generateMap(len(self.trajectory)-1)
+            else:
+                self.ani = FuncAnimation(self.fig, self.generateMap, interval=300, blit=False)
+        else:
+            if len(self.coords) > MAXLEN:
+                self.generateMap(len(self.trajectory)-1)
+            else:
+                self.ani = Player(self.fig, self.generateMap, maxi=len(self.trajectory)-1, interval=300, blit=False)
+        
+        
+    def putCoords(self) -> None:
+        """ Obtiene, posiciona y numera en el grafico los puntos con las coordenadas a recorrer """
 
+        # Agregar titulo a la ventana
+        self.fig = plt.gcf()
+        self.fig.canvas.manager.set_window_title('Visualizador de trayectoria para soluciones TSP')
+
+        for p in self.coords: # separar las coordenadas del eje x de los del eje y
+            self.x.append(p.x)
+            self.y.append(p.y)
+
+        # Generar los puntos con las coordenadas
+        self.ax.scatter(self.x, self.y, color='red', s=70, edgecolors='black', label='Punto Normal')
+        
+        self.ax.set_title('Visualizacion del Tour')
+        #ax.set_xlabel('Eje X')
+        #ax.set_ylabel('Eje Y')
+        
+        self.ax1.grid(color='black', linestyle='-', linewidth=0.1)
+        self.ax1.set_title('Variacion por iteracion')
+        self.ax1.set_ylabel('Costo')
+        self.ax1.set_xlabel('Iteraciones\n\n')
+        
+        self.ax.grid(color='black', linestyle='-', linewidth=0.1)
+        
+        # Numerar puntos con las coordenadas 
+        for i in range(len(self.coords)):
+            self.ax.annotate(i,
+                xy=(self.x[i], self.y[i]), 
+                xytext=(self.x[i], self.y[i]+0.05))
+
+        # expandir al tamaño de la ventana
+        plt.tight_layout()
+
+    def generateMap(self, i: int) -> None:
+        """Genera la visualizacion uniendo los puntos con las coordenadas en cada tour de la trayectoria"""
+        
+        if i >= len(self.trajectory):
+            return
+        
+        # obtener tour de la trayectoria
+        tour = self.trajectory[i].tour
+        # limpiar todas las anotaciones de la graficacion anterior
+        self.clearAnnotations()
+
+        # generar texto con detalle de la graficacion
+        textstr = '\n'.join((
+        f'Tour: {self.trajectory[i].tour}',
+        f'Costo: {self.trajectory[i].cost}',
+        f'Iteraciones: {self.trajectory[i].iterations}',
+        f'Evaluaciones: {self.trajectory[i].evaluations}'
+        ))
+        
+        # si hay temperatura
+        if self.trajectory[i].temperature >= 0:
+            textstr += f'\nTemperatura: {self.trajectory[i].temperature:.2f}'
+
+        # si hay promedio y desviacion estandar
+        if self.trajectory[i].average > 0 and self.trajectory[i].deviation > 0:
+            textstr += f'\nPromedio Poblacion: {self.trajectory[i].average:.2f}\nDesviacion Estandar Poblacion: {self.trajectory[i].deviation:.2f}'
+        
+        #ax.set_title(textstr)
+        # generar cuadro de texto con los detalles de la graficacion
+        props = dict(boxstyle='round', facecolor='lightblue', alpha=0.77)
+
+        # poner el cuadro de texto en la esquina superior izquierda del grafico
+        a = self.ax.text(0.01, 0.98, textstr, transform=self.ax.transAxes, fontsize=12,
+                verticalalignment='top', bbox=props)
+
+        self.annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
+
+    
+        #ax.cla()
+        #ax.scatter(x,y, color='blue')
+        # marcar punto de inicio del tour
+        a = self.ax.scatter(self.x[tour[0]], self.y[tour[0]], s=70, edgecolors='black', color='lime', label='Punto de Partida') 
+
+        self.annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
+        a = self.ax.legend(loc='upper right')
+        self.annotations.append(a)
+        # Poner la figura en el grafico
+        self.drawFig(tour)
+        
+        self.drawStats(i)
+
+    def drawStats(self, i: int) -> None:
+        """Grafica los cambios en la calidad de los tour a lo largo de la iteraciones"""
+        
+        # graficar completamente los cambios de calidad en las iteraciones
+        if len(self.coords) > MAXLEN:
+            self.ax1.plot([tra.iterations for tra in self.trajectory],
+                    [tra.cost for tra in self.trajectory],
+                    label="Mejor Actual", linestyle='-', marker='', color='green')
+            return
+        
+        self.ax1.cla()
+        
+        self.ax1.grid(color='black', linestyle='-', linewidth=0.1)
+        self.ax1.set_title('Variacion por iteracion')
+        self.ax1.set_ylabel('Costo')
+        self.ax1.set_xlabel('Iteraciones')
+        #x_data = [tra.iterations for tra in trajectory]
+        #y_data = [tra.cost for tra in trajectory]
+        self.iterations.append(self.trajectory[i].iterations)
+        self.cost.append(self.trajectory[i].cost)
+        
+        self.ax1.plot(self.iterations, self.cost, label="Mejor", linestyle='-', marker='', color='green')
+
+        if self.trajectory[i].average > 0 and self.trajectory[i].worst > 0:
+            self.avg.append(self.trajectory[i].average)
+            self.worst.append(self.trajectory[i].worst)
+            self.ax1.plot(self.iterations, self.avg, label="Promedio", linestyle='-', marker='', color= 'blue')
+            self.ax1.plot(self.iterations, self.worst, label="Peor", linestyle='-', marker='', color='red')
+            
+        self.ax1.legend(loc='upper right')
+        
+        #ax1.plot(trajectory[i].iterations, trajectory[i].average, label="", linestyle='--')
+    
+
+    def clearAnnotations(self) -> None:
+        """Elimina todas las anotaciones de la figura"""
+        for an in self.annotations:
+            an.remove()
+        self.annotations[:] = []
+
+    def drawFig(self, tour: list) -> None:
+        """Grafica el tour en el grafico conectando los puntos a traves de flechas"""
+
+        for i in range(len(tour)-1):
+                
+            #ax.plot([x[tour[i]], x[tour[i+1]]],
+            #[y[tour[i]], y[tour[i+1]]], color='red')
+            
+            # conectar los puntos con flechas
+            a = self.ax.annotate("",
+                            xy=(self.x[tour[i+1]], self.y[tour[i+1]]), 
+                            xytext=(self.x[tour[i]], self.y[tour[i]]), 
+                            arrowprops=dict(arrowstyle="->",
+                                            connectionstyle="arc3", 
+                                            color="royalblue"))
+            self.annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
+            
+            
+            
 class Player(FuncAnimation):
     """Clase que sirve como reproductor para tener la posibilidad de navegar por los graficos de la trayectoria"""
 
@@ -310,201 +325,3 @@ class Player(FuncAnimation):
         self.button_oneback.on_clicked(self.onebackward)
         self.button_oneforward.on_clicked(self.oneforward)
         self.button_stop.on_clicked(self.stop)
-
-
-class Window(Frame):
-    
-    
-  
-    def __init__(self, master: Tk = None):
-        Frame.__init__(self, master)
-        
-        master.title('Visualizador de trayectoria para problemas')
-        
-        self.fig, (self.ax, self.ax1) = plt.subplots(figsize=(16, 9), gridspec_kw={'height_ratios': [5, 1]}, dpi=90, nrows=2, ncols=1) # Crear figura y graficos
-
-
-        self.master = master
-        
-
-        self.coords = coords # lista de coordenadas
-        self.trajectory = trajectory # lista de con la trayectoria de la solucion
-        self.x, self.y = [], [] # lista de coordenadas x e y
-        self.annotations = [] # lista de anotaciones en el grafico que serian las numeraciones, flechas de union, etc.
-        self.iterations, self.cost, self.avg, self.worst = [], [], [], []
-        self.init_window()
-        
-        #plt.show()
-     
-     
-    def init_window(self):
-        
-        self.putCoords()
-        self.pack()     
-
-
-        self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
-        #self.canvas.draw()
-        self.canvas.get_tk_widget().pack(fill='both', expand=1)
-        
-        self.toolbar = NavigationToolbar2Tk(self.canvas, self.master, pack_toolbar=False)
-        self.toolbar.update()
-        #self.canvas._tkcanvas.grid(column=0,row=0)
-
-        # generar la animacion de la graficacion de la trayectoria
-        if replit:
-            if len(coords) > MAXLEN:
-                self.generateMap(len(self.trajectory)-1)
-            else:
-                self.ani = FuncAnimation(self.fig, self.generateMap, interval=300, blit=False)
-        else:
-            if len(coords) > MAXLEN:
-                self.generateMap(len(self.trajectory)-1)
-            else:
-                self.ani = Player(self.fig, self.generateMap, maxi=len(self.trajectory)-1, interval=300, blit=False)
-        
-        
-
-
-
-    def putCoords(self) -> None:
-        """Obtiene, pone y numera en el grafico los puntos con las coordenadas a recorrer"""
-
-        # Agregar titulo a la ventana
-        self.fig = plt.gcf()
-        self.fig.canvas.manager.set_window_title('Visualizador de trayectoria para soluciones TSP')
-
-        for p in coords: # separar las coordenadas del eje x de los del eje y
-            self.x.append(p.x)
-            self.y.append(p.y)
-
-        # Generar los puntos con las coordenadas
-        self.ax.scatter(self.x, self.y, color='red', s=70, edgecolors='black', label='Punto Normal')
-        
-        self.ax.set_title('Visualizacion del Tour')
-        #ax.set_xlabel('Eje X')
-        #ax.set_ylabel('Eje Y')
-        
-        self.ax1.grid(color='black', linestyle='-', linewidth=0.1)
-        self.ax1.set_title('Variacion por iteracion')
-        self.ax1.set_ylabel('Costo')
-        self.ax1.set_xlabel('Iteraciones\n\n')
-        
-        self.ax.grid(color='black', linestyle='-', linewidth=0.1)
-        
-        # Numerar puntos con las coordenadas 
-        for i in range(len(coords)):
-            self.ax.annotate(i,
-                xy=(self.x[i], self.y[i]), 
-                xytext=(self.x[i], self.y[i]+0.05))
-
-        # expandir al tamaño de la ventana
-        plt.tight_layout()
-
-    def generateMap(self, i: int) -> None:
-        """Genera la visualizacion uniendo los puntos con las coordenadas en cada tour de la trayectoria"""
-        
-        if i >= len(self.trajectory):
-            return
-        
-        # obtener tour de la trayectoria
-        tour = self.trajectory[i].tour
-        # limpiar todas las anotaciones de la graficacion anterior
-        self.clearAnnotations()
-
-        # generar texto con detalle de la graficacion
-        textstr = '\n'.join((
-        f'Tour: {self.trajectory[i].tour}',
-        f'Costo: {self.trajectory[i].cost}',
-        f'Iteraciones: {self.trajectory[i].iterations}',
-        f'Evaluaciones: {self.trajectory[i].evaluations}'
-        ))
-        
-        # si hay temperatura
-        if self.trajectory[i].temperature >= 0:
-            textstr += f'\nTemperatura: {self.trajectory[i].temperature:.2f}'
-
-        # si hay promedio y desviacion estandar
-        if self.trajectory[i].average > 0 and self.trajectory[i].deviation > 0:
-            textstr += f'\nPromedio Poblacion: {self.trajectory[i].average:.2f}\nDesviacion Estandar Poblacion: {self.trajectory[i].deviation:.2f}'
-        
-        #ax.set_title(textstr)
-        # generar cuadro de texto con los detalles de la graficacion
-        props = dict(boxstyle='round', facecolor='lightblue', alpha=0.77)
-
-        # poner el cuadro de texto en la esquina superior izquierda del grafico
-        a = self.ax.text(0.01, 0.98, textstr, transform=self.ax.transAxes, fontsize=12,
-                verticalalignment='top', bbox=props)
-
-        self.annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-
-    
-        #ax.cla()
-        #ax.scatter(x,y, color='blue')
-        # marcar punto de inicio del tour
-        a = self.ax.scatter(self.x[tour[0]], self.y[tour[0]], s=70, edgecolors='black', color='lime', label='Punto de Partida') 
-
-        self.annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion
-        a = self.ax.legend(loc='upper right')
-        self.annotations.append(a)
-        # Poner la figura en el grafico
-        self.drawFig(tour)
-        
-        self.drawStats(i)
-
-    def drawStats(self, i: int) -> None:
-        """Grafica los cambios en la calidad de los tour a lo largo de la iteraciones"""
-        
-        # graficar completamente los cambios de calidad en las iteraciones
-        if len(self.coords) > MAXLEN:
-            self.ax1.plot([tra.iterations for tra in trajectory],
-                    [tra.cost for tra in trajectory],
-                    label="Mejor Actual", linestyle='-', marker='', color='green')
-            return
-        
-        self.ax1.cla()
-        
-        self.ax1.grid(color='black', linestyle='-', linewidth=0.1)
-        self.ax1.set_title('Variacion por iteracion')
-        self.ax1.set_ylabel('Costo')
-        self.ax1.set_xlabel('Iteraciones')
-        #x_data = [tra.iterations for tra in trajectory]
-        #y_data = [tra.cost for tra in trajectory]
-        self.iterations.append(self.trajectory[i].iterations)
-        self.cost.append(self.trajectory[i].cost)
-        
-        self.ax1.plot(self.iterations, self.cost, label="Mejor", linestyle='-', marker='', color='green')
-
-        if self.trajectory[i].average > 0 and self.trajectory[i].worst > 0:
-            self.avg.append(self.trajectory[i].average)
-            self.worst.append(self.trajectory[i].worst)
-            self.ax1.plot(self.iterations, self.avg, label="Promedio", linestyle='-', marker='', color= 'blue')
-            self.ax1.plot(self.iterations, self.worst, label="Peor", linestyle='-', marker='', color='red')
-            
-        self.ax1.legend(loc='upper right')
-        
-        #ax1.plot(trajectory[i].iterations, trajectory[i].average, label="", linestyle='--')
-    
-
-    def clearAnnotations(self) -> None:
-        """Elimina todas las anotaciones de la figura"""
-        for an in self.annotations:
-            an.remove()
-        self.annotations[:] = []
-
-    def drawFig(self, tour: list) -> None:
-        """Grafica el tour en el grafico conectando los puntos a traves de flechas"""
-
-        for i in range(len(tour)-1):
-                
-            #ax.plot([x[tour[i]], x[tour[i+1]]],
-            #[y[tour[i]], y[tour[i+1]]], color='red')
-            
-            # conectar los puntos con flechas
-            a = self.ax.annotate("",
-                            xy=(self.x[tour[i+1]], self.y[tour[i+1]]), 
-                            xytext=(self.x[tour[i]], self.y[tour[i]]), 
-                            arrowprops=dict(arrowstyle="->",
-                                            connectionstyle="arc3", 
-                                            color="royalblue"))
-            self.annotations.append(a) # guardar anotacion para ser borrada en la siguiente graficacion

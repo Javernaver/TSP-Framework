@@ -43,7 +43,7 @@ class Tsp():
         self.nodes = self.instance.n # Numero de Nodos
 
         #self.print_distances()
-        plot.coords = self.instance.nodeptr.copy()
+        plot.Graph.coords = self.instance.nodeptr.copy()
 
 
     def getSize(self) -> int:
