@@ -6,8 +6,10 @@ from . import bcolors
 from ..Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
 from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType
 
-from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END
-from tkinter import messagebox, filedialog, ttk
+from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END, Menu
+from tkinter import messagebox, filedialog
+from tkinter.ttk import Combobox
+import webbrowser
 
 
 
@@ -50,7 +52,7 @@ class Gui():
         self.configureWindow()
         self.welcomeScreen()
         
-
+        
     def configureWindow(self) -> None:
         """ Configura la ventana principal de la interfaz """
         self.root.title('TSP-Framework')
@@ -58,10 +60,16 @@ class Gui():
         self.root.geometry('700x300')
         #self.root.configure(background='white')
 
-        #self.root.bind_all("<Button-1>", lambda event: event.widget.focus_set()) # fuerza el focus donde el usuario haga click
-        #self.root.eval('tk::PlaceWindow . right')
+        self.root.bind_all("<Button-1>", lambda event: self.setFocus(event) ) # fuerza el focus donde el usuario haga click
         
         #root.geometry('1366x768')
+    
+    def setFocus(self, event) -> None:
+        """ Fuerza el focus en cualquier widget a traves de un evento """
+        try:
+            event.widget.focus_set()
+        except:
+            return 
         
     def onQuit(self) -> None:
         """ Al salir o cerrar ventana """
@@ -157,6 +165,8 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.SA
         
+        self.menubar = MenuBar(self.root, self)
+        
         frameSA = LabelFrame(
                     self.frameOptions,
                     text='Simulated Annealing',
@@ -170,7 +180,7 @@ class Gui():
         # movimiento
         lm = Label(frameSA, text='Tipo de movimiento a utilizar: ', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
-        comboM = ttk.Combobox(frameSA, 
+        comboM = Combobox(frameSA, 
                                state='readonly', 
                                values=[ move.value for move in TSPMove ])
         comboM.set(self.options.move.value)
@@ -180,7 +190,7 @@ class Gui():
         # Enfriamiento
         le = Label(frameSA, text='Tipo de enfriamiento a utilizar: ', font=menuLabelFont)
         le.grid(row=1, column=0, padx=5, pady=5, sticky='e')
-        comboE = ttk.Combobox(frameSA, 
+        comboE = Combobox(frameSA, 
                                state='readonly', 
                                values=[ cool.value for cool in CoolingType ])
         comboE.set(self.options.cooling.value)
@@ -240,6 +250,8 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.GA
         
+        self.menubar = MenuBar(self.root, self)
+        
         frameGA = LabelFrame(
                     self.frameOptions,
                     text='Algoritmo Genetico',
@@ -267,7 +279,7 @@ class Gui():
         # Seleccion de padres
         lps = Label(frameGA, text='Tipo de seleccion de padres: ', font=menuLabelFont)
         lps.grid(row=2, column=0, padx=5, pady=5, sticky='e')
-        comboPs = ttk.Combobox(frameGA, 
+        comboPs = Combobox(frameGA, 
                                state='readonly', 
                                values=[ sel.value for sel in SelectionType ])
         comboPs.set(self.options.pselection_type.value)
@@ -277,7 +289,7 @@ class Gui():
         # Tipo de cruzamiento
         lcr = Label(frameGA, text='Tipo de cruzamiento: ', font=menuLabelFont)
         lcr.grid(row=3, column=0, padx=5, pady=5, sticky='e')
-        comboCr = ttk.Combobox(frameGA, 
+        comboCr = Combobox(frameGA, 
                                state='readonly', 
                                values=[ cro.value for cro in CrossoverType ])
         comboCr.set(self.options.crossover_type.value)
@@ -287,7 +299,7 @@ class Gui():
         # Tipo de mutacion
         lmt = Label(frameGA, text='Tipo de mutacion: ', font=menuLabelFont)
         lmt.grid(row=4, column=0, padx=5, pady=5, sticky='e')
-        comboMt = ttk.Combobox(frameGA, 
+        comboMt = Combobox(frameGA, 
                                state='readonly', 
                                values=[ mu.value for mu in TSPMove ])
         comboMt.set(self.options.mutation_type.value)
@@ -304,7 +316,7 @@ class Gui():
         # Estrategia nueva poblacion
         lss = Label(frameGA, text='Estrategia de seleccion nueva poblacion: ', font=menuLabelFont)
         lss.grid(row=6, column=0, padx=5, pady=5, sticky='e')
-        comboSs = ttk.Combobox(frameGA, 
+        comboSs = Combobox(frameGA, 
                                state='readonly', 
                                values=[ sel.value for sel in SelectionStrategy ])
         comboSs.set(self.options.selection_strategy.value)
@@ -314,7 +326,7 @@ class Gui():
         # Tipo seleccion nueva poblacion
         lgs = Label(frameGA, text='Tipo de seleccion nueva poblacion: ', font=menuLabelFont)
         lgs.grid(row=7, column=0, padx=5, pady=5, sticky='e')
-        comboGs = ttk.Combobox(frameGA, 
+        comboGs = Combobox(frameGA, 
                                state='readonly', 
                                values=[ sel.value for sel in SelectionType ])
         comboGs.set(self.options.gselection_type.value)
@@ -353,6 +365,8 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.LS
         
+        self.menubar = MenuBar(self.root, self)
+        
         frameLS = LabelFrame(
                     self.frameOptions,
                     text='Local Search',
@@ -366,7 +380,7 @@ class Gui():
         # tipo de busqueda
         lm = Label(frameLS, text='Tipo de busqueda local a utilizar: ', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
-        comboM = ttk.Combobox(frameLS, 
+        comboM = Combobox(frameLS, 
                                state='readonly', 
                                values=[ move.value for move in TSPMove ])
         comboM.set(self.options.move.value)
@@ -388,6 +402,8 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.ILS
         
+        self.menubar = MenuBar(self.root, self)
+        
         frameILS = LabelFrame(
                     self.frameOptions,
                     text='Iterated Local Search',
@@ -401,7 +417,7 @@ class Gui():
         # tipo de busqueda
         lm = Label(frameILS, text='Tipo de busqueda local a utilizar: ', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
-        comboM = ttk.Combobox(frameILS, 
+        comboM = Combobox(frameILS, 
                                state='readonly', 
                                values=[ move.value for move in TSPMove ])
         comboM.set(self.options.move.value)
@@ -411,7 +427,7 @@ class Gui():
         # Tipo de perturbacion
         lp = Label(frameILS, text='Tipo de perturbacion a aplicar: ', font=menuLabelFont)
         lp.grid(row=1, column=0, padx=5, pady=5, sticky='e')
-        comboP = ttk.Combobox(frameILS, 
+        comboP = Combobox(frameILS, 
                                state='readonly', 
                                values=[ per.value for per in PerturbationType ])
         comboP.set(self.options.perturbation.value)
@@ -533,7 +549,7 @@ class Gui():
         # solucion inicial
         ls = Label(frameGeneral, text='Tipo de solucion inicial: ', font=menuLabelFont)
         ls.grid(row=5, column=0, padx=5, pady=5, sticky='e')
-        comboIS = ttk.Combobox(frameGeneral, 
+        comboIS = Combobox(frameGeneral, 
                                state='readonly', 
                                values=[ sol.value for sol in InitialSolution ])
         comboIS.set(self.options.initial_solution.value)
@@ -611,7 +627,7 @@ class Gui():
             else:
                 self.options.bestImprovement = False
         
-    def setCombobox(self, combo: ttk.Combobox, opt: Enum, var: str = '') -> None:
+    def setCombobox(self, combo: Combobox, opt: Enum, var: str = '') -> None:
         """ Actualiza los valores a las variables representadas por los combobox y Enum de las opciones """
         
         # General
@@ -723,12 +739,17 @@ class Gui():
         if not self.options.replit:
             self.textFeed.delete(1.0, END)
         
-        
         start = timer() # tiempo inicial de ejecucion
         # leer e inicializar las opciones 
         options = self.options
         if not options.replit:
             bcolors.disable(bcolors)
+            
+        # validar optiones
+        if options.errors():
+            messagebox.showerror(title='Error', message='Se detectaron errores de configuracion')
+            return
+        
         # Mostrar Opciones 
         options.printOptions()
 
@@ -737,7 +758,7 @@ class Gui():
 
         # Ejecutar Metaheuristica Simulated Annealing
         if (options.metaheuristic == MHType.SA):
-
+                
             # Solucion inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
@@ -802,8 +823,57 @@ def main(options: AlgorithmsOptions) -> None:
     label = Label(frame, text='TSP-Framework')
     label.config(font=('consolas', 40))
     label.pack(pady=10)
-    
+       
     gui = Gui(root=root, options=options)
+    
     
     root.protocol("WM_DELETE_WINDOW", gui.onQuit)
     root.mainloop()
+    
+class MenuBar:
+    """ Clase que representa el menu de herramientas superior """
+    def __init__(self, window: Tk, gui: Gui):
+        
+        self.menuBar = Menu(window)
+        self.gui = gui
+        
+        # Archivo
+        fileMenu = Menu(self.menuBar, tearoff = False)
+        #fileMenu.add_command(label = "New")
+        #fileMenu.add_command(label = "Open...")
+        #fileMenu.add_command(label = "Close")
+        fileMenu.add_separator()
+        fileMenu.add_command(label = "Salir", command=gui.onQuit)
+        self.menuBar.add_cascade(menu = fileMenu, label = "Archivo")
+          
+        # cambiar metodo
+        editMenu = Menu(self.menuBar, tearoff = False)
+        editMenu.add_command(label="Simulated Annealing", command=lambda: self.changeSearch(MHType.SA))
+        editMenu.add_command(label="Algoritmo Genetico", command=lambda: self.changeSearch(MHType.GA))
+        editMenu.add_command(label="Local Search", command=lambda: self.changeSearch(MHType.LS))
+        editMenu.add_command(label="Iterated Local Search", command=lambda: self.changeSearch(MHType.ILS))
+
+        self.menuBar.add_cascade(menu=editMenu, label="Cambiar Metodo de Busqueda")
+  
+        # Menu ayuda
+        helpMenu = Menu(self.menuBar, tearoff = False)
+        helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(r'https://javernaver.github.io/TSP-Framework/'))
+        helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(r'https://github.com/Javernaver/TSP-Framework'))
+        helpMenu.add_separator()
+        helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", message=f'TSP-Framework \nJavier del Canto\njavier.delcanto.m@mail.pucv.cl'))
+        self.menuBar.add_cascade(menu=helpMenu, label="Ayuda")
+        window.config(menu=self.menuBar)
+        
+    def changeSearch(self, searchType: MHType):
+        
+        self.gui.frameOptions.destroy()
+        self.gui.frameFeedback.destroy()
+        
+        if searchType == MHType.SA:
+            self.gui.simulatedAnnealing()
+        elif searchType == MHType.GA:
+            self.gui.geneticAlgorithm()
+        elif searchType == MHType.LS:
+            self.gui.localSearch()
+        elif searchType == MHType.ILS:
+            self.gui.iteratedLocalSearch()

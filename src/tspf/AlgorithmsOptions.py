@@ -297,12 +297,14 @@ class AlgorithmsOptions():
             # Procesar argumentos de Simulated Annealing
             self.argsSA(args, kwargs)
             # Validar logica de opciones
-            self.validateSA()
+            if self.errorsSA():
+                exit()
         elif self.metaheuristic == MHType.GA:
             # Procesar argumentos de Algoritmo Genetico
             self.argsGA(args, kwargs) 
             # Validar logica de opciones
-            self.validateGA()
+            if self.errorsGA():
+                exit()
         elif self.metaheuristic == MHType.LS or self.metaheuristic == MHType.ILS:
             # Procesar argumentos de Local Search e Iterated Local Search
             self.argsLS(args, kwargs)
@@ -552,7 +554,7 @@ class AlgorithmsOptions():
                 print(f"{bcolors.FAIL}Error: El numero de perturbaciones debe ser un numero entero (-np | --nperturbations){bcolors.ENDC}")
 
 
-    def validateSA(self) -> None:
+    def errorsSA(self) -> bool:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
         error = False
         if (self.max_evaluations <= 0 or self.max_iterations <= 0):
@@ -567,10 +569,9 @@ class AlgorithmsOptions():
         if (self.t0 <= self.tmin):
             print(f"{bcolors.FAIL}Error: t0 debe ser > tmin, valor tmin: {self.tmin} valor t0: {self.t0} (-t0 | --tini y -tm | --tmin){bcolors.ENDC}")
             error = True
-        if error:
-            exit()
+        return error
     
-    def validateGA(self) -> None:
+    def errorsGA(self) -> bool:
         """ Validar que algunos parametros cumplan con la logica del algoritmo a aplicar """
         error = False
         if (self.max_evaluations <= 0 or self.max_iterations <= 0):
@@ -584,10 +585,19 @@ class AlgorithmsOptions():
             error = True
         if (self.pop_size <= 1):
             print(f"{bcolors.FAIL}Error: La cantidad de individuos de la poblacion (-p | --psize) debe ser > 1{bcolors.ENDC}")
-            error = True
-        if error:
-            exit()
-                   
+            error = True     
+        return error
+    
+    
+    def errors(self) -> bool:
+        """ Devuelve verdadero si hay errores en las configuraciones del metodo de busqueda """
+        if self.metaheuristic == MHType.SA:
+            return self.errorsSA()
+        elif self.metaheuristic == MHType.GA:
+            return self.errorsGA()
+        return False
+    
+    
     def printOptions(self) -> None:
         """ Mostrar las opciones y parametros finales """
         # Opciones generales
