@@ -2,15 +2,16 @@
 Modulo dedicado a la interfaz grafica de usuario
 
 """
-from . import bcolors
+from . import bcolors, plot
 from ..Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
 from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType
 
-from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, END, Menu
+from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, Menu
+from tkinter import END
 from tkinter import messagebox, filedialog
 from tkinter.ttk import Combobox
 import webbrowser
-
+import pickle
 
 
 # Tipos de letra y tamaño para los elementos de la interfaz
@@ -33,21 +34,24 @@ class TextRedirector(object):
 
 class Gui():
 
-    options: AlgorithmsOptions
+    options: AlgorithmsOptions = None
     
-    frame: Frame
+    frame: Frame = None
     
-    frameOptions: Frame
+    frameOptions: Frame = None
     
-    frameFeedback: Frame
+    frameFeedback: Frame = None
     
-    textFeed: Text
+    textFeed: Text = None
     
     
     def __init__(self, root: Tk, options: AlgorithmsOptions) -> None:
         
         self.root = root
         self.options = options
+        self.solver = None
+        self.saved = ''
+        self.watchButton = None
         
         self.configureWindow()
         self.welcomeScreen()
@@ -80,11 +84,11 @@ class Gui():
     def openFile(self, var: StringVar = None) -> None:
         """ Abrir archivo de instancia TSP """
                         
-        arch = filedialog.askopenfilename(title='Abrir archivo de instancia con problema TSP', 
+        file = filedialog.askopenfilename(title='Abrir archivo de instancia con problema TSP', 
                                                     initialdir='instances/',
                                                     filetypes=(('Archivo de instancia con problema TSP', '*.tsp'),))
-        if arch:
-            self.options.instance = arch
+        if file:
+            self.options.instance = file
     
         if var:
             var.set(self.options.instance)
@@ -96,21 +100,23 @@ class Gui():
         sol = ''
         tra = ''
         if extension == '.txt':
-            sol = filedialog.asksaveasfilename(title='Abrir archivo de solucion al problema TSP', 
+            sol = filedialog.asksaveasfilename(title='Guardar archivo de solucion al problema TSP', 
                                                     initialdir=os.getcwd(),
                                                     filetypes=(('Archivo de solucion', '*.txt'),))
         elif extension == '.csv':
-            tra = filedialog.asksaveasfilename(title='Abrir archivo de trayectoria a la solucion al problema TSP', 
+            tra = filedialog.asksaveasfilename(title='Guardar archivo de trayectoria a la solucion al problema TSP', 
                                                     initialdir=os.getcwd(),
                                                     filetypes=(('Archivo de trayectoria a la solucion', '*.csv'),))    
         
         if sol:
-            if not '.txt' in sol:
+            check = os.path.splitext(sol)  # separa la ruta de la extension en lista
+            if not check[1]:
                 sol += '.txt'
             self.options.solution = sol
             ar.set(sol)
         if tra:
-            if not '.csv' in tra:
+            check = os.path.splitext(tra)
+            if not check[1]:
                 tra += '.csv'
             self.options.trajectory = tra
             ar.set(tra)
@@ -119,6 +125,8 @@ class Gui():
     """ S E L E C C I O N   D E   M E T O D O   D E   B U S Q U E D A """
         
     def mainScreen(self) -> None:
+        
+        self.menubar = MenuBar(self.root, self)
         
         self.root.geometry('960x540')
         self.frame.destroy()
@@ -165,7 +173,6 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.SA
         
-        self.menubar = MenuBar(self.root, self)
         
         frameSA = LabelFrame(
                     self.frameOptions,
@@ -250,7 +257,6 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.GA
         
-        self.menubar = MenuBar(self.root, self)
         
         frameGA = LabelFrame(
                     self.frameOptions,
@@ -365,7 +371,6 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.LS
         
-        self.menubar = MenuBar(self.root, self)
         
         frameLS = LabelFrame(
                     self.frameOptions,
@@ -393,6 +398,13 @@ class Gui():
         cbi.deselect()
         cbi.grid(row=1, column=1, padx=5, pady=5, sticky='e')
         
+        # Verbose
+        ve = StringVar(frameLS)
+        cve = Checkbutton(frameLS, text='Full Feedback', variable=ve, onvalue=1, offvalue=0, command=lambda : self.setBool(ve, 'verbose'))
+        cve.deselect()
+        cve.grid(row=1, column=0, padx=5, pady=5, sticky='e')
+        
+        
         
     """ I T E R A T E D   L O C A L   S E A R C H """
         
@@ -402,7 +414,6 @@ class Gui():
         self.optionsFrame()
         self.options.metaheuristic = MHType.ILS
         
-        self.menubar = MenuBar(self.root, self)
         
         frameILS = LabelFrame(
                     self.frameOptions,
@@ -447,6 +458,13 @@ class Gui():
         cbi.deselect()
         cbi.grid(row=3, column=1, padx=5, pady=5, sticky='e')
         
+        # Verbose
+        ve = StringVar(frameILS)
+        cve = Checkbutton(frameILS, text='Full Feedback', variable=ve, onvalue=1, offvalue=0, command=lambda : self.setBool(ve, 'verbose'))
+        cve.deselect()
+        cve.grid(row=3, column=0, padx=5, pady=5, sticky='e')
+        
+    
     
     
     
@@ -477,7 +495,6 @@ class Gui():
             self.frameOptions.pack(anchor='nw', side='left', padx=5, pady=5)
         else:
             self.frameOptions.pack(anchor='center', side='top', padx=5, pady=5)
-        #self.frameOptions.grid(column=0, row=0, padx=25, pady=15)
         
         # Si se esta en replit no se muestra el frame de opciones ya que no que espacio y se muestra la salida por la terminal
         if not self.options.replit:
@@ -490,7 +507,6 @@ class Gui():
                     )
 
             self.frameFeedback.pack(anchor='ne', side='right', padx=5, pady=5)
-            #self.frameFeedback.grid(column=0, row=1, padx=25, pady=15)
             
             self.textFeed = Text(self.frameFeedback, bg='#fff', fg='#000')
             self.textFeed.config(state='disable', padx=10, pady=10, width=500, height=700, font=feedbackFont)
@@ -508,7 +524,6 @@ class Gui():
                     font=("consolas", 22)
                 )
         
-        #frameGeneral.pack(anchor='n', side='left', padx=25, pady=15)
         frameGeneral.grid(row=0, column=0, padx=15, pady=10)
         
         # Opciones Generales
@@ -562,6 +577,8 @@ class Gui():
         chv = Checkbutton(frameGeneral, text='Visualizar trayectoria', variable=v, onvalue=1, offvalue=0, command=lambda : self.setBool(v, 'visualize'))
         chv.select()
         chv.grid(row=6, column=1, padx=5, pady=5, sticky='e')
+        self.watchButton = Button(frameGeneral, text='🔎 Ver ', command=self.watchTrajec, state='disabled')
+        self.watchButton.grid(row=6, column=2, padx=1, pady=1)
 
         
         # Opciones Condicion de termino
@@ -572,7 +589,6 @@ class Gui():
                     font=("consolas", 20)
                 )
         
-        #frameTermino.pack(anchor='ne', padx=25, pady=15)
         frameTermino.grid(row=7, column=0, padx=10, pady=10)
         
         # Iteraciones maximas
@@ -597,7 +613,7 @@ class Gui():
         et.grid(row=2, column=1, padx=5, pady=5)
         
         
-        # boton ejecutar
+        # Boton ejecutar
         frameEj = LabelFrame(
                     self.frameOptions,
                     text='',
@@ -605,14 +621,19 @@ class Gui():
                     font=("consolas", 22)
                 )
         
-        #frameEj.pack(anchor='n', side='right', padx=25, pady=15)
-        frameEj.grid(row=7, column=3, padx=25, pady=10)
+        frameEj.grid(row=7, column=3, padx=25, pady=5)
 
-        bej = Button(frameEj, text='EJECUTAR', command=self.run)
+        bej = Button(frameEj, text='EJECUTAR', command=self.search)
         bej.config(fg='#f00', font=('consolas', 22, 'bold'))
         bej.grid(row=0, column=0, padx=20, pady=20)
         
-    
+        
+    def watchTrajec(self) -> None:
+        """ Ver nuevamente la trayectoria """
+        if not self.solver:
+            return
+        self.solver.visualize()
+
     def setBool(self, chk: StringVar, var: str) -> None:
         """ Asigna los booleandos a las variables correspondientes desde checkbox """
         #print(chk.get())
@@ -626,6 +647,11 @@ class Gui():
                 self.options.bestImprovement = True
             else:
                 self.options.bestImprovement = False
+        if var == 'verbose':
+            if chk.get() == '1':
+                self.options.verbose = True
+            else:
+                self.options.verbose = False
         
     def setCombobox(self, combo: Combobox, opt: Enum, var: str = '') -> None:
         """ Actualiza los valores a las variables representadas por los combobox y Enum de las opciones """
@@ -734,10 +760,18 @@ class Gui():
     
     """ E J E C U C I O N """   
      
-    def run(self) -> None:
-        """ Ejecuta el algoritmo con las opciones configuradas """
+    def search(self) -> None:
+        """ Realiza la busqueda a traves metodo de busqueda y opciones seleccionadas """
+        
+        if self.watchButton != None:
+            self.watchButton.config(state='normal')
+            self.menubar.fileMenu.entryconfig('Guardar Configuracion...', state='normal')
+            
         if not self.options.replit:
-            self.textFeed.delete(1.0, END)
+            self.textFeed.config(state='normal')
+            self.textFeed.delete('1.0', END)
+            self.textFeed.config(state='disabled')
+            
         
         start = timer() # tiempo inicial de ejecucion
         # leer e inicializar las opciones 
@@ -762,51 +796,51 @@ class Gui():
             # Solucion inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
-            solver = SimulatedAnnealing(options=options, problem=problem)
+            self.solver = SimulatedAnnealing(options=options, problem=problem)
             # Ejecutar la busqueda
-            solver.search(first_solution)
+            self.solver.search(first_solution)
 
         # Ejecutar Metaheuristica Algoritmo Genetico
         elif (options.metaheuristic == MHType.GA):
             # Crear solver
-            solver = GeneticAlgorithm(options=options, problem=problem)
+            self.solver = GeneticAlgorithm(options=options, problem=problem)
             # Ejecutar la busqueda
-            solver.search()
+            self.solver.search()
             
         elif (options.metaheuristic == MHType.LS):
             # Solucion inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
-            solver = LocalSearch(options=options, problem=problem)
+            self.solver = LocalSearch(options=options, problem=problem)
             # Ejecutar la busqueda
-            solver.search(first_solution)
+            self.solver.search(first_solution)
             
         elif (options.metaheuristic == MHType.ILS):
             # Solucion inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
-            solver = IteratedLocalSearch(options=options, problem=problem)
+            self.solver = IteratedLocalSearch(options=options, problem=problem)
             # Ejecutar la busqueda
-            solver.search(first_solution)
+            self.solver.search(first_solution)
 
         else: 
             # Crear solver
-            solver = GeneticAlgorithm(options=options, problem=problem)
+            self.solver = GeneticAlgorithm(options=options, problem=problem)
             # Ejecutar la busqueda
-            solver.search()
+            self.solver.search()
 
         # Guardar la solucion y trayectoria en archivo
-        solver.printSolFile(options.solution)
-        solver.printTraFile(options.trajectory)
+        self.solver.printSolFile(options.solution)
+        self.solver.printTraFile(options.trajectory)
         # Escribir la solucion por consola
-        solver.print_best_solution()
+        self.solver.print_best_solution()
         
         end = timer() # tiempo final de ejecucion
         print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
         print(f'\n------------------------------------------------------------------------------------------------------------------\n')
         
         if options.visualize:
-            solver.visualize()
+            self.solver.visualize()
 
         if not self.options.replit:
             self.textFeed.insert(END, "spam\n")
@@ -832,42 +866,43 @@ def main(options: AlgorithmsOptions) -> None:
     
 class MenuBar:
     """ Clase que representa el menu de herramientas superior """
-    def __init__(self, window: Tk, gui: Gui):
+    def __init__(self, window: Tk, gui: Gui) -> None:
         
         self.menuBar = Menu(window)
         self.gui = gui
         
         # Archivo
-        fileMenu = Menu(self.menuBar, tearoff = False)
-        #fileMenu.add_command(label = "New")
-        #fileMenu.add_command(label = "Open...")
-        #fileMenu.add_command(label = "Close")
-        fileMenu.add_separator()
-        fileMenu.add_command(label = "Salir", command=gui.onQuit)
-        self.menuBar.add_cascade(menu = fileMenu, label = "Archivo")
+        self.fileMenu = Menu(self.menuBar, tearoff = False)
+        self.fileMenu.add_command(label="Guardar Configuracion...", command=self.saveConfig, state='disabled')
+        self.fileMenu.add_command(label="Cargar Configuracion...", command=self.loadConfig)
+        self.fileMenu.add_separator()
+        self.fileMenu.add_command(label="Salir", command=gui.onQuit)
+        self.menuBar.add_cascade(menu=self.fileMenu, label = "Archivo")
           
         # cambiar metodo
-        editMenu = Menu(self.menuBar, tearoff = False)
-        editMenu.add_command(label="Simulated Annealing", command=lambda: self.changeSearch(MHType.SA))
-        editMenu.add_command(label="Algoritmo Genetico", command=lambda: self.changeSearch(MHType.GA))
-        editMenu.add_command(label="Local Search", command=lambda: self.changeSearch(MHType.LS))
-        editMenu.add_command(label="Iterated Local Search", command=lambda: self.changeSearch(MHType.ILS))
+        self.editMenu = Menu(self.menuBar, tearoff = False)
+        self.editMenu.add_command(label="Simulated Annealing", command=lambda: self.changeSearch(MHType.SA))
+        self.editMenu.add_command(label="Algoritmo Genetico", command=lambda: self.changeSearch(MHType.GA))
+        self.editMenu.add_command(label="Local Search", command=lambda: self.changeSearch(MHType.LS))
+        self.editMenu.add_command(label="Iterated Local Search", command=lambda: self.changeSearch(MHType.ILS))
 
-        self.menuBar.add_cascade(menu=editMenu, label="Cambiar Metodo de Busqueda")
+        self.menuBar.add_cascade(menu=self.editMenu, label="Cambiar Metodo de Busqueda")
   
         # Menu ayuda
-        helpMenu = Menu(self.menuBar, tearoff = False)
-        helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(r'https://javernaver.github.io/TSP-Framework/'))
-        helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(r'https://github.com/Javernaver/TSP-Framework'))
-        helpMenu.add_separator()
-        helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", message=f'TSP-Framework \nJavier del Canto\njavier.delcanto.m@mail.pucv.cl'))
-        self.menuBar.add_cascade(menu=helpMenu, label="Ayuda")
+        self.helpMenu = Menu(self.menuBar, tearoff = False)
+        self.helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(r'https://javernaver.github.io/TSP-Framework/'))
+        self.helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(r'https://github.com/Javernaver/TSP-Framework'))
+        self.helpMenu.add_separator()
+        self.helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", message=f'TSP-Framework \nJavier del Canto\njavier.delcanto.m@mail.pucv.cl'))
+        self.menuBar.add_cascade(menu=self.helpMenu, label="Ayuda")
         window.config(menu=self.menuBar)
         
-    def changeSearch(self, searchType: MHType):
+    def changeSearch(self, searchType: MHType) -> None:
         
-        self.gui.frameOptions.destroy()
-        self.gui.frameFeedback.destroy()
+        if self.gui.frameOptions != None:
+            self.gui.frameOptions.destroy()
+        if not self.gui.options.replit and self.gui.frameFeedback != None:
+            self.gui.frameFeedback.destroy()
         
         if searchType == MHType.SA:
             self.gui.simulatedAnnealing()
@@ -877,3 +912,72 @@ class MenuBar:
             self.gui.localSearch()
         elif searchType == MHType.ILS:
             self.gui.iteratedLocalSearch()
+    
+            
+    def saveConfig(self) -> None:
+        """ Guarda la configuracion y el texto de feedback de una solucion """
+        if not self.gui.solver:
+            return
+        
+        save = filedialog.asksaveasfilename(title='Guardar configuracion actual en archivo TSP-Framework', 
+                                                    initialdir=os.getcwd(),
+                                                    filetypes=(('Archivo de guardado TSP-Framework', '*.tspf'),))
+        if not save:
+            return
+        
+        check = os.path.splitext(save)
+        if not check[1]:
+            save += '.tspf'
+        
+        try:
+            file = open(save, 'wb')
+            # obtener texto de feedback
+            txt = self.gui.textFeed.get("1.0", END)
+            # crear diccionario con la data para guardar en el archivo de guardado
+            data = {'options': self.gui.options,
+                    'solver': self.gui.solver,
+                    'textFeed': txt,
+                    'coords': plot.Graph.coords}
+            # guardar
+            pickle.dump(data, file)
+            file.close()
+            
+        except IOError:
+            print(f"{bcolors.FAIL}No se pudo guardar el archivo... {save} Error: {IOError}{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Asegurese de tener permisos de escritura en la ruta seleccionada{bcolors.ENDC}")
+        
+        
+    def loadConfig(self) -> None:
+        """ Carga la configuracion y texto de feedback a traves de un archivo de guardado """
+        
+        load = filedialog.askopenfilename(title='Cargar configuracion desde archivo TSP-Framework', 
+                                                    initialdir=os.getcwd(),
+                                                    filetypes=(('Archivo de guardado TSP-Framework', '*.tspf'),))
+        if not load:
+            return
+        
+        try:
+            file = open(load, 'rb')
+            
+            data = pickle.load(file)
+            
+            self.gui.options = data['options']
+            self.gui.solver = data['solver']
+            text = data['textFeed']
+            
+            plot.Graph.coords = data['coords'] # cargar coodenadas de la solucion anterior para generar visualizacion
+            
+            self.changeSearch(self.gui.options.metaheuristic) # Cargar la pantalla del archivo guardado
+            
+            self.gui.textFeed.config(state='normal')
+            self.gui.textFeed.delete('1.0', END)
+            self.gui.textFeed.insert('1.0', text)
+            self.gui.textFeed.config(state='disabled')
+            self.gui.textFeed.see(END)
+            
+            self.gui.watchButton.config(state='normal')
+            
+            file.close()
+        except IOError:
+            print(f"{bcolors.FAIL}No se pudo leer el archivo... {load} Error: {IOError}{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Asegurese de tener permisos de lectura en la ruta seleccionada{bcolors.ENDC}")

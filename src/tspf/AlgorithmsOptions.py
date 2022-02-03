@@ -4,7 +4,7 @@ Modulo que contiene las clases encargadas de todas las opciones que puedan tener
 """
 
 from .Tools import utilities, bcolors
-from . import Enum, time, argparse
+from . import Enum, time, argparse, os
 
 class MHType(Enum):
     """Tipos de Metaheristicas disponibles
@@ -330,9 +330,13 @@ class AlgorithmsOptions():
         if (args.solution or 'solution' in kwargs):
             self.solution = args.solution if args.solution else kwargs['solution']
             self.trajectory = args.solution if args.solution else kwargs['solution']
-            if not '.txt' in self.solution:
+            
+            check = os.path.splitext(self.solution) # separa la ruta de la extension en lista
+            if not check[1]:
                 self.solution += '.txt'
-            if not '.csv' in self.trajectory:
+                
+            check = os.path.splitext(self.trajectory)
+            if not check[1]:
                 self.trajectory += '.csv'
                 
         # Si se activa modo verbose

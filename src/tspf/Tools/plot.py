@@ -58,19 +58,19 @@ class Graph(Frame):
         self.x, self.y = [], [] # lista de coordenadas x e y
         self.annotations = [] # lista de anotaciones en el grafico que serian las numeraciones, flechas de union, etc.
         self.iterations, self.cost, self.avg, self.worst = [], [], [], []
-        self.init_window()
+        self.initWindow()
         
         #plt.show()
      
      
-    def init_window(self):
+    def initWindow(self):
         
         self.putCoords()
         self.pack()     
 
 
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.master)
-        #self.canvas.draw()
+        self.canvas.draw_idle()
         self.canvas.get_tk_widget().pack(fill='both', expand=1)
         
         
