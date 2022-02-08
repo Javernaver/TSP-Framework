@@ -38,6 +38,8 @@ class Gui():
     
     frame: Frame = None
     
+    frameL: Frame = None
+    
     frameOptions: Frame = None
     
     frameFeedback: Frame = None
@@ -59,9 +61,19 @@ class Gui():
         
     def configureWindow(self) -> None:
         """ Configura la ventana principal de la interfaz """
+        if not self.options.replit:
+            frame = Frame(self.root)
+            frame.config(bd=10, relief='ridge')
+            frame.pack(anchor='center', side='top', padx=5, pady=15)
+            label = Label(frame, text='TSP-Framework')
+            label.config(font=('consolas', 40))
+            label.pack(pady=10)
+        
+        self.menubar = MenuBar(self.root, self)
+            
         self.root.title('TSP-Framework')
         #self.root.resizable(0,0)
-        self.root.geometry('700x300')
+        self.root.geometry('670x400')
         #self.root.configure(background='white')
 
         self.root.bind_all("<Button-1>", lambda event: self.setFocus(event) ) # fuerza el focus donde el usuario haga click
@@ -126,8 +138,7 @@ class Gui():
         
     def mainScreen(self) -> None:
         
-        self.menubar = MenuBar(self.root, self)
-        
+        self.frameL.destroy()
         self.root.geometry('960x540')
         self.frame.destroy()
         self.frame = LabelFrame(
@@ -169,6 +180,7 @@ class Gui():
     def simulatedAnnealing(self) -> None:
         """ Configurar opciones de simulated annealing """
         
+        self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
         self.options.metaheuristic = MHType.SA
@@ -185,7 +197,7 @@ class Gui():
         frameSA.grid(row=0, column=3, padx=15, pady=10)
         
         # movimiento
-        lm = Label(frameSA, text='Tipo de movimiento a utilizar: ', font=menuLabelFont)
+        lm = Label(frameSA, text='Movimiento:', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         comboM = Combobox(frameSA, 
                                state='readonly', 
@@ -195,7 +207,7 @@ class Gui():
         comboM.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboM, TSPMove, 'move'))
         
         # Enfriamiento
-        le = Label(frameSA, text='Tipo de enfriamiento a utilizar: ', font=menuLabelFont)
+        le = Label(frameSA, text='Enfriamiento:', font=menuLabelFont)
         le.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         comboE = Combobox(frameSA, 
                                state='readonly', 
@@ -205,21 +217,21 @@ class Gui():
         comboE.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboE, CoolingType))
         
         # alpha
-        la = Label(frameSA, text='Valor para Alpha: ', font=menuLabelFont)
+        la = Label(frameSA, text='Alpha:', font=menuLabelFont)
         la.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         sva = StringVar(frameSA, value=self.options.alpha)
         ea = Entry(frameSA, textvariable=sva, validate="focusout", validatecommand=lambda: self.validateNumberSA(sva, 'alpha'))
         ea.grid(row=2, column=1, padx=5, pady=5)
         
         # temperatura inicial
-        lti = Label(frameSA, text='Temperatura Inicial: ', font=menuLabelFont)
+        lti = Label(frameSA, text='Temperatura Inicial:', font=menuLabelFont)
         lti.grid(row=3, column=0, padx=5, pady=5, sticky='e')
         svti = StringVar(frameSA, value=self.options.t0)
         eti = Entry(frameSA, textvariable=svti, validate="focusout", validatecommand=lambda: self.validateNumberSA(svti, 't0'))
         eti.grid(row=3, column=1, padx=5, pady=5)
         
         # temperatura minima
-        ltm = Label(frameSA, text='Temperatura Minima: ', font=menuLabelFont)
+        ltm = Label(frameSA, text='Temperatura Minima:', font=menuLabelFont)
         ltm.grid(row=4, column=0, padx=5, pady=5, sticky='e')
         svtm = StringVar(frameSA, value=self.options.tmin)
         etm = Entry(frameSA, textvariable=svtm, validate="focusout", validatecommand=lambda: self.validateNumberSA(svtm, 'tmin'))
@@ -253,6 +265,7 @@ class Gui():
     
     def geneticAlgorithm(self) -> None:
         """ Configurar opciones de algoritmo genetico """
+        self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
         self.options.metaheuristic = MHType.GA
@@ -269,21 +282,21 @@ class Gui():
         frameGA.grid(row=0, column=3, padx=10, pady=10)
         
         # cantidad de poblacion
-        lps = Label(frameGA, text='Cantidad de individuos de la poblacion: ', font=menuLabelFont)
+        lps = Label(frameGA, text='Cant. de individuos de la poblacion: ', font=menuLabelFont)
         lps.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         svps = StringVar(frameGA, value=self.options.pop_size)
         eps = Entry(frameGA, textvariable=svps, validate="focusout", validatecommand=lambda: self.validateNumberGA(svps, 'pop_size'))
         eps.grid(row=0, column=1, padx=5, pady=5)
         
         # cantidad de hijos
-        los = Label(frameGA, text='Cantidad de hijos de la poblacion: ', font=menuLabelFont)
+        los = Label(frameGA, text='Cant. de hijos de la poblacion: ', font=menuLabelFont)
         los.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         svos = StringVar(frameGA, value=self.options.offspring_size)
         eos = Entry(frameGA, textvariable=svos, validate="focusout", validatecommand=lambda: self.validateNumberGA(svos, 'offspring_size'))
         eos.grid(row=1, column=1, padx=5, pady=5)
         
         # Seleccion de padres
-        lps = Label(frameGA, text='Tipo de seleccion de padres: ', font=menuLabelFont)
+        lps = Label(frameGA, text='Seleccion de padres: ', font=menuLabelFont)
         lps.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         comboPs = Combobox(frameGA, 
                                state='readonly', 
@@ -293,7 +306,7 @@ class Gui():
         comboPs.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboPs, SelectionType, 'ps'))
         
         # Tipo de cruzamiento
-        lcr = Label(frameGA, text='Tipo de cruzamiento: ', font=menuLabelFont)
+        lcr = Label(frameGA, text='Cruzamiento: ', font=menuLabelFont)
         lcr.grid(row=3, column=0, padx=5, pady=5, sticky='e')
         comboCr = Combobox(frameGA, 
                                state='readonly', 
@@ -303,7 +316,7 @@ class Gui():
         comboCr.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboCr, CrossoverType))
         
         # Tipo de mutacion
-        lmt = Label(frameGA, text='Tipo de mutacion: ', font=menuLabelFont)
+        lmt = Label(frameGA, text='Mutacion: ', font=menuLabelFont)
         lmt.grid(row=4, column=0, padx=5, pady=5, sticky='e')
         comboMt = Combobox(frameGA, 
                                state='readonly', 
@@ -320,7 +333,7 @@ class Gui():
         emp.grid(row=5, column=1, padx=5, pady=5)
         
         # Estrategia nueva poblacion
-        lss = Label(frameGA, text='Estrategia de seleccion nueva poblacion: ', font=menuLabelFont)
+        lss = Label(frameGA, text='Estrategia nueva poblacion: ', font=menuLabelFont)
         lss.grid(row=6, column=0, padx=5, pady=5, sticky='e')
         comboSs = Combobox(frameGA, 
                                state='readonly', 
@@ -330,7 +343,7 @@ class Gui():
         comboSs.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboSs, SelectionStrategy))
         
         # Tipo seleccion nueva poblacion
-        lgs = Label(frameGA, text='Tipo de seleccion nueva poblacion: ', font=menuLabelFont)
+        lgs = Label(frameGA, text='Seleccion nueva poblacion: ', font=menuLabelFont)
         lgs.grid(row=7, column=0, padx=5, pady=5, sticky='e')
         comboGs = Combobox(frameGA, 
                                state='readonly', 
@@ -366,7 +379,8 @@ class Gui():
     """ L O C A L   S E A R C H """    
         
     def localSearch(self) -> None:
-    
+
+        self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
         self.options.metaheuristic = MHType.LS
@@ -383,7 +397,7 @@ class Gui():
         frameLS.grid(row=0, column=3, padx=10, pady=10)
         
         # tipo de busqueda
-        lm = Label(frameLS, text='Tipo de busqueda local a utilizar: ', font=menuLabelFont)
+        lm = Label(frameLS, text='Tipo de busqueda:', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         comboM = Combobox(frameLS, 
                                state='readonly', 
@@ -410,6 +424,7 @@ class Gui():
         
     def iteratedLocalSearch(self) -> None:
         
+        self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
         self.options.metaheuristic = MHType.ILS
@@ -426,7 +441,7 @@ class Gui():
         frameILS.grid(row=0, column=3, padx=10, pady=10)
         
         # tipo de busqueda
-        lm = Label(frameILS, text='Tipo de busqueda local a utilizar: ', font=menuLabelFont)
+        lm = Label(frameILS, text='Tipo de busqueda:', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         comboM = Combobox(frameILS, 
                                state='readonly', 
@@ -436,7 +451,7 @@ class Gui():
         comboM.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboM, TSPMove, 'move'))
         
         # Tipo de perturbacion
-        lp = Label(frameILS, text='Tipo de perturbacion a aplicar: ', font=menuLabelFont)
+        lp = Label(frameILS, text='Perturbacion:', font=menuLabelFont)
         lp.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         comboP = Combobox(frameILS, 
                                state='readonly', 
@@ -446,7 +461,7 @@ class Gui():
         comboP.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboP, PerturbationType))
         
         # cantidad de perturbaciones
-        lnp = Label(frameILS, text='Cantidad de perturbaciones: ', font=menuLabelFont)
+        lnp = Label(frameILS, text='Cant. de perturbaciones:', font=menuLabelFont)
         lnp.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         svnp = StringVar(frameILS, value=self.options.nPerturbations)
         enp = Entry(frameILS, textvariable=svnp, validate="focusout", validatecommand=lambda: self.validateNumberG(svnp, 'nPerturbations'))
@@ -482,13 +497,16 @@ class Gui():
         else:
             self.root.attributes('-zoomed', True)
 
-        # Configurar seccion de opciones 
-        self.frameOptions = LabelFrame(
-                    self.root,
-                    text='Opciones',
-                    bg='#f0f0f0',
-                    font=("consolas", 20)
-                )
+        # Configurar seccion de opciones
+        if self.options.replit:
+            self.frameOptions = Frame(self.root)
+        else:
+            self.frameOptions = LabelFrame(
+                        self.root,
+                        text='Opciones',
+                        bg='#f0f0f0',
+                        font=("consolas", 20)
+                    )
         
         # Si se esta en replit se mueve el frame de opciones al centro
         if not self.options.replit:
@@ -528,30 +546,30 @@ class Gui():
         
         # Opciones Generales
         # archivo de intancia
-        lins = Label(frameGeneral, text='Archivo de instancia: ', font=menuLabelFont)
+        lins = Label(frameGeneral, text='Archivo de instancia:', font=menuLabelFont)
         lins.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         ins = StringVar(frameGeneral, value=self.options.instance)
         eins = Entry(frameGeneral, textvariable=ins, state='disabled')
         eins.grid(row=1, column=1, padx=5, pady=5)
-        bins = Button(frameGeneral, text='Cambiar', command=lambda: self.openFile(ins))
+        bins = Button(frameGeneral, text='Cambiar', command=lambda: self.openFile(ins), font=('arial', 8, 'bold'))
         bins.grid(row=1, column=2, padx=5, pady=5)
         
         # archivo de solucion
-        l = Label(frameGeneral, text='Archivo para la solucion: ', font=menuLabelFont)
+        l = Label(frameGeneral, text='Archivo para solucion:', font=menuLabelFont)
         l.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         sol = StringVar(frameGeneral, value=self.options.solution)
         e = Entry(frameGeneral, textvariable=sol, state='disabled')
         e.grid(row=2, column=1, padx=5, pady=5)
-        b = Button(frameGeneral, text='Cambiar', command=lambda: self.saveFile('.txt', sol))
+        b = Button(frameGeneral, text='Cambiar', command=lambda: self.saveFile('.txt', sol), font=('arial', 8, 'bold'))
         b.grid(row=2, column=2, padx=5, pady=5)
         
         # archivo de trayectoria
-        l = Label(frameGeneral, text='Archivo para la trayectoria: ', font=menuLabelFont)
+        l = Label(frameGeneral, text='Archivo para trayectoria:', font=menuLabelFont)
         l.grid(row=3, column=0, padx=5, pady=5, sticky='e')
         tra = StringVar(frameGeneral, value=self.options.trajectory)
         e = Entry(frameGeneral, textvariable=tra, state='disabled')
         e.grid(row=3, column=1, padx=5, pady=5)
-        b = Button(frameGeneral, text='Cambiar', command=lambda: self.saveFile('.csv', tra))
+        b = Button(frameGeneral, text='Cambiar', command=lambda: self.saveFile('.csv', tra), font=('arial', 8, 'bold'))
         b.grid(row=3, column=2, padx=5, pady=5)
         
         # seed
@@ -562,7 +580,7 @@ class Gui():
         es.grid(row=4, column=1, padx=5, pady=5)
         
         # solucion inicial
-        ls = Label(frameGeneral, text='Tipo de solucion inicial: ', font=menuLabelFont)
+        ls = Label(frameGeneral, text='Solucion inicial:', font=menuLabelFont)
         ls.grid(row=5, column=0, padx=5, pady=5, sticky='e')
         comboIS = Combobox(frameGeneral, 
                                state='readonly', 
@@ -577,7 +595,7 @@ class Gui():
         chv = Checkbutton(frameGeneral, text='Visualizar trayectoria', variable=v, onvalue=1, offvalue=0, command=lambda : self.setBool(v, 'visualize'))
         chv.select()
         chv.grid(row=6, column=1, padx=5, pady=5, sticky='e')
-        self.watchButton = Button(frameGeneral, text='🔎 Ver ', command=self.watchTrajec, state='disabled')
+        self.watchButton = Button(frameGeneral, text=' Ver ', command=self.watchTrajec, state='disabled', font=('arial', 8, 'bold'))
         self.watchButton.grid(row=6, column=2, padx=1, pady=1)
 
         
@@ -592,21 +610,21 @@ class Gui():
         frameTermino.grid(row=7, column=0, padx=10, pady=10)
         
         # Iteraciones maximas
-        li = Label(frameTermino, text='Iteraciones maximas: ', font=menuLabelFont)
+        li = Label(frameTermino, text='Iteraciones max.:', font=menuLabelFont)
         li.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         svi = StringVar(frameTermino, value=self.options.max_iterations)
         ei = Entry(frameTermino, textvariable=svi, validate="focusout", validatecommand=lambda: self.validateNumberG(svi, 'iterations'))
         ei.grid(row=0, column=1, padx=5, pady=5)
         
         # Evaluaciones maximas
-        le = Label(frameTermino, text='Evaluaciones maximas: ', font=menuLabelFont)
+        le = Label(frameTermino, text='Evaluaciones max.:', font=menuLabelFont)
         le.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         sve = StringVar(frameTermino, value=self.options.max_evaluations)
         ee = Entry(frameTermino, textvariable=sve, validate="focusout", validatecommand=lambda: self.validateNumberG(sve, 'evaluations'))
         ee.grid(row=1, column=1, padx=5, pady=5)
         
         # Tiempo maximo
-        lt = Label(frameTermino, text='Tiempo maximo de ejecucion (segundos): ', font=menuLabelFont)
+        lt = Label(frameTermino, text='Tiempo max. de ejecucion (seg): ', font=menuLabelFont)
         lt.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         svt = StringVar(frameTermino, value=self.options.max_time)
         et = Entry(frameTermino, textvariable=svt, validate="focusout", validatecommand=lambda: self.validateNumberG(svt, 'time'))
@@ -727,7 +745,7 @@ class Gui():
         #self.frame = Frame(self.root)
         self.frame = LabelFrame(
                     self.root,
-                    text='Selecciona un archivo de instancia TSP',
+                    text='Selecciona una instancia TSP',
                     bg='#f0f0f0',
                     font=("consolas", 13)
                 )
@@ -737,7 +755,7 @@ class Gui():
         f = Frame(self.frame)
         f.grid(row=0, column=0)
         
-        l = Label(f, text='Instancia del problema TSP: ', font=menuLabelFont)
+        l = Label(f, text='Instancia TSP:', font=menuLabelFont)
         l.grid(row=1, column=0, padx=2, pady=5, sticky='e')
         #l.pack(anchor='nw')
         sol = StringVar(f, value=self.options.instance)
@@ -755,7 +773,21 @@ class Gui():
         b2.config(fg='#f00', font=('consolas',12, 'bold'))
         #b2.pack(anchor='center', padx=50, pady=25)
         b2.grid(row=2, column=1, sticky='w', padx=5, pady=5)
-
+        
+        self.frameL = LabelFrame(
+                    self.root,
+                    text='Utilizar solucion anterior',
+                    bg='#f0f0f0',
+                    font=("consolas", 13)
+                )
+        
+        self.frameL.pack(anchor='s', pady=10)
+        
+        b3 = Button(self.frameL, text='Cargar archivo', command=self.menubar.loadConfig)
+        b3.config(fg='#f00', font=('consolas',12, 'bold'))
+        b3.pack(anchor='center', padx=10, pady=10)
+        #b2.grid(row=2, column=1, sticky='w', padx=5, pady=5)
+        
         
     
     """ E J E C U C I O N """   
@@ -850,13 +882,6 @@ class Gui():
 def main(options: AlgorithmsOptions) -> None:
     
     root = Tk()
-
-    frame = Frame(root)
-    frame.config(bd=10, relief='ridge')
-    frame.pack(anchor='center', side='top', padx=5, pady=15)
-    label = Label(frame, text='TSP-Framework')
-    label.config(font=('consolas', 40))
-    label.pack(pady=10)
        
     gui = Gui(root=root, options=options)
     

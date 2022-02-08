@@ -29,12 +29,6 @@ def show(onGui: bool = False) -> None:
     # Si se ejecuta la visualizacion desde la terminal
     if not onGui:
         
-        """ # Maximizar ventana para windows y linux
-        if os.name == 'nt':
-            gui.state('zoomed')
-        else:
-            gui.attributes('-zoomed', True) """
-            
         gui.protocol("WM_DELETE_WINDOW", lambda: quit(gui))
         gui.mainloop()
         
@@ -65,6 +59,14 @@ class Graph(Frame):
      
     def initWindow(self):
         
+        if self.replit:
+            # Maximizar ventana para windows y linux
+            if os.name == 'nt':
+                self.master.state('zoomed')
+            else:
+                self.master.attributes('-zoomed', True)
+            
+        
         self.putCoords()
         self.pack()     
 
@@ -82,9 +84,7 @@ class Graph(Frame):
             else:
                 self.master.attributes('-zoomed', True)
             
-            self.toolbar = NavigationToolbar2Tk(self.canvas, self.master, pack_toolbar=True)
-        else:
-            self.toolbar = NavigationToolbar2Tk(self.canvas, self.master, pack_toolbar=False)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.master, pack_toolbar=True)
         self.toolbar.update()
         #self.canvas._tkcanvas.grid(column=0,row=0)
 
