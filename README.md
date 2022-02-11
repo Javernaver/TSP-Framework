@@ -1,8 +1,14 @@
 # Framework de algoritmos para resolver el Problema del Vendedor Viajero
 Framework para resolver el problema del vendedor viajero aplicando algoritmos metaheuristicos como el Simulated Annealing o Algoritmo Genetico.
 
+**Visualizacion**:
 <p align="center">
 <img src="https://media.giphy.com/media/uLzy84eyEANxqK83Iw/giphy.gif"/>
+</p>
+
+**GUI**:
+<p align="center">
+<img src="https://media.giphy.com/media/7I1c3ms9OekiCkcbQD/giphy.gif"/>
 </p>
 
 ## Contenido
@@ -84,6 +90,8 @@ Se recomienda tener una cuenta en Replit y hacer fork del proyecto para una mejo
 
 * **plot.py:** Modulo encargado de generar y mostrar los distintos graficos utilizados como los generados en la trayectoria de las soluciones 
 
+* **gui.py:** Modulo encargado de generar y mostrar la interfaz grafica de usuario 
+
 ### Algoritmos
 
 * **SimulatedAnnealing.py:** Modulo con la clase que implementa el metodo de busqueda de Simulated Annealing
@@ -161,6 +169,9 @@ Argumentos Generales:
 	 
 * **Visualizacion de trayectoria:** Parametro de tipo flag que indica si se quiere o no visualizar la trayectoria de la solucion.
 	 * (-vi o --visualize). **Ejemplo:** python tspf.py --visualize
+
+* **Modo Interfaz Grafica:** Parametro de tipo flag que indica si se quiere o no utilizar el modo interfaz grafica.
+	 * (-gui o --gui). **Ejemplo:** python tspf.py --gui
 
 Argumentos para Simulated Annealing:
 

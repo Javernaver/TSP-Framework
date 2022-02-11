@@ -178,12 +178,12 @@ class Gui():
     """ S I M U L A T E D   A N N E A L I N G """
     
     def simulatedAnnealing(self) -> None:
-        """ Configurar opciones de simulated annealing """
+        """ Configura las opciones de simulated annealing """
         
+        self.options.metaheuristic = MHType.SA
         self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
-        self.options.metaheuristic = MHType.SA
         
         
         frameSA = LabelFrame(
@@ -264,12 +264,12 @@ class Gui():
     """ A L G O R I T M O   G E N E T I C O """
     
     def geneticAlgorithm(self) -> None:
-        """ Configurar opciones de algoritmo genetico """
+        """ Configura las opciones de algoritmo genetico """
+        
+        self.options.metaheuristic = MHType.GA
         self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
-        self.options.metaheuristic = MHType.GA
-        
         
         frameGA = LabelFrame(
                     self.frameOptions,
@@ -379,11 +379,12 @@ class Gui():
     """ L O C A L   S E A R C H """    
         
     def localSearch(self) -> None:
+        """ Configura la opciones de Local Search """
 
+        self.options.metaheuristic = MHType.LS
         self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
-        self.options.metaheuristic = MHType.LS
         
         
         frameLS = LabelFrame(
@@ -423,11 +424,12 @@ class Gui():
     """ I T E R A T E D   L O C A L   S E A R C H """
         
     def iteratedLocalSearch(self) -> None:
+        """ Configura las opciones de Iterated Local Search """
         
+        self.options.metaheuristic = MHType.ILS
         self.frameL.destroy()
         self.frame.destroy()
         self.optionsFrame()
-        self.options.metaheuristic = MHType.ILS
         
         
         frameILS = LabelFrame(
@@ -606,7 +608,6 @@ class Gui():
                     bg='#f0f0f0',
                     font=("consolas", 20)
                 )
-        
         frameTermino.grid(row=7, column=0, padx=10, pady=10)
         
         # Iteraciones maximas
@@ -614,6 +615,10 @@ class Gui():
         li.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         svi = StringVar(frameTermino, value=self.options.max_iterations)
         ei = Entry(frameTermino, textvariable=svi, validate="focusout", validatecommand=lambda: self.validateNumberG(svi, 'iterations'))
+        
+        if self.options.metaheuristic == MHType.LS:
+            ei.config(state='disabled')
+            
         ei.grid(row=0, column=1, padx=5, pady=5)
         
         # Evaluaciones maximas
@@ -621,6 +626,10 @@ class Gui():
         le.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         sve = StringVar(frameTermino, value=self.options.max_evaluations)
         ee = Entry(frameTermino, textvariable=sve, validate="focusout", validatecommand=lambda: self.validateNumberG(sve, 'evaluations'))
+        
+        if self.options.metaheuristic == MHType.LS:
+            ee.config(state='disabled')
+            
         ee.grid(row=1, column=1, padx=5, pady=5)
         
         # Tiempo maximo
@@ -628,6 +637,10 @@ class Gui():
         lt.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         svt = StringVar(frameTermino, value=self.options.max_time)
         et = Entry(frameTermino, textvariable=svt, validate="focusout", validatecommand=lambda: self.validateNumberG(svt, 'time'))
+        
+        if self.options.metaheuristic == MHType.LS:
+            et.config(state='disabled')
+            
         et.grid(row=2, column=1, padx=5, pady=5)
         
         
@@ -711,19 +724,19 @@ class Gui():
             try:
                 self.options.max_iterations = int(value.get())
             except:
-                print('Las iteraciones meximas deben ser numero entero')
+                print('Las iteraciones maximas deben ser numero entero')
             return self.options.max_iterations
         elif atribute == 'evaluations':
             try:
                 self.options.max_evaluations = int(value.get())
             except:
-                print('Las evaluaciones meximas deben ser numero entero')
+                print('Las evaluaciones maximas deben ser numero entero')
             return self.options.max_iterations
         elif atribute == 'time':
             try:
                 self.options.max_time = float(value.get())
             except:
-                print('Las evaluaciones meximas deben ser numero')
+                print('Las evaluaciones maximas deben ser numero')
             return self.options.max_time
         
         elif atribute == 'nPerturbations':
@@ -918,7 +931,8 @@ class MenuBar:
         self.helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(r'https://javernaver.github.io/TSP-Framework/'))
         self.helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(r'https://github.com/Javernaver/TSP-Framework'))
         self.helpMenu.add_separator()
-        self.helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", message=f'TSP-Framework \nJavier del Canto\njavier.delcanto.m@mail.pucv.cl'))
+        self.helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", 
+                                                                                            message=f'TSP-Framework \nJavier del Canto\nJorge Polanco\n\nContacto\njavier.delcanto.m@mail.pucv.cl\njorge.polanco.sanmartin@gmail.com'))
         self.menuBar.add_cascade(menu=self.helpMenu, label="Ayuda")
         window.config(menu=self.menuBar)
         
