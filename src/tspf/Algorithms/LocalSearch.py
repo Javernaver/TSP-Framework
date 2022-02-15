@@ -11,6 +11,36 @@ class LocalSearch():
     
     
     def __init__(self, options: AlgorithmsOptions = None, problem: Tsp = None) -> None:
+        """ Clase Local Search la cual representa este metodo de busqueda
+
+        Parameters
+        ----------
+        problem : Tsp
+            Instancia del problema TSP
+        options : AlgorithmsOptions
+            Objeto de opciones para el algoritmo
+
+        Attributes
+        ----------
+        move_type: TSPMove
+            Tipo de movimiento
+        best_tour : Tour
+            Instancia del mejor tour
+        evaluations : int
+            Numero de evaluaciones
+        total_time : float
+            Tiempo de ejecucion de Local Search
+        trajectory : list
+            Lista de objetos de la trayectoria de la solucion
+        bestImprovement : bool
+            Si es de tipo best improvement o no
+
+        Examples
+        --------
+        >>> options = AlgorithmsOptions()
+        >>> problem = Tsp(filename=options.instance)
+        >>> solver = LocalSearch(options=options, problem=problem)
+    """
 
         # Atributos de instancia
         self.problem: Tsp # Problema TSP

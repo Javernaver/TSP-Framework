@@ -11,6 +11,7 @@ class MHType(Enum):
     SA: Simulated Annealing
     GA: Genetic Algorithm
     LS: Local Search
+    ILS: Iterated Local Search
     """
     SA = 'SA'
     GA = 'GA'

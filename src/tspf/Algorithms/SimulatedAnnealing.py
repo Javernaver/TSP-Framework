@@ -21,7 +21,7 @@ class SimulatedAnnealing():
         ----------
         cooling : CoolingType
             Esquema de enfriamiento
-        move_type: TSPMove
+        move_type : TSPMove
             Tipo de movimiento
         alpha : float
             Parametro alfa para el esquema de enfriamiento geometrico
