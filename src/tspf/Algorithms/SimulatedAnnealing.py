@@ -143,10 +143,6 @@ class SimulatedAnnealing():
             # Generar un vecino aleatoriamente a traves de un movimiento
             neighbor_tour.randomMove(self.move_type)
 
-            # Mostrar avance iteracion
-            #if not self.options.silent:
-            #    print(f"{bcolors.BOLD}\n{self.evaluations}; {temperature:.2f}; {end-start:.4f}; {bcolors.ENDC}", end='')
-
             # Revisar funcion objetivo de la nueva solucion
             if (neighbor_tour.cost < current_tour.cost):
                 # Mejor solucion encontrada
@@ -159,10 +155,8 @@ class SimulatedAnnealing():
                                         evaluations=self.evaluations,
                                         temperature=temperature) ) 
 
-                #if not self.options.silent:
-                #    print(f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}", end='')
 
-                details += f"{bcolors.OKGREEN} Solucion actual con mejor costo encontrada: {current_tour.cost}{bcolors.ENDC}"
+                details += f"{bcolors.OKGREEN} Mejor costo encontrado: {current_tour.cost}{bcolors.ENDC}"
 
             else:
                 # Calcular criterio de aceptacion
@@ -172,23 +166,17 @@ class SimulatedAnnealing():
                     # Se acepta la solucion peor
                     current_tour.copy(neighbor_tour)
                     
-                    #if not self.options.silent:
-                    #    print(f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}", end='')
-                    
-                    details += f"{bcolors.FAIL} Se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}"
+                   
+                    details += f"{bcolors.FAIL} Se acepta peor costo por crit. de metropolis: {neighbor_tour.cost}{bcolors.ENDC}"
                 else:
-                    #if not self.options.silent:
-                    #    print(f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}", end='')
-                    # No se acepta la solucion
-                    details += f"{bcolors.WARNING} No se acepta peor costo por criterio de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}"
+                   # No se acepta la solucion
+                    details += f"{bcolors.WARNING} No se acepta peor costo por crit. de metropolis: {neighbor_tour.cost}{bcolors.ENDC}{bcolors.OKGREEN} -> Solucion actual: {current_tour.cost}{bcolors.ENDC}"
 
                     neighbor_tour.copy(current_tour)
 
 			# Revisar si la nueva solucion es la mejor hasta el momento
             if (current_tour.cost < self.best_tour.cost):
-                #if not self.options.silent:
-                #    print(f"{bcolors.OKGREEN} -> ¡Mejor solucion global encontrada! {bcolors.ENDC}", end='')
-                
+               
                 details += f"{bcolors.OKGREEN} -> ¡Mejor solucion global encontrada! {bcolors.ENDC}"
 
                 self.best_tour.copy(current_tour)
@@ -218,7 +206,7 @@ class SimulatedAnnealing():
         # Mostrar tabla
         if not self.options.silent:
             print(table)
-            #print()
+            
 		
 
     def terminationCondition(self, termperature: float, evaluations: int, time: float) -> bool:

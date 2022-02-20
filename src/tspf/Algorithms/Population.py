@@ -144,6 +144,9 @@ class Population():
             print(f"{bcolors.UNDERLINE}Individuo {i+1}{bcolors.ENDC}")
             self.pop[i].printSol()
 
+
+
+
     """ 
     
     
@@ -229,7 +232,16 @@ class Population():
         avg = stats.mean(costs) # calcular media aritmetica (promedio)
         return avg
 
-    """ METODOS DE SELECCION DE PADRES (2) """
+
+
+
+    """
+    
+    
+    M E T O D O S   D E   S E L E C C I O N   D E   P A D R E S  (2)
+    
+    
+    """
 
     def selectParents(self, stype: SelectionType) -> list:
         """ Selecciona 2 padres segun el tipo de seleccion
@@ -412,6 +424,8 @@ class Population():
             sel = list( set(sel) )
             
         return sel
+
+
     	
     
     """ 
@@ -704,6 +718,8 @@ class Population():
             r = utilities.random.random()
             if (mut_probability > r):
                 self.pop[i].randomMove(TSPMove.THREE_OPT)
+
+
 
     
     """ 

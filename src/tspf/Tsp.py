@@ -42,7 +42,7 @@ class Tsp():
         
         self.nodes = self.instance.n # Numero de Nodos
 
-        #self.print_distances()
+        # Guardar coordenadas de los puntos del para generar mapeado al utilizar la graficacion
         plot.Graph.coords = self.instance.nodeptr.copy()
 
 

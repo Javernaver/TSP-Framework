@@ -1,1 +1,2 @@
 include instances/*
+include documentation/*

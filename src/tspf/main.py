@@ -31,7 +31,7 @@ def main(argv=sys.argv) -> None:
     # leer e interpretar el problema TSP leido desde la instancia definida
     problem = Tsp(filename=options.instance)
 
-    # Ejecutar Metaheuristica Simulated Annealing
+    # Ejecutar Simulated Annealing
     if (options.metaheuristic == MHType.SA):
 
         # Solucion inicial
@@ -41,13 +41,14 @@ def main(argv=sys.argv) -> None:
         # Ejecutar la busqueda
         solver.search(first_solution)
 
-    # Ejecutar Metaheuristica Algoritmo Genetico
+    # Ejecutar Algoritmo Genetico
     elif (options.metaheuristic == MHType.GA):
         # Crear solver
         solver = GeneticAlgorithm(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search()
-        
+    
+    # Ejecutar Local Search    
     elif (options.metaheuristic == MHType.LS):
         # Solucion inicial
         first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
@@ -55,7 +56,8 @@ def main(argv=sys.argv) -> None:
         solver = LocalSearch(options=options, problem=problem)
         # Ejecutar la busqueda
         solver.search(first_solution)
-        
+    
+    # Ejecutar Iterated Local Search    
     elif (options.metaheuristic == MHType.ILS):
         # Solucion inicial
         first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)

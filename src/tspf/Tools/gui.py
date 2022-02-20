@@ -9,7 +9,7 @@ from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolut
 from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, Menu
 from tkinter import END
 from tkinter import messagebox, filedialog
-from tkinter.ttk import Combobox
+from tkinter.ttk import Combobox, Scrollbar
 import webbrowser
 import pickle
 
@@ -18,6 +18,11 @@ import pickle
 menuLabelFont = ('Arial', 9, 'bold')
 feedbackFont = ('consolas',11,'bold')
 buttonFont = ('consolas', 12, 'bold')
+
+# URLs & Paths
+GIT_HUB = r'https://github.com/Javernaver/TSP-Framework'
+DOCUMENTATION = r'https://javernaver.github.io/TSP-Framework/'
+MANUAL_FILE = 'documentation/Manual.pdf'
 
 class TextRedirector(object):
     """ Clase destinada a redireccionar el texto de los print (stdout) a el widget de tkinter """
@@ -48,6 +53,12 @@ class Gui():
     
     
     def __init__(self, root: Tk, options: AlgorithmsOptions) -> None:
+        """Clase que representa la intefaz grafica
+
+        Args:
+            root (Tk): raiz con la intefaz tkinter
+            options (AlgorithmsOptions): instancia con las opciones
+        """
         
         self.root = root
         self.options = options
@@ -69,6 +80,7 @@ class Gui():
             label.config(font=('consolas', 40))
             label.pack(pady=10)
         
+        # Iniciar Barra de herramientas superior
         self.menubar = MenuBar(self.root, self)
             
         self.root.title('TSP-Framework')
@@ -134,7 +146,13 @@ class Gui():
             ar.set(tra)
     
     
-    """ S E L E C C I O N   D E   M E T O D O   D E   B U S Q U E D A """
+    """ 
+    
+    
+    S E L E C C I O N   D E   M E T O D O   D E   B U S Q U E D A 
+    
+    
+    """
         
     def mainScreen(self) -> None:
         
@@ -486,7 +504,13 @@ class Gui():
     
     
     
-    """ P A N T A L L A   D E   O P C I O N E S """
+    """ 
+    
+    
+    P A N T A L L A   D E   O P C I O N E S
+    
+    
+    """
 
 
 
@@ -499,6 +523,7 @@ class Gui():
         else:
             self.root.attributes('-zoomed', True)
 
+        
         # Configurar seccion de opciones
         if self.options.replit:
             self.frameOptions = Frame(self.root)
@@ -528,13 +553,19 @@ class Gui():
 
             self.frameFeedback.pack(anchor='ne', side='right', padx=5, pady=5)
             
-            self.textFeed = Text(self.frameFeedback, bg='#fff', fg='#000')
+            scrollBar = Scrollbar(self.frameFeedback, orient='vertical')
+            scrollBar.pack(side='right', fill='y')
+            
+            self.textFeed = Text(self.frameFeedback, bg='#fff', fg='#000', yscrollcommand=scrollBar.set)
             self.textFeed.config(state='disable', padx=10, pady=10, width=500, height=700, font=feedbackFont)
             self.textFeed.pack(fill="y", padx=5, pady=5)
             
             # Redireccionar todos los print desde el stdout a el texto de feedback
             sys.stdout = TextRedirector(self.textFeed, "stdout")
-        
+            
+            
+            scrollBar.config(command=self.textFeed.yview)
+
         
         # configurar seccion de opciones generales
         frameGeneral = LabelFrame(
@@ -835,7 +866,7 @@ class Gui():
         # leer e interpretar el problema TSP leido desde la instancia definida
         problem = Tsp(filename=options.instance)
 
-        # Ejecutar Metaheuristica Simulated Annealing
+        # Ejecutar Simulated Annealing
         if (options.metaheuristic == MHType.SA):
                 
             # Solucion inicial
@@ -845,13 +876,14 @@ class Gui():
             # Ejecutar la busqueda
             self.solver.search(first_solution)
 
-        # Ejecutar Metaheuristica Algoritmo Genetico
+        # Ejecutar Algoritmo Genetico
         elif (options.metaheuristic == MHType.GA):
             # Crear solver
             self.solver = GeneticAlgorithm(options=options, problem=problem)
             # Ejecutar la busqueda
             self.solver.search()
-            
+        
+        # Ejecutar Local Search    
         elif (options.metaheuristic == MHType.LS):
             # Solucion inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
@@ -859,7 +891,8 @@ class Gui():
             self.solver = LocalSearch(options=options, problem=problem)
             # Ejecutar la busqueda
             self.solver.search(first_solution)
-            
+        
+        # Ejecutar Iterated Local Search  
         elif (options.metaheuristic == MHType.ILS):
             # Solucion inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
@@ -893,6 +926,11 @@ class Gui():
    
 
 def main(options: AlgorithmsOptions) -> None:
+    """Funcion principal que crea las instancias para utilizar la interfaz
+
+    Args:
+        options (AlgorithmsOptions): instancia con las opciones para los algoritmos
+    """
     
     root = Tk()
        
@@ -905,6 +943,12 @@ def main(options: AlgorithmsOptions) -> None:
 class MenuBar:
     """ Clase que representa el menu de herramientas superior """
     def __init__(self, window: Tk, gui: Gui) -> None:
+        """Clase que representa la barra de herramientas superior
+
+        Args:
+            window (Tk): base de la barra de herramientas
+            gui (Gui): instancia de la intefaz
+        """
         
         self.menuBar = Menu(window)
         self.gui = gui
@@ -924,12 +968,13 @@ class MenuBar:
         self.editMenu.add_command(label="Local Search", command=lambda: self.changeSearch(MHType.LS))
         self.editMenu.add_command(label="Iterated Local Search", command=lambda: self.changeSearch(MHType.ILS))
 
-        self.menuBar.add_cascade(menu=self.editMenu, label="Cambiar Metodo de Busqueda")
+        self.menuBar.add_cascade(menu=self.editMenu, label="Cambiar de Algoritmo")
   
         # Menu ayuda
         self.helpMenu = Menu(self.menuBar, tearoff = False)
-        self.helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(r'https://javernaver.github.io/TSP-Framework/'))
-        self.helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(r'https://github.com/Javernaver/TSP-Framework'))
+        self.helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(DOCUMENTATION))
+        self.helpMenu.add_command(label="Agregar algoritmo", command=lambda: webbrowser.open('file://' + os.path.realpath(MANUAL_FILE)))
+        self.helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(GIT_HUB))
         self.helpMenu.add_separator()
         self.helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", 
                                                                                             message=f'TSP-Framework \nJavier del Canto\nJorge Polanco\n\nContacto\njavier.delcanto.m@mail.pucv.cl\njorge.polanco.sanmartin@gmail.com'))
@@ -937,6 +982,7 @@ class MenuBar:
         window.config(menu=self.menuBar)
         
     def changeSearch(self, searchType: MHType) -> None:
+        """ Cambia de metodo de busqueda en la barra de herramientas """
         
         if self.gui.frameOptions != None:
             self.gui.frameOptions.destroy()
