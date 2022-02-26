@@ -264,6 +264,8 @@ class Tour():
             int
                 delta para saber si se obtuvo una mejor solucion al aplicar el movimiento
         """
+        if not self.current or not self.problem:
+            return
         delta = 0
         self.current.pop()
         # Puntos de corte para calcular las distancias y el delta

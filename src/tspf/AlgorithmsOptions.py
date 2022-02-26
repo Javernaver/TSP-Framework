@@ -158,9 +158,9 @@ class AlgorithmsOptions():
     
     """ O P C I O N E S  G E N E R A L E S """
     
-    solution = "solution.txt"	# Archivo para imprimir la solucion
+    solution = "output/solution.txt"	# Archivo para imprimir la solucion
 
-    trajectory = "trajectory.csv"	# Archivo para imprimir la trayectoria de solucion
+    trajectory = "output/trajectory.csv"	# Archivo para imprimir la trayectoria de solucion
     
     instance = "instances/burma14.tsp" # Archivo de la instancia    
     

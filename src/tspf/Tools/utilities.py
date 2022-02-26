@@ -6,6 +6,10 @@ Modulo con las utilidades utilizadas por los demas modulos
 import random
 import csv
 from os import path
+from pathlib import Path
+
+# Numero maximo de archivos de salida para ser reemplazados
+NUM_FILES = 30
 
 class bcolors:
     """ Clase cuyo objetivo es cambiar de color los output por consola """
@@ -85,6 +89,8 @@ def printSolToFile(outputFile: str, tour: list) -> None:
     if not outputFile or not tour:
         return
     try:
+        # crea la carpeta output si es que no existe y se usa la salida por defecto
+        Path("output/").mkdir(exist_ok=True)
         print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{path.abspath(outputFile)}")
         # Comprobar si existe el archivo y renombrar si es el caso
         outputFile = checkFile(outputFile)
@@ -107,6 +113,8 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
     if not trajectoryFile or not trajectory:
         return
     try:
+        # crea la carpeta output si es que no existe y se usa la salida por defecto
+        Path("output/").mkdir(exist_ok=True)
         print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{path.abspath(trajectoryFile)}")
         # Comprobar si existe el archivo y renombrar si es el caso
         trajectoryFile = checkFile(trajectoryFile)
@@ -150,7 +158,7 @@ def checkFile(filePath: str) -> str:
         
         while True:
             # Limite de archivos para evitar llenar de exceso de archivos
-            if num > 3:
+            if num > NUM_FILES:
                 # obtener archivo mas antiguo de las rutas
                 old = min(files, key=lambda pth: path.getmtime(pth))
                 #print(old)

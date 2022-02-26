@@ -455,17 +455,17 @@ class Population():
         offspring = []
         parents = []
         # Obtener indivuduos padres con los ids
-        parents.extend( self.getIndividuals(parents_id) )
+        parents = self.getIndividuals(parents_id)
 
         # Aplicar Crossover
         if (ctype == CrossoverType.PMX):
-            offspring.extend( self.PMXCrossover(parents) )
+            offspring = self.PMXCrossover(parents)
         elif (ctype == CrossoverType.OX):
-            offspring.extend( self.OXCrossover(parents) )
+            offspring = self.OXCrossover(parents)
         elif (ctype == CrossoverType.OPX):
-            offspring.extend( self.OPXCrossover(parents) )
+            offspring = self.OPXCrossover(parents)
         else:
-            offspring.extend( self.OXCrossover(parents) )
+            offspring = self.OXCrossover(parents)
 
         return offspring
 

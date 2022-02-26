@@ -492,15 +492,7 @@ class Gui():
         cbi = Checkbutton(frameILS, text='Best Improvement', variable=bi, onvalue=1, offvalue=0, command=lambda : self.setBool(bi, 'bestImprovement'))
         cbi.deselect()
         cbi.grid(row=3, column=1, padx=5, pady=5, sticky='e')
-        
-        # Verbose
-        ve = StringVar(frameILS)
-        cve = Checkbutton(frameILS, text='Full Feedback', variable=ve, onvalue=1, offvalue=0, command=lambda : self.setBool(ve, 'verbose'))
-        cve.deselect()
-        cve.grid(row=3, column=0, padx=5, pady=5, sticky='e')
-        
-    
-    
+      
     
     
     
@@ -1044,23 +1036,26 @@ class MenuBar:
         try:
             file = open(load, 'rb')
             
-            data = pickle.load(file)
-            
-            self.gui.options = data['options']
-            self.gui.solver = data['solver']
-            text = data['textFeed']
-            
-            plot.Graph.coords = data['coords'] # cargar coodenadas de la solucion anterior para generar visualizacion
-            
-            self.changeSearch(self.gui.options.metaheuristic) # Cargar la pantalla del archivo guardado
-            
-            self.gui.textFeed.config(state='normal')
-            self.gui.textFeed.delete('1.0', END)
-            self.gui.textFeed.insert('1.0', text)
-            self.gui.textFeed.config(state='disabled')
-            self.gui.textFeed.see(END)
-            
-            self.gui.watchButton.config(state='normal')
+            try:
+                data = pickle.load(file)
+                
+                self.gui.options = data['options']
+                self.gui.solver = data['solver']
+                text = data['textFeed']
+                
+                plot.Graph.coords = data['coords'] # cargar coodenadas de la solucion anterior para generar visualizacion
+                
+                self.changeSearch(self.gui.options.metaheuristic) # Cargar la pantalla del archivo guardado
+                
+                self.gui.textFeed.config(state='normal')
+                self.gui.textFeed.delete('1.0', END)
+                self.gui.textFeed.insert('1.0', text)
+                self.gui.textFeed.config(state='disabled')
+                self.gui.textFeed.see(END)
+                
+                self.gui.watchButton.config(state='normal')
+            except:
+                messagebox.showerror(title="Error", message='No se puede cargar este archivo, puede que este dañado o no sea del formato correcto')
             
             file.close()
         except IOError:
