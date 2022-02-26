@@ -965,7 +965,7 @@ class MenuBar:
         # Menu ayuda
         self.helpMenu = Menu(self.menuBar, tearoff = False)
         self.helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(DOCUMENTATION))
-        self.helpMenu.add_command(label="Agregar algoritmo", command=lambda: webbrowser.open('file://' + os.path.realpath(MANUAL_FILE)))
+        self.helpMenu.add_command(label="Manual", command=lambda: webbrowser.open('file://' + os.path.realpath(MANUAL_FILE)))
         self.helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(GIT_HUB))
         self.helpMenu.add_separator()
         self.helpMenu.add_command(label="Acerca de...", command=lambda: messagebox.showinfo(title="Acerca de", 
