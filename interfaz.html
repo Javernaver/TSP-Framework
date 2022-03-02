@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="shortcut icon" href="images/favicon.ico"/>
-    <title>TSP Framework - Parámetros de Ejecución Generales</title>
+    <title>TSP Framework - Interfaz Gráfica</title>
   </head>
   <body style="background-image:url(images/TSP\ Tour.png)">
     <nav class="navbar navbar-center navbar-expand-lg navbar-light fixed-top" style="background-color:rgb(74, 74, 75);">
@@ -100,105 +100,57 @@
     <div>
         <div class="row">
             <div class="mt-5 col-md-10 offset-md-1" style="background-color: rgba(207, 207, 207, 0.925);">
-                <h1 class="mt-4 d-flex justify-content-center">Parámetros de Ejecución Generales</h1>
+                <h1 class="mt-4 d-flex justify-content-center">Interfaz Gráfica</h1>
                 <p></p>
                 <div class="col-md-10 offset-md-1">
                   <p>
-                    Los parámetros de ejecución del framework pueden ser modificados directamente desde el código 
-                    fuente en la clase <samp>AlgorithmsOptions.py</samp>, permitiendo cambiar las condiciones de funcionamiento del programa, 
-                    dando como resultado una ampliación de los resultados posibles de una misma instancia o la sustitución de este última.
+                    Con el fin de facilitar la experiencia de uso en el framework, se ha desarrollado una interfaz gráfica, la cual ejecuta los mismos procedimientos efectuados por la linea de comandos.
                   </p>
                   <p>
-                    De igual manera, es posible configurar estos parámetros de ejecución al iniciar el software desde la línea de comandos. 
-                    A continuación, se entregan los comandos generales:
+                    Para activar esta función, es necesario ejecutar el comando:
+                    <div class="d-flex justify-content-center">
+                      <div class="col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
+                        <samp>python tspf.py --gui</samp>
+                      </div>
+                    </div>
                   </p>
-                  <ul>
-                    <li>
-                      <b>--help (-h):</b> entrega la lista de comandos disponibles del framwork
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --help</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--metaheuristic (-mh):</b> tipo de metaheurística a usar, por defecto <samp>SA</samp>
-                      <ul type="circle">
-                        <li><b>SA:</b> Simulated Annealing</li>
-                        <li><b>GA:</b> Algoritmo Genetico</li>
-                      </ul>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -mh GA</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--instance (-i):</b> ruta al archivo de la instancia de TSP a resolver, por defecto <samp>instances/burma14.tsp</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -i instances/2000-5.tsp</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--seed (-s):</b> semilla para la generación de números aleatorios, relacionado al módulo random de Python
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -s 4854</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--evaluations (-e):</b> numero máximo de evaluaciones a calcular, por defecto se utiliza <samp>1000</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -e 2000</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--iterations (-it):</b> numero máximo de iteraciones a calcular, por defecto se utiliza <samp>20</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py -it 500</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--visualize (-vi):</b> activa la función de visualizar gráficamente el recorrido de las mejores soluciones encontradas
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --visualize</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--solution (-sol) [nombre_archivo]:</b> permite personalizar el nombre de los archivos de salida de la ejecución, tanto 
-                      para el archivo <samp>.txt</samp> como el <samp>.csv</samp>
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --solution ejecucion10</samp>
-                        </div>
-                      </div>
-                      <hr>
-                    </li>
-                    <li>
-                      <b>--gui (-gui):</b> despliega la interfaz gráfica del framework
-                      <div class="d-flex justify-content-center">
-                        <div class="mt-3 col-md-6" style="background-color: rgba(74, 74, 75, 0.849); text-align: center; color: aliceblue;">
-                          <samp>python tspf.py --gui</samp>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                  <p>
+                    A continuación se observan algunas capturas de la interfaz con pequeñas descripciones de los diferentes opciones disponibles (<b>al seleccionar la imagen, se aprecian con mayor detalle</b>):
+                  </p>
+                  <div>
+                    <h5>Inicio</h5>
+                    <a href="./images/GUI/Base.png" target="_blank"><img src="./images/GUI/Base.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica de Inicio"></a>
+                    <hr>
+                  </div>
+                  <div>
+                    <h5>Selección de Metaheurística</h5>
+                    <a href="./images/GUI/Seleccion.png" target="_blank"><img src="./images/GUI/Seleccion.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica de Seleccion de Metaheuristica"></a>
+                    <hr>
+                  </div>
+                  <div>
+                    <h5>Opciones Simulated Annealing</h5>
+                    <a href="./images/GUI/SimulatedAnnealing.png" target="_blank"><img src="./images/GUI/SimulatedAnnealing.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica de Simmulated Annealing"></a>
+                    <hr>
+                  </div>
+                  <div>
+                    <h5>Opciones Algoritmo Genético</h5>
+                    <a href="./images/GUI/AlgoritmoGenetico.png" target="_blank"><img src="./images/GUI/AlgoritmoGenetico.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica de Algoritmo Genético"></a>
+                    <hr>
+                  </div>
+                  <div>
+                    <h5>Opciones Local Search</h5>
+                    <a href="./images/GUI/LocalSearch.png" target="_blank"><img src="./images/GUI/LocalSearch.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica de Local Search"></a>
+                    <hr>
+                  </div>
+                  <div>
+                    <h5>Opciones Iterated Local Search</h5>
+                    <a href="./images/GUI/IteratedLocalSearch.png" target="_blank"><img src="./images/GUI/IteratedLocalSearch.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica de Iterated Local Search"></a>
+                    <hr>
+                  </div>
+                  <div>
+                    <h5>Guardar y Cargar configuraciones</h5>
+                    <a href="./images/GUI/GuardarCargar.png" target="_blank"><img src="./images/GUI/GuardarCargar.png" class="img-fluid rounded mx-auto d-block" alt="Imagen Interfaz Gráfica para Guardar y Cargar salida de datos"></a>
+                  </div>
                 </div>
                 <hr>    
             </div>
