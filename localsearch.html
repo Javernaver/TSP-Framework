@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="shortcut icon" href="images/favicon.ico"/>
-    <title>TSP Framework</title>
+    <title>TSP Framework - Local Search</title>
   </head>
   <body style="background-image:url(images/TSP\ Tour.png)">
     <nav class="navbar navbar-center navbar-expand-lg navbar-light fixed-top" style="background-color:rgb(74, 74, 75);">
@@ -75,8 +75,6 @@
                 <li><a class="dropdown-item" href="./metaheuristicas.html">Metaheurísticas</a></li>
                 <li><a class="dropdown-item" href="./simulatedannealing.html">Simulated Annealing</a></li>
                 <li><a class="dropdown-item" href="./algoritmogenetico.html">Algoritmos Genéticos</a></li>
-                <li><a class="dropdown-item" href="./localsearch.html">Local Search</a></li>
-                <li><a class="dropdown-item" href="./iteratedlocalsearch.html">Iterated Local Search</a></li>
               </ul>
             </li>
           </ul>
@@ -102,90 +100,81 @@
     <div>
         <div class="row">
             <div class="mt-5 col-md-10 offset-md-1" style="background-color: rgba(207, 207, 207, 0.925);">
-                <h1 class="mt-4 d-flex justify-content-center">TSP Framework</h1>
-                <div class="col-md-10 offset-md-1">
-                  <p>
-                    El problema del vendedor viajero (TSP) es un problema de optimización en el que se debe
-                    encontrar una ruta óptima que visite un conjunto de ubicaciones o ciudades para luego volver al
-                    punto de partida. Esta ruta debe minimizar los costos o la distancia recorrida.
-                  </p>
-                  <p>
-                    El software TSP-Framework tiene como enfoque el solucionar instancias de este tipo de problema 
-                    gracias al uso de las metaheurísticas de Simulated Annealing y Algoritmos Genéticos. 
-                  </p>
+              <h1 class="mt-4 d-flex justify-content-center">Local Search</h1>
+              <p></p>
+              <div class="col-md-10 offset-md-1">
+                <p>
+                  La búsqueda local es un método heurístico para resolver problemas de optimización computacionalmente difíciles. 
+                  La búsqueda local se puede utilizar en problemas que se pueden formular como encontrar una solución que maximiza 
+                  un criterio entre varias soluciones candidatas. Los algoritmos de búsqueda local se mueven de una solución a 
+                  otra en el espacio de soluciones candidatas (el espacio de búsqueda) mediante la aplicación de cambios locales, 
+                  hasta que se encuentra una solución considerada óptima.
+                </p>
+                <div class="col-2">
+                  <h4 class="d-flex justify-content-start">Pseudocódigo</h4>
                 </div>
-                <h5 class="mt-4 d-flex justify-content-center">Demo Simulated Annealing</h5>
-                <div class="d-flex justify-content-center">
-                  <video width="960" height="520" controls>
-                    <source src="./images/Demo.mp4" type="video/mp4">
-                    Tu navegador no soporta videos.
-                  </video>
-                </div>
-                <div class="col-10">
-                  <p class="d-flex justify-content-end" style="font-size: medium;">
-                    <samp>Esquema enfriamiento lineal α = 0.98</samp>
-                  </p>
-                </div>
-                <div class="col-md-10 offset-md-1 mt-5">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="card" style="width: 18rem; background-color:rgb(74, 74, 75); color:aliceblue">
-                        <div class="card-body">
-                          <h5 class="card-title">Instalación Python <img src="./images/Python.png" alt="" style="width:25px;height:25px"></h5>
-                          
-                          <p class="card-text">Para usar el framework de manera local, es necesario instalar Python en su equipo.</p>
-                          <h6 class="card-subtitle mb-2" style="color: rgb(202, 205, 207);"><b>Seleccione SO</b></h6>
-                          <div class="d-flex justify-content-center">
-                            <a href="https://www.python.org/downloads/windows/" class="card-link"><img src="./images/Windows.png" alt="Python Windows" style="width:60px;height:60px"></a>
-                            <a href="https://www.python.org/downloads/source/" class="card-link"><img src="./images/Linux.png" alt="Python Linux" style="width:60px;height:60px"></a>
-                            <a href="https://www.python.org/downloads/macos/" class="card-link"><img src="./images/macOS.png" alt="Python macOS" style="width:60px;height:60px"></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="card" style="width: 18rem; background-color:rgb(74, 74, 75); color:aliceblue">
-                        <div class="card-body">
-                          <h5 class="card-title">Instancias</h5>
-                          <p class="card-text">Pruebe a descargar instancias en formato TSP para ejecutar este framework</p>
-                          <h6 class="card-subtitle mb-2" style="color: rgb(202, 205, 207);">Universidad de Heidelberg</h6>
-                          <div class="d-flex justify-content-center">
-                            <a href="http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/" class="card-link"><img src="./images/Descarga.png" alt="Boton Lista Descargar" style="width:60px;height:60px"></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="card" style="width: 18rem; background-color:rgb(74, 74, 75); color:aliceblue">
-                        <div class="card-body">
-                          <h5 class="card-title">Online</h5>
-                          <p class="card-text">Ejecute el framework sin la necesidad de descargarlo, gracias a la virtualizacion de SO</p>
-                          <h6 class="card-subtitle mb-2" style="color: rgb(202, 205, 207);">Replit</h6>
-                          <div class="d-flex justify-content-center">
-                            <a href="replit.html" class="card-link"><img src="./images/Replit.png" alt="Boton Lista Descargar" style="width:60px;height:60px"></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr/>
+                <p>El procedimiento de ejecución del algoritmo se rige por las siguientes operaciones:</p>
+                <ol>
+                  <li>
+                    Se genera una solución inicial, denominada como solucion actual (s), la cual a su vez será considerada la mejor solución (s*).
+                  </li>
+                  <li>
+                    Luego se limita el espacio de búsqueda a los vecinos de la solución, llamado movimiento del espacio de búsqueda.
+                  </li>
+                  <li>
+                    Se genera una solucion vecina (s') a partir de la solución actual (s).
+                  </li>
+                  <li>
+                    Se comprueba que el nuevo vecino (s’) sea una mejor solución que la actual (s), se presentan dos situaciones:
+                    <ol type="a">
+                      <li>
+                        Si el vecino (s’) es peor solución a la actual (s), se genera un nuevo vecino de la solución actual (s).
+                        En caso de no poder generar mas soluciones vecinas (s’), se devuelve la mejor solución encontrada (s*).
+                      </li>
+                      <li>
+                        Si el vecino (s’) es mejor que la solución actual (s), el vecino se convierte en la solución actual (s) 
+                        y además en la mejor solución (s*).
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    Cuando la mejor solución encontrada (s*) es la mejor solución entre los vecinos generados de la solución actual 
+                    (s) se le considera una solución Best Improvement:
+                    <ol type="a">
+                      <li>
+                        En caso de que se cumpla esta condición, se vuelve al paso 2, repitiendo el proceso.
+                      </li>
+                      <li>
+                        En caso de no cumplir esta condición, se vuelve al paso 3, hasta encontrar la mejor solución entre los posibles vecinos.
+                      </li>
+                    </ol>
+                  </li>
+                  <li>
+                    La ejecución finaliza cuando ya no es posible encontrar un mejor vecino (s´) de la solución actual (s) o por condición de término
+                    (iteraciones máximas, evaluaciones máximas o tiempo de ejecución).
+                  </li>
+                </ol>
+                <p>Con el fin de facilitar la comprensión del algoritmo, se presenta un diagrama de flujo:</p>
+                <img src="images/Local Search.JPG" alt="Diagrama de flujo Local Search" class="rounded mx-auto d-block img-thumbnail">
+              </div>
+              <hr/>
+              <p></p>
             </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12" style="background-color:rgb(74, 74, 75);">
-            <div class="mt-4 d-flex justify-content-center" style="color: antiquewhite; text-align: center;">
-              <dl>
-                <dt>Pontificia Universidad Católica de Valparaíso</dt>
-                <dt>Facultad de Ingeniería</dt>
-                <dt>Escuela de Ingeniería Informática</dt>
-              </dl>
-            </div>
-            <p class="mt-4 d-flex justify-content-center" style="color: antiquewhite;">
-              Desarrollado por Jorge Polanco & Javier del Canto
-            </p>
           </div>
-        </div>
+          <div class="row">
+            <div class="col-md-12" style="background-color:rgb(74, 74, 75);">
+              <div class="mt-4 d-flex justify-content-center" style="color: antiquewhite; text-align: center;">
+                <dl>
+                  <dt>Pontificia Universidad Católica de Valparaíso</dt>
+                  <dt>Facultad de Ingeniería</dt>
+                  <dt>Escuela de Ingeniería Informática</dt>
+                </dl>
+              </div>
+              <p class="mt-4 d-flex justify-content-center" style="color: antiquewhite;">
+                Desarrollado por Jorge Polanco & Javier del Canto
+              </p>
+            </div>
+          </div>
     </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
