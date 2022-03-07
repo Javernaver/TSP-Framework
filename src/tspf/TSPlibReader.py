@@ -41,6 +41,10 @@ class TSPlibReader():
     n = 0
     # Nombre del archivo de instancia
     name = ''
+    # modo Gui
+    gui = False
+    # error
+    error = ''
 
     def __init__(self, tsp_file_name: str):
         """ Constructor clase TSPlibReader recibe la ruta al archivo de la instancia"""
@@ -48,18 +52,21 @@ class TSPlibReader():
         try:
             # Leer instancia desde un archivo
             self.nodeptr = self.read_etsp(tsp_file_name)
+           
         except:
-            print(f"{bcolors.FAIL}Error: No se tiene acceso al archivo.{bcolors.ENDC}")
-            exit()
-        # Obtener la matriz de distancias
-        print('Calculando las distancias...')
-        self.compute_distances()
-        # Generar listas de vecinos ordenados
-        print('Calculando los vecinos...')
-        self.compute_nn_lists()
-        print(f"instancia {self.name} tiene {self.n} nodos")
-        #print(self.distance)
-        #print(self.nn_list)
+            if not self.gui:
+                print(f"{bcolors.FAIL}Error: No se pudo leer el archivo.{bcolors.ENDC}")
+                exit()
+        if not self.error:
+            # Obtener la matriz de distancias
+            print('Calculando las distancias...')
+            self.compute_distances()
+            # Generar listas de vecinos ordenados
+            print('Calculando los vecinos...')
+            self.compute_nn_lists()
+            print(f"instancia {self.name} tiene {self.n} nodos")
+            #print(self.distance)
+            #print(self.nn_list)
 
 
     def read_etsp(self, tsp_file_name: str) -> list:
@@ -85,14 +92,22 @@ class TSPlibReader():
         found_coord_section = False
 
         if (tsp_file_name == None):
-            print(f"{bcolors.FAIL}Error: Instancia no especificada, abortando...{bcolors.ENDC}")
-            exit()
+            if not self.gui:
+                print(f"{bcolors.FAIL}Error: Instancia no especificada, abortando...{bcolors.ENDC}")
+                exit()
+            else:
+                self.error = 'Instancia no especificada'
+                return
 
         if(not(os.access(tsp_file_name, os.R_OK))):
-            print(f"{bcolors.FAIL}Error: No se puede leer el archivo {tsp_file_name}{bcolors.ENDC}")
-            print(f"{bcolors.BOLD}Si esta utilizando el framework desde otra carpeta recuerde agregar la instancia tsp con el parametro (-i <PATH> o --instance <PATH>) {bcolors.ENDC}")  
-        
-            exit()
+            if not self.gui:
+                print(f"{bcolors.FAIL}Error: No se puede leer el archivo {tsp_file_name}{bcolors.ENDC}")
+                print(f"{bcolors.BOLD}Si esta utilizando el framework desde otra carpeta recuerde agregar la instancia tsp con el parametro (-i <PATH> o --instance <PATH>) {bcolors.ENDC}")  
+            
+                exit()
+            else:
+                self.error = 'No se puede leer el archivo'
+                return
             
         print(f"Leyendo archivo TSPlib {tsp_file_name} ... ")
         archivo = open(tsp_file_name, "r")
@@ -105,8 +120,12 @@ class TSPlibReader():
                     self.name = linea[linea.find(":")+2:len(linea)-1]
 
                 elif(linea.startswith("TYPE") and linea.find("TSP") == -1):
-                    print(f"{bcolors.FAIL}Instancia no esta en el formato TSPLIB !!{bcolors.ENDC}")
-                    exit()
+                    if not self.gui:
+                        print(f"{bcolors.FAIL}Instancia no esta en el formato TSPLIB !!{bcolors.ENDC}")
+                        exit()
+                    else:
+                        self.error += 'Instancia no esta en el formato TSPLIB !!'
+                        return
                 elif(linea.startswith("DIMENSION")):
                     self.n = int(linea[linea.find(":")+2 : len(linea)-1])
                     nodeptr = [Point] * self.n
@@ -122,8 +141,12 @@ class TSPlibReader():
                         elif(buf == "ATT"):
                             self.distance_type = Distance_type.ATT
                         else:
-                            print(f"{bcolors.FAIL}EDGE_WEIGHT_TYPE {buf} no implementado en la clase.{bcolors.ENDC}")
-                            exit()
+                            if not self.gui:
+                                print(f"{bcolors.FAIL}EDGE_WEIGHT_TYPE {buf} no implementado en la clase.{bcolors.ENDC}")
+                                exit()
+                            else:
+                                self.error = f'EDGE_WEIGHT_TYPE {buf} no implementado en la clase.'
+                                return
             else:
                   
                 city_info = linea.split()
@@ -137,8 +160,12 @@ class TSPlibReader():
             linea = archivo.readline()
     
         if (found_coord_section == False):
-            print("Error: Ocurrio al buscar el inicio de las coordenadas !!")
-            exit()
+            if not self.gui:
+                print("Error: Ocurrio al buscar el inicio de las coordenadas !!")
+                exit()
+            else:
+                self.error = 'Ocurrio al buscar el inicio de las coordenadas !!'
+                return
 
         archivo.close()
         

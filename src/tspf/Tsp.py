@@ -30,20 +30,31 @@ class Tsp():
         Clase constructora, lee todas las opciones que pueda tener el problema
    
     """
+    
+    # errores de lectura en TSPLIB
+    error = ''
 
     def __init__(self, filename: str) -> None:
 
         # Atributos de instancia
         self.instance = TSPlibReader(tsp_file_name=filename) # Instancia TSPlibReader que lee el archivo y calcula las distancias
-
-        self.distances = self.instance.distance # Matriz con las distacias
-
-        self.neighbours = self.instance.nn_list # Matriz con vecinos mas cercanos 
         
-        self.nodes = self.instance.n # Numero de Nodos
+        
+        self.error = self.instance.error
+            
+        
+        if not self.error:
 
-        # Guardar coordenadas de los puntos del para generar mapeado al utilizar la graficacion
-        plot.Graph.coords = self.instance.nodeptr.copy()
+            self.distances = self.instance.distance # Matriz con las distacias
+
+            self.neighbours = self.instance.nn_list # Matriz con vecinos mas cercanos 
+            
+            self.nodes = self.instance.n # Numero de Nodos
+
+            # Guardar coordenadas de los puntos del para generar mapeado al utilizar la graficacion
+            plot.Graph.coords = self.instance.nodeptr.copy()
+        
+        
 
 
     def getSize(self) -> int:

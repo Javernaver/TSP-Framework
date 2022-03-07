@@ -49,6 +49,10 @@ MANIFEST
 *.manifest
 *.spec
 
+#output
+/output
+/log
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

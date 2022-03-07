@@ -4,7 +4,7 @@ Modulo dedicado a la interfaz grafica de usuario
 """
 from . import bcolors, plot
 from ..Algorithms import GeneticAlgorithm, SimulatedAnnealing, LocalSearch, IteratedLocalSearch, timer
-from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType
+from .. import Enum, os, sys, AlgorithmsOptions, Tsp, Tour, MHType, InitialSolution, TSPMove, CoolingType, SelectionType, SelectionStrategy, CrossoverType, PerturbationType, TSPlibReader
 
 from tkinter import Label, Tk, Frame, Button, Checkbutton, LabelFrame, Entry, StringVar, Text, Menu
 from tkinter import END
@@ -854,9 +854,15 @@ class Gui():
         
         # Mostrar Opciones 
         options.printOptions()
-
+        # asignar modo gui a la lectura de instancias para gestionar los errores
+        TSPlibReader.gui = self.options.gui
         # leer e interpretar el problema TSP leido desde la instancia definida
         problem = Tsp(filename=options.instance)
+        
+        # si hubo algun error al leer la instancia e interpretarla
+        if problem.error:
+            messagebox.showerror(title="Error", message=f'{problem.error}')
+            return
 
         # Ejecutar Simulated Annealing
         if (options.metaheuristic == MHType.SA):
