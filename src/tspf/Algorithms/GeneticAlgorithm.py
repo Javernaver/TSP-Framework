@@ -1,5 +1,5 @@
 """
-Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genetico
+Modulo que contiene la clase que representa la metaheuristica de Algoritmo Genético
 
 """
 
@@ -8,7 +8,7 @@ from . import Population, csv, datetime, Path, timer, PrettyTable, path
 from .. import Tour, Tsp, AlgorithmsOptions, SelectionStrategy
 
 class GeneticAlgorithm():
-    """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de busqueda
+    """ Clase Simulated Annealing la cual representa dicha metaheristica y sus metodos de búsqueda
 
         Parameters
         ----------
@@ -20,21 +20,21 @@ class GeneticAlgorithm():
         Attributes
         ----------
         pop_size : int
-            Numero de integrantes de la poblacion
+            Numero de integrantes de la población
         offspring_size : int
-            Numero de hijos para los integrantes de la poblacion
+            Numero de hijos para los integrantes de la población
         pselection_type : SelectionType
             Metodo de seleccion de padres
         crossover_type : CrossoverType
             Metodo de cruzamiento para los padres
         mutation_type : TSPMove
-            Metodo de mutacion para la poblacion
+            Metodo de mutacion para la población
         mutation_prob : float
-            Probabilidad de mutacion para la poblacion
+            Probabilidad de mutacion para la población
         selection_strategy : SelectionStrategy
-            Estrategia de seleccion para la nueva poblacion
+            Estrategia de seleccion para la nueva población
         gselection_type : SelectionType
-            Tipo de seleccion de la poblacion
+            Tipo de seleccion de la población
         best_tour : Tour
             Instancia del mejor tour
         evaluations : int
@@ -44,7 +44,7 @@ class GeneticAlgorithm():
         total_time : float
             Tiempo de ejecucion de Simulated Annealing
         trajectory : list
-            Lista de objetos de la trayectoria de la solucion
+            Lista de objetos de la trayectoria de la solución
 
         Examples
         --------
@@ -60,7 +60,7 @@ class GeneticAlgorithm():
 
         self.best_tour: Tour = None # Mejor tour 
         
-        self.total_time = 0.0 # tiempo de ejecucion de Algoritmo Genetico
+        self.total_time = 0.0 # tiempo de ejecucion de Algoritmo Genético
         
         self.iterations = 1 # numero de iteraciones
         
@@ -68,9 +68,9 @@ class GeneticAlgorithm():
 
         self.options: AlgorithmsOptions # Opciones
 
-        self.total_time = 0.0 # tiempo de ejecucion de Algoritmo Genetico
+        self.total_time = 0.0 # tiempo de ejecucion de Algoritmo Genético
 
-        self.trajectory = [] # lista de listas con la trayectoria de la solucion
+        self.trajectory = [] # lista de listas con la trayectoria de la solución
 
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
@@ -83,7 +83,7 @@ class GeneticAlgorithm():
         else:
             self.problem = problem
 
-        self.pop_size = self.options.pop_size # Parametro tamaño de la poblacion 
+        self.pop_size = self.options.pop_size # Parametro tamaño de la población 
 
         self.offspring_size = self.options.offspring_size # Cantidad de hijos
 
@@ -95,26 +95,26 @@ class GeneticAlgorithm():
 
         self.mutation_prob = self.options.mutation_prob # Probabilidad de mutacion
 
-        self.selection_strategy = self.options.selection_strategy # Estrategia de seleccion de la nueva poblacion
+        self.selection_strategy = self.options.selection_strategy # Estrategia de seleccion de la nueva población
 
-        self.gselection_type = self.options.gselection_type # Tipo de seleccion de la poblacion
+        self.gselection_type = self.options.gselection_type # Tipo de seleccion de la población
 
-        print(f"{bcolors.HEADER}\nIniciando Algortimo Genetico...{bcolors.ENDC}")
+        print(f"{bcolors.HEADER}\nIniciando Algortimo Genético...{bcolors.ENDC}")
 
 
     def print_best_solution(self) -> None:
-        """ Escribir la mejor solucion """
+        """ Escribir la mejor solución """
         self.updateLog()
         print()
-        print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
+        print(f"\t\t{bcolors.UNDERLINE}Mejor Solución Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol(True)
         print(f"{bcolors.BOLD}Total de iteraciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.iterations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-self.offspring_size}{bcolors.ENDC}")
-        print(f"{bcolors.BOLD}Tiempo total de busqueda con Algoritmo Genetico:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de búsqueda con Algoritmo Genético:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
 
 
     def search(self) -> None:
-        """ Ejecuta la busqueda del Algoritmo Genetico desde una poblacion generada aleatoriamente """
+        """ Ejecuta la búsqueda del Algoritmo Genético desde una población generada aleatoriamente """
 
         # Tabla para almacenar la informacion de la ejecucion
         table = PrettyTable()
@@ -123,18 +123,18 @@ class GeneticAlgorithm():
         "Promedio", "Desv. Estandar", f"Detalles{bcolors.ENDC}"]
         
         parents = []
-        # Inicializar poblacion
-        print(f"{bcolors.BOLD}Generando poblacion inicial...{bcolors.ENDC}")
+        # Inicializar población
+        print(f"{bcolors.BOLD}Generando población inicial...{bcolors.ENDC}")
         population = Population(pop_size=self.pop_size, problem=self.problem)
-        # Iniciar poblacion de hijos
+        # Iniciar población de hijos
         offspring = Population(problem=self.problem)
         
 
         # Imprimir mejor solución encontrada 
-        print(f"{bcolors.UNDERLINE}Mejor individuo de la poblacion{bcolors.ENDC}")
+        print(f"{bcolors.UNDERLINE}Mejor individuo de la población{bcolors.ENDC}")
         population.getBestTour().printSol()
         
-        # Guardar la mejor solucion en best_tour
+        # Guardar la mejor solución en best_tour
         if not self.best_tour:
             self.best_tour = Tour(tour=population.getBestTour())
         else:
@@ -155,7 +155,7 @@ class GeneticAlgorithm():
         # tiempo para iteraciones y condicion de termino por tiempo
         start = end = timer()
         if not self.options.silent: # si esta o no el modo silencioso que muestra los cambios en cada iteracion
-            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genetico...\n{bcolors.ENDC}")
+            print(f"{bcolors.HEADER}\nEjecutando Algoritmo Genético...\n{bcolors.ENDC}")
 
 
         # Bucle principal del algoritmo
@@ -163,7 +163,7 @@ class GeneticAlgorithm():
 
             details = '' # variable de texto con los detalles 
                
-            # Aplicar cruzamiento para generar poblacion de hijos
+            # Aplicar cruzamiento para generar población de hijos
             while (offspring.pop_size < self.offspring_size):
                 parents = population.selectParents(self.pselection_type)
                 offspring.add( population.crossover(parents, self.crossover_type) )
@@ -172,7 +172,7 @@ class GeneticAlgorithm():
             offspring.mutation(self.mutation_prob, self.mutation_type)
 
         
-            # Revisar si algun hijo es la mejor solucion hasta el momento
+            # Revisar si algun hijo es la mejor solución hasta el momento
             if (offspring.getBestTour().cost < self.best_tour.cost):
 
                 details = f"{bcolors.OKGREEN} Mejor actual: {self.best_tour.cost} -> {offspring.getBestTour().cost} ¡Actualizado!{bcolors.ENDC}"
@@ -199,7 +199,7 @@ class GeneticAlgorithm():
                         f"{details}"
                         ])
 
-            # Seleccionar nueva poblacion
+            # Seleccionar nueva población
             if (self.selection_strategy == SelectionStrategy.MULAMBDA):
                 # Seleccionar solo desde los hijos
                 if (self.offspring_size > self.pop_size):
@@ -214,7 +214,7 @@ class GeneticAlgorithm():
                 offspring.selectPopulation(self.pop_size, self.gselection_type)
                 population.copy(offspring)            
                     
-            # Actualizar contadores de iteraciones y evaluaciones, luego limpiar la poblacion de hijos
+            # Actualizar contadores de iteraciones y evaluaciones, luego limpiar la población de hijos
             self.evaluations += self.offspring_size
             self.iterations += 1
             offspring.clear()
@@ -225,12 +225,12 @@ class GeneticAlgorithm():
             print(table)
 
 
-        # actualizar tiempo total de busqueda de Algoritmo Genetico
+        # actualizar tiempo total de búsqueda de Algoritmo Genético
         self.total_time = timer() - start
 
 
     def terminationCondition(self, iterations: int, evaluations: int, time: float) -> bool:
-        """ Condicion de termino para el ciclo principal de Algoritmo Genetico, 
+        """ Condicion de termino para el ciclo principal de Algoritmo Genético, 
         basado en los criterios de iteraciones, evaluaciones y tiempo, devuelve verdadero o falso si se debe continuar o no"""
         
         # Criterio de termino de las iteraciones
@@ -249,11 +249,11 @@ class GeneticAlgorithm():
         return True
 
     def printSolFile(self, outputSol: str) -> None:
-        """ Guarda la solucion en archivo de texto"""
+        """ Guarda la solución en archivo de texto"""
         utilities.printSolToFile(outputSol, self.best_tour.current)
 
     def printTraFile(self, outputTra: str) -> None:
-        """ Guarda la trayectoria de la solucion en archivo de texto"""
+        """ Guarda la trayectoria de la solución en archivo de texto"""
         utilities.printTraToFile(outputTra, self.trajectory)
 
     def updateLog(self) -> None:
@@ -276,10 +276,10 @@ class GeneticAlgorithm():
             if not csvfile.tell():
                 writer.writeheader()
 
-            # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+            # crear texto con la solución separando cada elemento con espacios y luego guardarlo en el archivo
             sol = " ".join([str(elem) for elem in self.best_tour.current])
 
-            # escribir la mejor solucion y todas las caracteristicas de su ejecucion
+            # escribir la mejor solución y todas las caracteristicas de su ejecucion
             writer.writerow({
                 "solution": sol, 
                 "cost": self.best_tour.cost, 
@@ -303,7 +303,7 @@ class GeneticAlgorithm():
     
 
     def visualize(self) -> None:
-        """ Visualiza la trayectoria de la solucion """
+        """ Visualiza la trayectoria de la solución """
         plot.Graph.replit = self.options.replit
         plot.Graph.trajectory = self.trajectory
         

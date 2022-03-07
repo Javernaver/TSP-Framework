@@ -1,5 +1,5 @@
 """
-Modulo que contiene la clase la cual representa el metodo de busqueda de IteratedLocalSearch
+Modulo que contiene la clase la cual representa el metodo de búsqueda de IteratedLocalSearch
 
 """
 
@@ -11,7 +11,7 @@ class IteratedLocalSearch():
     
     
     def __init__(self, options: AlgorithmsOptions = None, problem: Tsp = None) -> None:
-        """ Clase Local Search la cual representa este metodo de busqueda
+        """ Clase Local Search la cual representa este metodo de búsqueda
 
         Parameters
         ----------
@@ -37,7 +37,7 @@ class IteratedLocalSearch():
         total_time : float
             Tiempo de ejecucion de Iterated Local Search
         trajectory : list
-            Lista de objetos de la trayectoria de la solucion
+            Lista de objetos de la trayectoria de la solución
         bestImprovement : bool
             Si es de tipo best improvement o no
 
@@ -67,7 +67,7 @@ class IteratedLocalSearch():
 
         self.options: AlgorithmsOptions # Opciones
 
-        self.trajectory = [] # lista con la trayectoria de la solucion
+        self.trajectory = [] # lista con la trayectoria de la solución
         
         # Si por el objeto con las opciones no es enviado al iniciar la clase
         if not options:
@@ -89,31 +89,31 @@ class IteratedLocalSearch():
         
         
     def print_best_solution(self) -> None:
-        """ Escribir la mejor solucion """
+        """ Escribir la mejor solución """
         self.updateLog()
         print()
-        print(f"\t\t{bcolors.UNDERLINE}Mejor Solucion Encontrada{bcolors.ENDC}\n")
+        print(f"\t\t{bcolors.UNDERLINE}Mejor Solución Encontrada{bcolors.ENDC}\n")
         self.best_tour.printSol(True)
         print(f"{bcolors.BOLD}Total de iteraciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.iterations-1}{bcolors.ENDC}")
         print(f"{bcolors.BOLD}Total de evaluaciones:{bcolors.ENDC} {bcolors.OKBLUE}{self.evaluations-1}{bcolors.ENDC}")
-        print(f"{bcolors.BOLD}Tiempo total de busqueda con Iterated Local Search:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
+        print(f"{bcolors.BOLD}Tiempo total de búsqueda con Iterated Local Search:{bcolors.ENDC} {bcolors.OKBLUE}{self.total_time:.3f} segundos{bcolors.ENDC}")
 
     
     def search(self, first_solution: Tour = None) -> None:
-        """ Ejecuta la busqueda de Iterated Local Search desde una solucion inicial """
+        """ Ejecuta la búsqueda de Iterated Local Search desde una solución inicial """
 
         table = PrettyTable()
 
         table.field_names = [f"{bcolors.BOLD}Iteraciones", "Tiempo", f"Detalles{bcolors.ENDC}"]
 
-        # Si el atributo opcional de la solucion inicial no esta incluido
+        # Si el atributo opcional de la solución inicial no esta incluido
         if not first_solution:
             first_solution = Tour(type_initial_sol=self.options.initial_solution, problem=self.problem)
 
  
         current_tour = Tour(tour=first_solution) # variable del tour actual 
         
-        self.best_tour.copy(first_solution) # solucion inicial se guarda como la mejor hasta el momento
+        self.best_tour.copy(first_solution) # solución inicial se guarda como la mejor hasta el momento
         # Guardar trayectoria Final
         self.trajectory.append( Trajectory(
                                 tour=self.best_tour.current.copy(),
@@ -127,7 +127,7 @@ class IteratedLocalSearch():
                                     iterations=self.iterations-1, 
                                     evaluations=self.evaluations-1) )
                                 
-        print(f"{bcolors.UNDERLINE}\nComenzando busqueda, solucion inicial: {bcolors.ENDC}")
+        print(f"{bcolors.UNDERLINE}\nComenzando búsqueda, solución inicial: {bcolors.ENDC}")
         self.best_tour.printSol()
 
        
@@ -146,7 +146,7 @@ class IteratedLocalSearch():
             
             details = ''
             
-            # Realizar busqueda Local Search
+            # Realizar búsqueda Local Search
             if self.options.move == TSPMove.SWAP:
                 solver.swapSearch(current_tour)
             elif self.options.move == TSPMove.TWO_OPT:
@@ -169,10 +169,10 @@ class IteratedLocalSearch():
                     move = utilities.random.choice([m.value for m in TSPMove]) # seleccionar Perturbacion aleatoria
                     current_tour.randomMove(move)
 
-            # si se encontro una mejor solucion
+            # si se encontro una mejor solución
             if current_tour.cost < self.best_tour.cost:
                                 
-                details = f"{bcolors.OKGREEN} Mejor solucion encontrada: {current_tour.cost}{bcolors.ENDC}" 
+                details = f"{bcolors.OKGREEN} Mejor solución encontrada: {current_tour.cost}{bcolors.ENDC}" 
                 
                 
                 self.trajectory.append( Trajectory(
@@ -184,7 +184,7 @@ class IteratedLocalSearch():
                 self.best_tour.copy(current_tour)
                 
             else:
-                details = f"{bcolors.OKBLUE} Solucion actual: {current_tour.cost}{bcolors.ENDC}"
+                details = f"{bcolors.OKBLUE} Solución actual: {current_tour.cost}{bcolors.ENDC}"
                
             
             table.add_row([f"{bcolors.BOLD}{self.iterations}", 
@@ -198,7 +198,7 @@ class IteratedLocalSearch():
             end = timer() # tiempo actual de iteracion
 
 
-        # actualizar tiempo total de busqueda 
+        # actualizar tiempo total de búsqueda 
         self.total_time = timer() - start
         self.evaluations += solver.evaluations
         # Mostrar tabla
@@ -237,11 +237,11 @@ class IteratedLocalSearch():
         
 
     def printSolFile(self, outputSol: str) -> None:
-        """ Guarda la solucion en archivo de texto"""
+        """ Guarda la solución en archivo de texto"""
         utilities.printSolToFile(outputSol, self.best_tour.current)
 
     def printTraFile(self, outputTra: str) -> None:
-        """ Guarda la trayectoria de la solucion en archivo de texto"""
+        """ Guarda la trayectoria de la solución en archivo de texto"""
         utilities.printTraToFile(outputTra, self.trajectory)
 
     def updateLog(self) -> None:
@@ -260,10 +260,10 @@ class IteratedLocalSearch():
             if not csvfile.tell():
                 writer.writeheader()
 
-            # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+            # crear texto con la solución separando cada elemento con espacios y luego guardarlo en el archivo
             sol = " ".join([str(elem) for elem in self.best_tour.current])
 
-            # escribir la mejor solucion y todas las caracteristicas de su ejecucion
+            # escribir la mejor solución y todas las caracteristicas de su ejecucion
             writer.writerow({
                 "solution": sol, 
                 "cost": self.best_tour.cost, 
@@ -278,7 +278,7 @@ class IteratedLocalSearch():
             })
 
     def visualize(self) -> None:
-        """ Visualiza la trayectoria de la solucion """
+        """ Visualiza la trayectoria de la solución """
         plot.Graph.replit = self.options.replit
         plot.Graph.trajectory = self.trajectory
         

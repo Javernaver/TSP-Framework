@@ -1,5 +1,5 @@
 """
-Modulo que contiene la clase la cual representa la poblacion utilizada por la metaheuristica de Algoritmo Genetico
+Modulo que contiene la clase la cual representa la población utilizada por la metaheuristica de Algoritmo Genetico
 
 """
 
@@ -8,16 +8,16 @@ from . import stats
 from .. import Tour, Tsp, CrossoverType, InitialSolution, TSPMove, SelectionType
 
 class Population():
-    """ Clase Population la cual representa una poblacion de indiviuos para Algoritmo Genetico, debe inicializarse obligatoriamente como diccionario
+    """ Clase Population la cual representa una población de indiviuos para Algoritmo Genetico, debe inicializarse obligatoriamente como diccionario
 
         Parameters
         ----------
         problem : Tsp
             Instancia del problema TSP
         pop_size : int
-            Numero de integrantes de la poblacion
+            Numero de integrantes de la población
         population : list
-            Otra lista con poblacion
+            Otra lista con población
         all : Population
             Otra instancia de la misma clase
 
@@ -26,11 +26,11 @@ class Population():
         problem : Tsp
             Instancia del problema TSP
         pop : list
-            Lista con la poblacion de la instancia
+            Lista con la población de la instancia
         pop_size : int
-            Numero total de individuos de la poblacion
+            Numero total de individuos de la población
         best_index : int
-            Indice del indivuduo con la mejor solucion
+            Indice del indivuduo con la mejor solución
 
         Examples
         --------
@@ -46,7 +46,7 @@ class Population():
         
         self.pop = [] # Poblacion
         
-        self.pop_size = 0 # Tamaño de la poblacion
+        self.pop_size = 0 # Tamaño de la población
         
         self.best_index = -1 # Indice del mejor individuo 
 
@@ -55,26 +55,26 @@ class Population():
         if ('problem' in kwargs):
             self.problem = kwargs['problem']
 
-        # Si se inicia con una poblacion
+        # Si se inicia con una población
         if ('pop_size' in kwargs):
             self.pop_size = kwargs['pop_size']
-            # Agregar individuos a la poblacion
+            # Agregar individuos a la población
             for _ in range(self.pop_size):
                 self.pop.append( Tour(type_initial_sol=InitialSolution.RANDOM, problem=self.problem) )
             # encontrar mejor individuo    
             self.searchBest()
         
-        # Si se inicia con una poblacion de individos preestablecida
+        # Si se inicia con una población de individos preestablecida
         if ('population' in kwargs):
-            self.pop_size = len(kwargs['population']) # definir tamaño de la poblacion
-            self.pop.extend(kwargs['population']) # agregar la poblacion recibida
+            self.pop_size = len(kwargs['population']) # definir tamaño de la población
+            self.pop.extend(kwargs['population']) # agregar la población recibida
 
-        # Si se inicia con una poblacion general preestablecida
+        # Si se inicia con una población general preestablecida
         if ('all' in kwargs):
             self.problem = kwargs['all'].problem # definir problema
-            self.pop_size = kwargs['all'].pop_size # definir tamaño de la poblacion
+            self.pop_size = kwargs['all'].pop_size # definir tamaño de la población
             if self.pop_size > 0:
-                self.pop.extend(kwargs['all'].pop) # agregar la poblacion recibida
+                self.pop.extend(kwargs['all'].pop) # agregar la población recibida
 
     
     def copy(self, population: 'Population') -> None:
@@ -82,16 +82,16 @@ class Population():
         self.problem = population.problem
         self.pop_size = population.pop_size
         self.pop.clear() # limpiar lista
-        # si la instancia trae una poblacion
+        # si la instancia trae una población
         if self.pop_size > 0:
             self.pop.extend(population.pop)
             self.best_index = population.best_index
 
     
     def start(self) -> None:
-        """Inicializa la poblacion"""
+        """Inicializa la población"""
         self.pop.clear()
-        # Agregar individuos a la poblacion
+        # Agregar individuos a la población
         for i in range(self.pop_size):
             self.pop.append( Tour(type_initial_sol=InitialSolution.RANDOM, problem=self.problem) )
             self.pop[i].printSol()
@@ -100,7 +100,7 @@ class Population():
 
     
     def add(self, indivi: any) -> None:
-        """Añade un individuo o varios de estos a la solucion """
+        """Añade un individuo o varios de estos a la solución """
         if isinstance(indivi, Tour): # si es un solo individuo
             self.pop.append(indivi)
             self.pop_size += 1
@@ -117,21 +117,21 @@ class Population():
 
 
     def clear(self) -> None:
-        """Elimina todos los individuos de la poblacion"""
+        """Elimina todos los individuos de la población"""
         self.pop.clear()
         self.pop_size = 0
         self.best_index = -1
 
 
     def searchBest(self) -> None:
-        """ Busca el mejor individuo en la poblacion y guarda su indice en la poblacion """
-        # Encontrar y guardar el indice de el individuo de la poblacion con menor costo
+        """ Busca el mejor individuo en la población y guarda su indice en la población """
+        # Encontrar y guardar el indice de el individuo de la población con menor costo
         if self.pop:
             self.best_index = self.pop.index( min(self.pop, key=lambda tour: tour.cost) )
 
 
     def orderPopulation(self) -> None:
-        """Ordena la poblacion de menor a mayor fitness"""
+        """Ordena la población de menor a mayor fitness"""
         # ordenar con metodo sort de listas y clave de ordenamiento el costo o fitness de cada tour que contiene
         self.pop.sort(key=lambda tour: tour.cost)
         self.searchBest()
@@ -139,7 +139,7 @@ class Population():
     
     # Impresiones
     def printPop(self) -> None:
-        """Imprime la poblacion de soluciones i costo"""
+        """Imprime la población de soluciones i costo"""
         for i in range(self.pop_size):
             print(f"{bcolors.UNDERLINE}Individuo {i+1}{bcolors.ENDC}")
             self.pop[i].printSol()
@@ -156,13 +156,13 @@ class Population():
     """
 
     def getBestTour(self) -> Tour:
-        """Retorna el mejor individuo de la poblacion"""
+        """Retorna el mejor individuo de la población"""
         if (self.best_index > -1):
             return self.pop[self.best_index]
         return None
     
     def getWorstTour(self) -> Tour:
-        """Retorna el peor individuo de la poblacion"""
+        """Retorna el peor individuo de la población"""
         worst = max(self.pop, key=lambda tour: tour.cost)
         return worst
 
@@ -219,15 +219,15 @@ class Population():
         return roulette
 
     def getDeviation(self) -> float:
-        """Obtener la desviacion estandar de la poblacion basado en su calidad """
-        # obtener lista con los costos de los tours en la poblacion
+        """Obtener la desviacion estandar de la población basado en su calidad """
+        # obtener lista con los costos de los tours en la población
         costs = [tour.cost for tour in self.pop]
         deviation = stats.stdev(costs) # calcular desviacion estandar
         return deviation
 
     def getAverage(self) -> float:
-        """Obtener el promedio de la poblacion basado en su calidad """
-        # obtener lista con los costos de los tours en la poblacion
+        """Obtener el promedio de la población basado en su calidad """
+        # obtener lista con los costos de los tours en la población
         costs = [tour.cost for tour in self.pop]
         avg = stats.mean(costs) # calcular media aritmetica (promedio)
         return avg
@@ -287,7 +287,7 @@ class Population():
         sel = []
         # Si se seleccionan mas individuos de los permitidos
         if (size > self.pop_size):
-            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una poblacion con {self.pop_size} individuos{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una población con {self.pop_size} individuos{bcolors.ENDC}")
             exit()
  
         # Si todos son seleccionados
@@ -295,7 +295,7 @@ class Population():
             sel = list(range(size))
             return sel
         
-        # Ordenar poblacion
+        # Ordenar población
         self.orderPopulation()
         # Seleccionar
         sel = list(range(size))
@@ -320,7 +320,7 @@ class Population():
         elegible = []
         # Si se seleccionan mas individuos de los permitidos
         if (size > self.pop_size):
-            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una poblacion con {self.pop_size} individuos{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una población con {self.pop_size} individuos{bcolors.ENDC}")
             exit()
         
         # Si todos son seleccionados
@@ -356,7 +356,7 @@ class Population():
 
         # Si se seleccionan mas individuos de los permitidos
         if (size > self.pop_size):
-            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una poblacion con {self.pop_size} individuos{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una población con {self.pop_size} individuos{bcolors.ENDC}")
             exit()
         
         # Si todos son seleccionados
@@ -401,7 +401,7 @@ class Population():
         tsel = []
         # Si se seleccionan mas individuos de los permitidos
         if (size > self.pop_size):
-            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una poblacion con {self.pop_size} individuos{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una población con {self.pop_size} individuos{bcolors.ENDC}")
             exit()
         
         # reducir el tamaño del torneo si es necesario
@@ -674,7 +674,7 @@ class Population():
 
 
     def swapMutation(self, mut_probability: float) -> None:
-        """Aplica swap aleatoriamente a toda la poblacion segun la probabilidad recibida
+        """Aplica swap aleatoriamente a toda la población segun la probabilidad recibida
 
             Parameters
             ----------
@@ -689,7 +689,7 @@ class Population():
                 self.pop[i].randomMove(TSPMove.SWAP)  
 
     def twoOptMutation(self, mut_probability: float) -> None:
-        """Aplica el movimiento 2opt aleatoriamente a toda la poblacion segun la probabilidad recibida
+        """Aplica el movimiento 2opt aleatoriamente a toda la población segun la probabilidad recibida
 
             Parameters
             ----------
@@ -705,7 +705,7 @@ class Population():
     
     
     def threeOptMutation(self, mut_probability: float) -> None:
-        """Aplica el movimiento 2opt aleatoriamente a toda la poblacion segun la probabilidad recibida
+        """Aplica el movimiento 2opt aleatoriamente a toda la población segun la probabilidad recibida
 
             Parameters
             ----------
@@ -731,7 +731,7 @@ class Population():
     """
 
     def selectPopulation(self, size: int, stype: SelectionType) -> None:
-        """ Selecciona individuos para permanecer en la poblacion
+        """ Selecciona individuos para permanecer en la población
 
             Parameters
             ----------
@@ -741,7 +741,7 @@ class Population():
                 tipo de seleccion
         """
         if (size > self.pop_size):
-            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una poblacion con {self.pop_size} individuos{bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: No es posible seleccionar {size} de una población con {self.pop_size} individuos{bcolors.ENDC}")
             exit()
 
         if (stype == SelectionType.BEST):
@@ -756,7 +756,7 @@ class Population():
             self.selectPopBest(size)
 
     def selectPopBest(self, size: int) -> None:
-        """Selecciona individuos para permacer en la poblacion en base al fitness, siendo una seleccion elitista
+        """Selecciona individuos para permacer en la población en base al fitness, siendo una seleccion elitista
 
             Parameters
             ----------
@@ -769,25 +769,25 @@ class Population():
         if (size == self.pop_size):
             return
         
-        # Ordenar poblacion por fitness
+        # Ordenar población por fitness
         self.orderPopulation()
         # Seleccionar los mejores
         for i in range(size):
             sel.append( self.pop[i] )
 
-        # Eliminar los individuos restantes de la poblacion
+        # Eliminar los individuos restantes de la población
         self.pop.clear()
 
         # Agregar los seleccionados
         self.pop.extend(sel)
 
-        # Actualizar poblacion
+        # Actualizar población
         self.pop_size = size
         self.searchBest()
 
     
     def selectPopRandom(self, size: int) -> None:
-        """Selecciona individuos aleatoriamente para permanecer en la poblacion
+        """Selecciona individuos aleatoriamente para permanecer en la población
 
             Parameters
             ----------
@@ -800,22 +800,22 @@ class Population():
         if (size == self.pop_size):
             return
 
-        # Seleccionar los individuos aleatoriamente desde la poblacion elegible y de la cantidad recibida
+        # Seleccionar los individuos aleatoriamente desde la población elegible y de la cantidad recibida
         sel = utilities.random.sample(self.pop, size)
 
-        # Eliminar los individuos restantes de la poblacion
+        # Eliminar los individuos restantes de la población
         self.pop.clear()
 
         # Agregar los seleccionados
         self.pop.extend(sel)
 
-        # Actualizar poblacion
+        # Actualizar población
         self.pop_size = size
         self.searchBest()
 
 
     def selectPopRoulette(self, size: int) -> None:
-        """Selecciona los individuos padres en base a la ruleta para permanacer en la poblacion
+        """Selecciona los individuos padres en base a la ruleta para permanacer en la población
 
             Parameters
             ----------
@@ -839,21 +839,21 @@ class Population():
             for i in range(len(self.pop)):
                 if (r < roulette[i]):
                     sel.append(self.pop[i]) # agregar a los seleccionados
-                    self.pop.pop(i) # eliminar de la poblacion
+                    self.pop.pop(i) # eliminar de la población
                     break
 
-        # Eliminar los individuos restantes de la poblacion
+        # Eliminar los individuos restantes de la población
         self.pop.clear()
 
         # Agregar los seleccionados
         self.pop.extend(sel)
 
-        # Actualizar poblacion
+        # Actualizar población
         self.pop_size = size
         self.searchBest()
 
     def selectPopTournament(self, size: int, tsize: int = 3) -> None:
-        """Selecciona individuos en base al fitness en un torneo para permanecer en la poblacion
+        """Selecciona individuos en base al fitness en un torneo para permanecer en la población
 
             Parameters
             ----------
@@ -880,19 +880,19 @@ class Population():
             tsel = self.selectIRandom(tsize)
 
             # Seleccionar mejor individuo de los participantes del torneo 
-            # tsel lista de indices y con min se accede a la poblacion dichos indices y se selecciona el de menor costo y se selecciona
+            # tsel lista de indices y con min se accede a la población dichos indices y se selecciona el de menor costo y se selecciona
             index = min(tsel, key=lambda ind: self.pop[ind].cost)
-            # Agregar individuo a los seleccionados y luego eliminarlo de la poblacion
+            # Agregar individuo a los seleccionados y luego eliminarlo de la población
             sel.append(self.pop[index]) 
-            self.pop.pop(index) # eliminar de la poblacion
-            self.pop_size -= 1 # disminuir tamaño de la poblacion para la siguiente seleccion
+            self.pop.pop(index) # eliminar de la población
+            self.pop_size -= 1 # disminuir tamaño de la población para la siguiente seleccion
 
-        # Eliminar los individuos restantes de la poblacion
+        # Eliminar los individuos restantes de la población
         self.pop.clear()
 
         # Agregar los seleccionados
         self.pop.extend(sel)
 
-        # Actualizar poblacion
+        # Actualizar población
         self.pop_size = size
         self.searchBest()

@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
     name='TSP-Framework',
-    version='1.17',
-    description='Framework para resolver el problema del vendedor viajero aplicando metodos de busqueda como Simulated Annealing, Genetic Algorithm, Local Search o Iterated Local Search',
+    version='1.27',
+    description='Framework para resolver el problema del vendedor viajero aplicando métodos de búsqueda como Simulated Annealing, Genetic Algorithm, Local Search o Iterated Local Search',
     long_description=open('README.md').read(),
     author='Javier del Canto, Jorge Polanco',
     author_email='javier.delcanto.m@mail.pucv.cl, jorge.polanco.sanmartin@gmail.com',

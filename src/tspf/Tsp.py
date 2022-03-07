@@ -81,19 +81,19 @@ class Tsp():
         return tour_length
 
     def tsp_check_tour(self, tour: list) -> bool:
-        """ Revisa la correctitud de una solucion del TSP """
+        """ Revisa la correctitud de una solución del TSP """
         
         error = False
         used = [0] * self.nodes
 
         # Si no se recibio el tour 
         if (not tour):
-            print(f"{bcolors.FAIL}Error: permutacion no esta inicializada! {bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: permutación no está inicializada! {bcolors.ENDC}")
             exit()
 
         for i in range(self.nodes):
             if used[tour[i]] != 0:
-                print(f"{bcolors.FAIL}Error: la solucion tiene dos veces el valor {tour[i]} (ultima posicion: {i}) {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: la solución tiene dos veces el valor {tour[i]} (última posición: {i}) {bcolors.ENDC}")
                 error = True
             else:
                 used[tour[i]] = 1
@@ -101,28 +101,28 @@ class Tsp():
         if (not error):
             for i in range(self.nodes):
                 if (used[i] == 0):
-                    print(f"{bcolors.FAIL}Error: posicion {i} en la solucion no esta ocupada{bcolors.ENDC}")
+                    print(f"{bcolors.FAIL}Error: posición {i} en la solución no está ocupada{bcolors.ENDC}")
                     error = True
         if (not error):
             if (tour[0] != tour[self.nodes]):
-                print(f"{bcolors.FAIL}Error: la permutacion no es un tour cerrado.{bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Error: la permutación no es un tour cerrado.{bcolors.ENDC}")
                 error = True;
             
         if (not error):
             return True
 
-        print(f"{bcolors.FAIL}Error: vector solucion:{bcolors.ENDC} ", end='')
+        print(f"{bcolors.FAIL}Error: vector solución:{bcolors.ENDC} ", end='')
         for elem in tour:
             print(f"{bcolors.FAIL}{elem}{bcolors.ENDC}", end=" ")
         print()
         return False
         
     def print_solution_and_cost(self, tour: list, final: bool) -> None:
-        """ Muestra la solucion y costo de un tour """
+        """ Muestra la solución y costo de un tour """
         if final:
-            print(f"{bcolors.BOLD}Solucion Final: {bcolors.ENDC}", end='')
+            print(f"{bcolors.BOLD}Solución Final: {bcolors.ENDC}", end='')
         else:
-            print(f"{bcolors.BOLD}Solucion: {bcolors.ENDC}", end='')
+            print(f"{bcolors.BOLD}Solución: {bcolors.ENDC}", end='')
         for elem in tour:
             print(f"{bcolors.OKCYAN}{elem}{bcolors.ENDC}", end=' ')
         if final:
@@ -131,7 +131,7 @@ class Tsp():
             print(f"{bcolors.BOLD}\nCosto: {bcolors.ENDC}{bcolors.OKCYAN}{self.compute_tour_length(tour)}{bcolors.ENDC}")
 
     def random_tour(self) -> list:
-        """ Genera una solucion aleatoria """
+        """ Genera una solución aleatoria """
         # crear lista con tour a reordenar
         tour = list(range(self.nodes))
         # reordenar aleatoriamente el tour
@@ -141,7 +141,7 @@ class Tsp():
         return tour
     
     def greedy_nearest_n(self, start: int) -> list:
-        """ Genera una solucion del tsp usando la heuristica del nodo mas cercano comenzando del nodo start """
+        """ Genera una solución del tsp usando la heuristica del nodo mas cercano comenzando del nodo start """
         tour = [0] * self.nodes
         selected = [False] * self.nodes
 
@@ -162,7 +162,7 @@ class Tsp():
         return tour
     
     def deterministic_tour(self) -> list:
-        """ Genera una solucion deterministica """
+        """ Genera una solución deterministica """
         # Crear lista deterministica (rango secuencial 0 al numero de nodos)
         tour = list(range(self.nodes))
         # Retornar al inicio

@@ -1,5 +1,5 @@
 """
-Modulo dedicado a la interfaz grafica de usuario
+Módulo dedicado a la interfaz gráfica de usuario
 
 """
 from . import bcolors, plot
@@ -53,7 +53,7 @@ class Gui():
     
     
     def __init__(self, root: Tk, options: AlgorithmsOptions) -> None:
-        """Clase que representa la intefaz grafica
+        """Clase que representa la intefaz gráfica
 
         Args:
             root (Tk): raiz con la intefaz tkinter
@@ -124,13 +124,13 @@ class Gui():
         sol = ''
         tra = ''
         if extension == '.txt':
-            sol = filedialog.asksaveasfilename(title='Guardar archivo de solucion al problema TSP', 
+            sol = filedialog.asksaveasfilename(title='Guardar archivo de solución al problema TSP', 
                                                     initialdir=os.getcwd(),
-                                                    filetypes=(('Archivo de solucion', '*.txt'),))
+                                                    filetypes=(('Archivo de solución', '*.txt'),))
         elif extension == '.csv':
-            tra = filedialog.asksaveasfilename(title='Guardar archivo de trayectoria a la solucion al problema TSP', 
+            tra = filedialog.asksaveasfilename(title='Guardar archivo de trayectoria a la solución al problema TSP', 
                                                     initialdir=os.getcwd(),
-                                                    filetypes=(('Archivo de trayectoria a la solucion', '*.csv'),))    
+                                                    filetypes=(('Archivo de trayectoria a la solución', '*.csv'),))    
         
         if sol:
             check = os.path.splitext(sol)  # separa la ruta de la extension en lista
@@ -161,7 +161,7 @@ class Gui():
         self.frame.destroy()
         self.frame = LabelFrame(
                     self.root,
-                    text='Metodo de Busqueda',
+                    text='Método de Búsqueda',
                     bg='#f0f0f0',
                     font=('consolas', 20)
                 )
@@ -176,7 +176,7 @@ class Gui():
         #b.pack(anchor='ne', side='left', padx=50, pady=50)
         b.grid(row=0, column=0, padx=25, pady=25)
         
-        b = Button(self.frame, text='Algoritmo Genetico', command=self.geneticAlgorithm)
+        b = Button(self.frame, text='Algoritmo Genético', command=self.geneticAlgorithm)
         b.config(font=buttonFont)
         #b.pack(anchor='se', side='left', padx=50, pady=50)
         b.grid(row=0, column=1, padx=25, pady=25)
@@ -249,7 +249,7 @@ class Gui():
         eti.grid(row=3, column=1, padx=5, pady=5)
         
         # temperatura minima
-        ltm = Label(frameSA, text='Temperatura Minima:', font=menuLabelFont)
+        ltm = Label(frameSA, text='Temperatura Mínima:', font=menuLabelFont)
         ltm.grid(row=4, column=0, padx=5, pady=5, sticky='e')
         svtm = StringVar(frameSA, value=self.options.tmin)
         etm = Entry(frameSA, textvariable=svtm, validate="focusout", validatecommand=lambda: self.validateNumberSA(svtm, 'tmin'))
@@ -262,19 +262,19 @@ class Gui():
             try:
                 self.options.alpha = float(value.get())
             except:
-                print('alpha debe ser numero')
+                print('Alpha debe ser número')
             return self.options.alpha
         elif atribute == 't0':
             try:
                 self.options.t0 = float(value.get())
             except:
-                print('Temperatura inicial debe ser numero')  
+                print('Temperatura inicial debe ser número')  
             return self.options.t0
         elif atribute == 'tmin':
             try:
                 self.options.tmin = float(value.get())
             except:
-                print('Temperatura minima debe ser numero')
+                print('Temperatura mínima debe ser número')
             return self.options.tmin
         return 0
     
@@ -282,7 +282,7 @@ class Gui():
     """ A L G O R I T M O   G E N E T I C O """
     
     def geneticAlgorithm(self) -> None:
-        """ Configura las opciones de algoritmo genetico """
+        """ Configura las opciones de algoritmo genético """
         
         self.options.metaheuristic = MHType.GA
         self.frameL.destroy()
@@ -291,7 +291,7 @@ class Gui():
         
         frameGA = LabelFrame(
                     self.frameOptions,
-                    text='Algoritmo Genetico',
+                    text='Algoritmo Genético',
                     bg='#f0f0f0',
                     font=("consolas", 22)
                 )
@@ -299,22 +299,22 @@ class Gui():
         #frameGA.pack(anchor='n', side='right', padx=25, pady=15)
         frameGA.grid(row=0, column=3, padx=10, pady=10)
         
-        # cantidad de poblacion
-        lps = Label(frameGA, text='Cant. de individuos de la poblacion: ', font=menuLabelFont)
+        # cantidad de población
+        lps = Label(frameGA, text='Cant. de individuos de la población: ', font=menuLabelFont)
         lps.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         svps = StringVar(frameGA, value=self.options.pop_size)
         eps = Entry(frameGA, textvariable=svps, validate="focusout", validatecommand=lambda: self.validateNumberGA(svps, 'pop_size'))
         eps.grid(row=0, column=1, padx=5, pady=5)
         
         # cantidad de hijos
-        los = Label(frameGA, text='Cant. de hijos de la poblacion: ', font=menuLabelFont)
+        los = Label(frameGA, text='Cant. de hijos de la población: ', font=menuLabelFont)
         los.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         svos = StringVar(frameGA, value=self.options.offspring_size)
         eos = Entry(frameGA, textvariable=svos, validate="focusout", validatecommand=lambda: self.validateNumberGA(svos, 'offspring_size'))
         eos.grid(row=1, column=1, padx=5, pady=5)
         
-        # Seleccion de padres
-        lps = Label(frameGA, text='Seleccion de padres: ', font=menuLabelFont)
+        # Selección de padres
+        lps = Label(frameGA, text='Selección de padres: ', font=menuLabelFont)
         lps.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         comboPs = Combobox(frameGA, 
                                state='readonly', 
@@ -334,7 +334,7 @@ class Gui():
         comboCr.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboCr, CrossoverType))
         
         # Tipo de mutacion
-        lmt = Label(frameGA, text='Mutacion: ', font=menuLabelFont)
+        lmt = Label(frameGA, text='Mutación: ', font=menuLabelFont)
         lmt.grid(row=4, column=0, padx=5, pady=5, sticky='e')
         comboMt = Combobox(frameGA, 
                                state='readonly', 
@@ -344,14 +344,14 @@ class Gui():
         comboMt.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboMt, TSPMove, 'mu'))
         
         # probabilidad de mutacion
-        lmp = Label(frameGA, text='Probabilidad de mutacion: ', font=menuLabelFont)
+        lmp = Label(frameGA, text='Probabilidad de mutación: ', font=menuLabelFont)
         lmp.grid(row=5, column=0, padx=5, pady=5, sticky='e')
         svmp = StringVar(frameGA, value=self.options.mutation_prob)
         emp = Entry(frameGA, textvariable=svmp, validate="focusout", validatecommand=lambda: self.validateNumberGA(svmp, 'mutation_prob'))
         emp.grid(row=5, column=1, padx=5, pady=5)
         
-        # Estrategia nueva poblacion
-        lss = Label(frameGA, text='Estrategia nueva poblacion: ', font=menuLabelFont)
+        # Estrategia nueva población
+        lss = Label(frameGA, text='Estrategia nueva población: ', font=menuLabelFont)
         lss.grid(row=6, column=0, padx=5, pady=5, sticky='e')
         comboSs = Combobox(frameGA, 
                                state='readonly', 
@@ -360,8 +360,8 @@ class Gui():
         comboSs.grid(row=6, column=1, padx=5, pady=5)
         comboSs.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboSs, SelectionStrategy))
         
-        # Tipo seleccion nueva poblacion
-        lgs = Label(frameGA, text='Seleccion nueva poblacion: ', font=menuLabelFont)
+        # Tipo selección nueva población
+        lgs = Label(frameGA, text='Selección nueva población: ', font=menuLabelFont)
         lgs.grid(row=7, column=0, padx=5, pady=5, sticky='e')
         comboGs = Combobox(frameGA, 
                                state='readonly', 
@@ -378,19 +378,19 @@ class Gui():
             try:
                 self.options.pop_size = int(value.get())
             except:
-                print('La cantidad de poblacion debe ser un numero entero')
+                print('La cantidad de población debe ser un número entero')
             return self.options.pop_size
         elif atribute == 'offspring_size':
             try:
                 self.options.offspring_size = int(value.get())
             except:
-                print('La cantidad de hijos de la poblacion debe ser un numero entero')  
+                print('La cantidad de hijos de la población debe ser un número entero')  
             return self.options.offspring_size
         elif atribute == 'mutation_prob':
             try:
                 self.options.mutation_prob = float(value.get())
             except:
-                print('Probabilidad de mutacion debe ser numero')
+                print('Probabilidad de mutacion debe ser número')
             return self.options.tmin
         return 0
     
@@ -415,8 +415,8 @@ class Gui():
         #frameLS.pack(anchor='n', side='right', padx=25, pady=15)
         frameLS.grid(row=0, column=3, padx=10, pady=10)
         
-        # tipo de busqueda
-        lm = Label(frameLS, text='Tipo de busqueda:', font=menuLabelFont)
+        # tipo de búsqueda
+        lm = Label(frameLS, text='Tipo de búsqueda:', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         comboM = Combobox(frameLS, 
                                state='readonly', 
@@ -460,8 +460,8 @@ class Gui():
         #frameLS.pack(anchor='n', side='right', padx=25, pady=15)
         frameILS.grid(row=0, column=3, padx=10, pady=10)
         
-        # tipo de busqueda
-        lm = Label(frameILS, text='Tipo de busqueda:', font=menuLabelFont)
+        # tipo de búsqueda
+        lm = Label(frameILS, text='Tipo de búsqueda:', font=menuLabelFont)
         lm.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         comboM = Combobox(frameILS, 
                                state='readonly', 
@@ -470,8 +470,8 @@ class Gui():
         comboM.grid(row=0, column=1, padx=5, pady=5)
         comboM.bind("<<ComboboxSelected>>", lambda a: self.setCombobox(comboM, TSPMove, 'move'))
         
-        # Tipo de perturbacion
-        lp = Label(frameILS, text='Perturbacion:', font=menuLabelFont)
+        # Tipo de perturbación
+        lp = Label(frameILS, text='Perturbación:', font=menuLabelFont)
         lp.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         comboP = Combobox(frameILS, 
                                state='readonly', 
@@ -579,8 +579,8 @@ class Gui():
         bins = Button(frameGeneral, text='Cambiar', command=lambda: self.openFile(ins), font=('arial', 8, 'bold'))
         bins.grid(row=1, column=2, padx=5, pady=5)
         
-        # archivo de solucion
-        l = Label(frameGeneral, text='Archivo para solucion:', font=menuLabelFont)
+        # archivo de solución
+        l = Label(frameGeneral, text='Archivo para solución:', font=menuLabelFont)
         l.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         sol = StringVar(frameGeneral, value=self.options.solution)
         e = Entry(frameGeneral, textvariable=sol, state='disabled')
@@ -604,8 +604,8 @@ class Gui():
         es = Entry(frameGeneral, textvariable=svs, validate="focusout", validatecommand=lambda: self.validateNumberG(svs, 'seed'))
         es.grid(row=4, column=1, padx=5, pady=5)
         
-        # solucion inicial
-        ls = Label(frameGeneral, text='Solucion inicial:', font=menuLabelFont)
+        # solución inicial
+        ls = Label(frameGeneral, text='Solución inicial:', font=menuLabelFont)
         ls.grid(row=5, column=0, padx=5, pady=5, sticky='e')
         comboIS = Combobox(frameGeneral, 
                                state='readonly', 
@@ -624,17 +624,17 @@ class Gui():
         self.watchButton.grid(row=6, column=2, padx=1, pady=1)
 
         
-        # Opciones Condicion de termino
+        # Opciones Condición de término
         frameTermino = LabelFrame(
                     self.frameOptions,
-                    text='Condicion de termino',                   
+                    text='Condición de término',                   
                     bg='#f0f0f0',
                     font=("consolas", 20)
-                )
+        )
         frameTermino.grid(row=7, column=0, padx=10, pady=10)
         
-        # Iteraciones maximas
-        li = Label(frameTermino, text='Iteraciones max.:', font=menuLabelFont)
+        # Iteraciones máximas
+        li = Label(frameTermino, text='Iteraciones máx.:', font=menuLabelFont)
         li.grid(row=0, column=0, padx=5, pady=5, sticky='e')
         svi = StringVar(frameTermino, value=self.options.max_iterations)
         ei = Entry(frameTermino, textvariable=svi, validate="focusout", validatecommand=lambda: self.validateNumberG(svi, 'iterations'))
@@ -644,8 +644,8 @@ class Gui():
             
         ei.grid(row=0, column=1, padx=5, pady=5)
         
-        # Evaluaciones maximas
-        le = Label(frameTermino, text='Evaluaciones max.:', font=menuLabelFont)
+        # Evaluaciones máximas
+        le = Label(frameTermino, text='Evaluaciones máx.:', font=menuLabelFont)
         le.grid(row=1, column=0, padx=5, pady=5, sticky='e')
         sve = StringVar(frameTermino, value=self.options.max_evaluations)
         ee = Entry(frameTermino, textvariable=sve, validate="focusout", validatecommand=lambda: self.validateNumberG(sve, 'evaluations'))
@@ -656,7 +656,7 @@ class Gui():
         ee.grid(row=1, column=1, padx=5, pady=5)
         
         # Tiempo maximo
-        lt = Label(frameTermino, text='Tiempo max. de ejecucion (seg): ', font=menuLabelFont)
+        lt = Label(frameTermino, text='Tiempo máx. de ejecución (seg): ', font=menuLabelFont)
         lt.grid(row=2, column=0, padx=5, pady=5, sticky='e')
         svt = StringVar(frameTermino, value=self.options.max_time)
         et = Entry(frameTermino, textvariable=svt, validate="focusout", validatecommand=lambda: self.validateNumberG(svt, 'time'))
@@ -720,7 +720,7 @@ class Gui():
         elif opt == CoolingType:
             self.options.cooling = CoolingType(combo.get())
         
-        # Algoritmo Genetico    
+        # Algoritmo Genético    
         elif opt == SelectionType and var == 'ps':
             self.options.pselection_type = SelectionType(combo.get())
         elif opt == CrossoverType:
@@ -741,32 +741,32 @@ class Gui():
             try:
                 self.options.seed = int(value.get())
             except:
-                print('Seed debe ser numero entero')
+                print('Seed debe ser número entero')
             return self.options.seed
         elif atribute == 'iterations':
             try:
                 self.options.max_iterations = int(value.get())
             except:
-                print('Las iteraciones maximas deben ser numero entero')
+                print('Las iteraciones máximas deben ser número entero')
             return self.options.max_iterations
         elif atribute == 'evaluations':
             try:
                 self.options.max_evaluations = int(value.get())
             except:
-                print('Las evaluaciones maximas deben ser numero entero')
+                print('Las evaluaciones máximas deben ser número entero')
             return self.options.max_iterations
         elif atribute == 'time':
             try:
                 self.options.max_time = float(value.get())
             except:
-                print('Las evaluaciones maximas deben ser numero')
+                print('Las evaluaciones máximas deben ser número')
             return self.options.max_time
         
         elif atribute == 'nPerturbations':
             try:
                 self.options.nPerturbations = int(value.get())
             except:
-                print('El numero de perturbaciones debe ser numero')   
+                print('El número de perturbaciones debe ser número')   
             return self.options.nPerturbations
         
         return 0
@@ -812,7 +812,7 @@ class Gui():
         
         self.frameL = LabelFrame(
                     self.root,
-                    text='Utilizar solucion anterior',
+                    text='Utilizar solución anterior',
                     bg='#f0f0f0',
                     font=("consolas", 13)
                 )
@@ -829,11 +829,11 @@ class Gui():
     """ E J E C U C I O N """   
      
     def search(self) -> None:
-        """ Realiza la busqueda a traves metodo de busqueda y opciones seleccionadas """
+        """ Realiza la búsqueda a traves metodo de búsqueda y opciones seleccionadas """
         
         if self.watchButton != None:
             self.watchButton.config(state='normal')
-            self.menubar.fileMenu.entryconfig('Guardar Configuracion...', state='normal')
+            self.menubar.fileMenu.entryconfig('Guardar Configuración...', state='normal')
             
         if not self.options.replit:
             self.textFeed.config(state='normal')
@@ -841,7 +841,7 @@ class Gui():
             self.textFeed.config(state='disabled')
             
         
-        start = timer() # tiempo inicial de ejecucion
+        start = timer() # tiempo inicial de ejecución
         # leer e inicializar las opciones 
         options = self.options
         if not options.replit:
@@ -849,7 +849,7 @@ class Gui():
             
         # validar optiones
         if options.errors():
-            messagebox.showerror(title='Error', message='Se detectaron errores de configuracion')
+            messagebox.showerror(title='Error', message='Se detectaron errores de configuración')
             return
         
         # Mostrar Opciones 
@@ -867,52 +867,52 @@ class Gui():
         # Ejecutar Simulated Annealing
         if (options.metaheuristic == MHType.SA):
                 
-            # Solucion inicial
+            # Solución inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
             self.solver = SimulatedAnnealing(options=options, problem=problem)
-            # Ejecutar la busqueda
+            # Ejecutar la búsqueda
             self.solver.search(first_solution)
 
-        # Ejecutar Algoritmo Genetico
+        # Ejecutar Algoritmo Genético
         elif (options.metaheuristic == MHType.GA):
             # Crear solver
             self.solver = GeneticAlgorithm(options=options, problem=problem)
-            # Ejecutar la busqueda
+            # Ejecutar la búsqueda
             self.solver.search()
         
         # Ejecutar Local Search    
         elif (options.metaheuristic == MHType.LS):
-            # Solucion inicial
+            # Solución inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
             self.solver = LocalSearch(options=options, problem=problem)
-            # Ejecutar la busqueda
+            # Ejecutar la búsqueda
             self.solver.search(first_solution)
         
         # Ejecutar Iterated Local Search  
         elif (options.metaheuristic == MHType.ILS):
-            # Solucion inicial
+            # Solución inicial
             first_solution = Tour(type_initial_sol=options.initial_solution, problem=problem)
             # Crear solver
             self.solver = IteratedLocalSearch(options=options, problem=problem)
-            # Ejecutar la busqueda
+            # Ejecutar la búsqueda
             self.solver.search(first_solution)
 
         else: 
             # Crear solver
             self.solver = GeneticAlgorithm(options=options, problem=problem)
-            # Ejecutar la busqueda
+            # Ejecutar la búsqueda
             self.solver.search()
 
-        # Guardar la solucion y trayectoria en archivo
+        # Guardar la solución y trayectoria en archivo
         self.solver.printSolFile(options.solution)
         self.solver.printTraFile(options.trajectory)
-        # Escribir la solucion por consola
+        # Escribir la solución por consola
         self.solver.print_best_solution()
         
-        end = timer() # tiempo final de ejecucion
-        print(f"{bcolors.BOLD}Tiempo total de ejecucion: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
+        end = timer() # tiempo final de ejecución
+        print(f"{bcolors.BOLD}Tiempo total de ejecución: {bcolors.ENDC}{bcolors.OKBLUE} {end-start:.3f} segundos{bcolors.ENDC}")
         print(f'\n------------------------------------------------------------------------------------------------------------------\n')
         
         if options.visualize:
@@ -953,8 +953,8 @@ class MenuBar:
         
         # Archivo
         self.fileMenu = Menu(self.menuBar, tearoff = False)
-        self.fileMenu.add_command(label="Guardar Configuracion...", command=self.saveConfig, state='disabled')
-        self.fileMenu.add_command(label="Cargar Configuracion...", command=self.loadConfig)
+        self.fileMenu.add_command(label="Guardar Configuración...", command=self.saveConfig, state='disabled')
+        self.fileMenu.add_command(label="Cargar Configuración...", command=self.loadConfig)
         self.fileMenu.add_separator()
         self.fileMenu.add_command(label="Salir", command=gui.onQuit)
         self.menuBar.add_cascade(menu=self.fileMenu, label = "Archivo")
@@ -962,7 +962,7 @@ class MenuBar:
         # cambiar metodo
         self.editMenu = Menu(self.menuBar, tearoff = False)
         self.editMenu.add_command(label="Simulated Annealing", command=lambda: self.changeSearch(MHType.SA))
-        self.editMenu.add_command(label="Algoritmo Genetico", command=lambda: self.changeSearch(MHType.GA))
+        self.editMenu.add_command(label="Algoritmo Genético", command=lambda: self.changeSearch(MHType.GA))
         self.editMenu.add_command(label="Local Search", command=lambda: self.changeSearch(MHType.LS))
         self.editMenu.add_command(label="Iterated Local Search", command=lambda: self.changeSearch(MHType.ILS))
 
@@ -970,7 +970,7 @@ class MenuBar:
   
         # Menu ayuda
         self.helpMenu = Menu(self.menuBar, tearoff = False)
-        self.helpMenu.add_command(label="Documentacion", command=lambda: webbrowser.open_new(DOCUMENTATION))
+        self.helpMenu.add_command(label="Documentación", command=lambda: webbrowser.open_new(DOCUMENTATION))
         self.helpMenu.add_command(label="Manual", command=lambda: webbrowser.open('file://' + os.path.realpath(MANUAL_FILE)))
         self.helpMenu.add_command(label="GitHub", command=lambda: webbrowser.open_new(GIT_HUB))
         self.helpMenu.add_separator()
@@ -980,7 +980,7 @@ class MenuBar:
         window.config(menu=self.menuBar)
         
     def changeSearch(self, searchType: MHType) -> None:
-        """ Cambia de metodo de busqueda en la barra de herramientas """
+        """ Cambia de metodo de búsqueda en la barra de herramientas """
         
         if self.gui.frameOptions != None:
             self.gui.frameOptions.destroy()
@@ -998,11 +998,11 @@ class MenuBar:
     
             
     def saveConfig(self) -> None:
-        """ Guarda la configuracion y el texto de feedback de una solucion """
+        """ Guarda la configuración y el texto de feedback de una solución """
         if not self.gui.solver:
             return
         
-        save = filedialog.asksaveasfilename(title='Guardar configuracion actual en archivo TSP-Framework', 
+        save = filedialog.asksaveasfilename(title='Guardar configuración actual en archivo TSP-Framework', 
                                                     initialdir=os.getcwd(),
                                                     filetypes=(('Archivo de guardado TSP-Framework', '*.tspf'),))
         if not save:
@@ -1026,14 +1026,13 @@ class MenuBar:
             file.close()
             
         except IOError:
-            print(f"{bcolors.FAIL}No se pudo guardar el archivo... {save} Error: {IOError}{bcolors.ENDC}")
-            print(f"{bcolors.FAIL}Asegurese de tener permisos de escritura en la ruta seleccionada{bcolors.ENDC}")
+            messagebox.showerror(title="Error", message=f'No se pudo leer el archivo... {save} Error: {IOError}\nAsegurese de tener permisos de lectura en la ruta seleccionada')
         
         
     def loadConfig(self) -> None:
-        """ Carga la configuracion y texto de feedback a traves de un archivo de guardado """
+        """ Carga la configuración y texto de feedback a traves de un archivo de guardado """
         
-        load = filedialog.askopenfilename(title='Cargar configuracion desde archivo TSP-Framework', 
+        load = filedialog.askopenfilename(title='Cargar configuración desde archivo TSP-Framework', 
                                                     initialdir=os.getcwd(),
                                                     filetypes=(('Archivo de guardado TSP-Framework', '*.tspf'),))
         if not load:
@@ -1049,7 +1048,7 @@ class MenuBar:
                 self.gui.solver = data['solver']
                 text = data['textFeed']
                 
-                plot.Graph.coords = data['coords'] # cargar coodenadas de la solucion anterior para generar visualizacion
+                plot.Graph.coords = data['coords'] # cargar coodenadas de la solución anterior para generar visualización
                 
                 self.changeSearch(self.gui.options.metaheuristic) # Cargar la pantalla del archivo guardado
                 
@@ -1065,5 +1064,4 @@ class MenuBar:
             
             file.close()
         except IOError:
-            print(f"{bcolors.FAIL}No se pudo leer el archivo... {load} Error: {IOError}{bcolors.ENDC}")
-            print(f"{bcolors.FAIL}Asegurese de tener permisos de lectura en la ruta seleccionada{bcolors.ENDC}")
+            messagebox.showerror(title="Error", message=f'No se pudo leer el archivo... {load} Error: {IOError}\nAsegurese de tener permisos de lectura en la ruta seleccionada')

@@ -1,5 +1,5 @@
 """
-Modulo que contiene la clase la cual represente un recorrido para una solucion de TSP
+Modulo que contiene la clase la cual represente un recorrido para una solución de TSP
 
 """
 
@@ -7,7 +7,7 @@ from . import Tsp, InitialSolution, TSPMove
 from .Tools import utilities, bcolors
 
 class Tour():
-    """ Clase Tour la cual representa un recorrido para una solucion de TSP, debe inicializarse obligatoriamente como diccionario
+    """ Clase Tour la cual representa un recorrido para una solución de TSP, debe inicializarse obligatoriamente como diccionario
 
         Parameters
         ----------
@@ -16,7 +16,7 @@ class Tour():
         current : list
             Recorrido actual para un tour el cual es una lista con los puntos a recorrer secuencialmente
         type_initial_sol : InitialSolution
-            Tipo de solucion inicial
+            Tipo de solución inicial
         tour : Tour
             Otra instancia de la misma clase
 
@@ -43,13 +43,13 @@ class Tour():
     
         self.current = [] # Solucion actual
 
-        self.cost = 0 # costo solucion actual
+        self.cost = 0 # costo solución actual
 
         # Si trae el problema TSP
         if ('problem' in kwargs):
             self.problem = kwargs['problem']
         
-        # Tipo de solucion incial
+        # Tipo de solución incial
         if ('type_initial_sol' in kwargs):
             if (kwargs['type_initial_sol'] == InitialSolution.RANDOM):
                 self.current = self.problem.random_tour()
@@ -64,7 +64,7 @@ class Tour():
         if ('tour' in kwargs):
             # actualizar problema
             self.problem = kwargs['tour'].problem
-            # copiar solucion actual
+            # copiar solución actual
             self.current = kwargs['tour'].current.copy()
             # actualizar costo
             self.cost = kwargs['tour'].cost
@@ -74,19 +74,19 @@ class Tour():
             self.current = kwargs['current'].copy()
 
         if (not self.problem.tsp_check_tour(self.current)):
-            print(f"{bcolors.FAIL}Error: Error al inicializar la solucion inicial {bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error: Error al inicializar la solución inicial {bcolors.ENDC}")
             exit()
 
-        # Determinar costo de la solucion inicial
+        # Determinar costo de la solución inicial
         self.cost = self.problem.compute_tour_length(self.current)
 
     def copy(self, tour: 'Tour') -> None:
-        """ Copia una solucion de otra instancia del objeto recibida por parametro actualizando la solucion actual """
+        """ Copia una solución de otra instancia del objeto recibida por parametro actualizando la solución actual """
         self.current = tour.current.copy()
         self.cost = tour.cost
 
     def printSol(self, final: bool = False) -> None:
-        """ Escribir solucion y costo """
+        """ Escribir solución y costo """
         self.problem.print_solution_and_cost(self.current, final)
 
     def printCost(self) -> None:
@@ -156,7 +156,7 @@ class Tour():
         return cost
 
     def swap(self, n1: int, n2: int) -> None:
-        """ Aplica el movimiento swap entre dos nodos modificando la solucion actual y su costo """
+        """ Aplica el movimiento swap entre dos nodos modificando la solución actual y su costo """
         # Si es el mismo nodo, no hay swap
         if (n1 == n2): return
         # Indice fuera de los limites
@@ -217,7 +217,7 @@ class Tour():
         return cost
     
     def twoOptSwap(self, n1: int, n2: int) -> None:
-        """ Aplica el movimiento 2-opt entre dos nodos modificando la solucion actual y su costo """
+        """ Aplica el movimiento 2-opt entre dos nodos modificando la solución actual y su costo """
         # Si es el mismo nodo, no hay swap
         if (n1 == n2): return
         # Indice fuera de los limites
@@ -262,7 +262,7 @@ class Tour():
             Returns
             -------
             int
-                delta para saber si se obtuvo una mejor solucion al aplicar el movimiento
+                delta para saber si se obtuvo una mejor solución al aplicar el movimiento
         """
         if not self.current or not self.problem:
             return

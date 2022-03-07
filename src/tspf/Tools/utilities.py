@@ -45,15 +45,15 @@ class Trajectory():
         cost : int
             calidad del recorrido
         iterations : int
-            numero de iteraciones al llegar a la solucion
+            numero de iteraciones al llegar a la solución
         evaluations : int
-            numero de evaluaciones al llegar a la solucion
+            numero de evaluaciones al llegar a la solución
         average : float, optional
-            promedio de las soluciones de la poblacion (Algoritmo Genetico)
+            promedio de las soluciones de la población (Algoritmo Genetico)
         deviation : float, optional
-            deviacion estandar de las soluciones de la poblacion (Algoritmo Genetico)
+            deviacion estandar de las soluciones de la población (Algoritmo Genetico)
         temperature : float, optional
-            temperatura al momemto de la solucion (simulated annealing)
+            temperatura al momemto de la solución (simulated annealing)
 
         Examples
         --------
@@ -68,8 +68,8 @@ class Trajectory():
         self.cost = cost
         self.iterations = iterations
         self.evaluations = evaluations
-        self.worst = worst # peor costo de la poblacion (algoritmo genetico)
-        self.average = average # promedio de la poblacion (algoritmo genetico)
+        self.worst = worst # peor costo de la población (algoritmo genetico)
+        self.average = average # promedio de la población (algoritmo genetico)
         self.deviation = deviation # desviacion estandar (algoritmo genetico)
         self.temperature = temperature # temperatura (simulated annealing)
 
@@ -85,20 +85,20 @@ def dtrunc (x: float) -> float:
 
 
 def printSolToFile(outputFile: str, tour: list) -> None:
-    """ Guardar la solucion para una instacia y ejecucion en un archivo recibido por parametro """
+    """ Guardar la solución para una instacia y ejecución en un archivo recibido por parámetro """
     if not outputFile or not tour:
         return
     try:
         # crea la carpeta output si es que no existe y se usa la salida por defecto
         Path("output/").mkdir(exist_ok=True)
-        print(f"{bcolors.OKGREEN}\nGuardando solucion en archivo... {bcolors.ENDC}{path.abspath(outputFile)}")
+        print(f"{bcolors.OKGREEN}\nGuardando solución en archivo... {bcolors.ENDC}{path.abspath(outputFile)}")
         # Comprobar si existe el archivo y renombrar si es el caso
         outputFile = checkFile(outputFile)
 
         # Abrir archivo para escribir o reemplazar
         file = open(outputFile, 'w')
 
-        # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+        # crear texto con la solución separando cada elemento con espacios y luego guardarlo en el archivo
         sol = " ".join([str(elem) for elem in tour])
         file.write(sol)
         file.close()
@@ -109,13 +109,13 @@ def printSolToFile(outputFile: str, tour: list) -> None:
 
 
 def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
-    """ Guardar la trayectoria de una solucion para una instacia y ejecucion en un archivo recibido por parametro """
+    """ Guardar la trayectoria de una solución para una instacia y ejecución en un archivo recibido por parámetro """
     if not trajectoryFile or not trajectory:
         return
     try:
         # crea la carpeta output si es que no existe y se usa la salida por defecto
         Path("output/").mkdir(exist_ok=True)
-        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solucion en archivo... {bcolors.ENDC}{path.abspath(trajectoryFile)}")
+        print(f"{bcolors.OKGREEN}\nGuardando trayectoria de la solución en archivo... {bcolors.ENDC}{path.abspath(trajectoryFile)}")
         # Comprobar si existe el archivo y renombrar si es el caso
         trajectoryFile = checkFile(trajectoryFile)
 
@@ -126,12 +126,13 @@ def printTraToFile(trajectoryFile: str, trajectory: list) -> None:
         fields = ["Iterations","Evaluations","cost","solution"]
         writer = csv.DictWriter(csvfile, delimiter=';', fieldnames=fields)
         writer.writeheader()
-        # crear texto con la solucion separando cada elemento con espacios y luego guardarlo en el archivo
+        # crear texto con la solución separando cada elemento con espacios y luego guardarlo en el archivo
         for tra in trajectory:
             sol = " ".join([str(elem) for elem in tra.tour])
-            # escribir la mejor solucion y todas las caracteristicas de su ejecucion
+            # escribir la mejor solución y todas las caracteristicas de su ejecución
             writer.writerow({
-                "Iterations": tra.iterations, "Evaluations": tra.evaluations,
+                "Iterations": tra.iterations, 
+                "Evaluations": tra.evaluations,
                 "cost": tra.cost, 
                 "solution": sol
             })
@@ -153,7 +154,7 @@ def checkFile(filePath: str) -> str:
         
         num = 1
         name = path.splitext(filePath) # Separe el nombre del archivo de la extension
-        files = [] # lista con las rutas para utilizar en el limite
+        files = [] # lista con las rutas para utilizar en el límite
         files.append(filePath)
         
         while True:
@@ -162,7 +163,7 @@ def checkFile(filePath: str) -> str:
                 # obtener archivo mas antiguo de las rutas
                 old = min(files, key=lambda pth: path.getmtime(pth))
                 #print(old)
-                print(f"{bcolors.FAIL}Se ha superado el limite de archivos con el mismo nombre, se reemplazara el mas viejo {bcolors.ENDC}")
+                print(f"{bcolors.FAIL}Se ha superado el límite de archivos con el mismo nombre, se reemplazará el más viejo {bcolors.ENDC}")
                 print(f"{bcolors.FAIL}Guardando en... {bcolors.ENDC} {path.abspath(old)}")
                 return old
             
@@ -171,7 +172,7 @@ def checkFile(filePath: str) -> str:
             if path.exists(newPath):
                 num += 1
             else:
-                print(f"{bcolors.FAIL}Se guardara en{bcolors.ENDC} {path.abspath(newPath)}")
+                print(f"{bcolors.FAIL}Se guardará en{bcolors.ENDC} {path.abspath(newPath)}")
                 return newPath
 
     return filePath

@@ -1,5 +1,5 @@
 """
-Modulo Encargado de el manejo de la visualizacion o graficacion de las soluciones y su trayectoria
+Módulo Encargado de el manejo de la visualización o graficacion de las soluciones y su trayectoria
 
 """
 
@@ -15,18 +15,18 @@ from matplotlib.widgets import Button
 import mpl_toolkits.axes_grid1
 
 
-MAXLEN = 100 # numero maximo de puntos de coordenada para animar la trayectoria
-TOOLBARLEN = 50  # numero minimo de puntos de coordenada para agregar barra de herramientas de matplotlib en el grafico
+MAXLEN = 100 # número máximo de puntos de coordenada para animar la trayectoria
+TOOLBARLEN = 50  # número mínimo de puntos de coordenada para agregar barra de herramientas de matplotlib en el grafico
         
         
 def show(onGui: bool = False) -> None:
-    """ Muestra y anima el grafico de la trayectoria a una solucion a problema TSP """
+    """ Muestra y anima el gráfico de la trayectoria a una solución a problema TSP """
         
     gui = Tk()
        
     Graph(gui)
     
-    # Si se ejecuta la visualizacion desde la terminal
+    # Si se ejecuta la visualización desde la terminal
     if not onGui:
         
         gui.protocol("WM_DELETE_WINDOW", lambda: quit(gui))
@@ -115,12 +115,12 @@ class Graph(Frame):
         # Generar los puntos con las coordenadas
         self.ax.scatter(self.x, self.y, color='red', s=70, edgecolors='black', label='Punto Normal')
         
-        self.ax.set_title('Visualizacion del Tour')
+        self.ax.set_title('Visualización del Tour')
         #ax.set_xlabel('Eje X')
         #ax.set_ylabel('Eje Y')
         
         self.ax1.grid(color='black', linestyle='-', linewidth=0.1)
-        self.ax1.set_title('Variacion por iteracion')
+        self.ax1.set_title('Variacion por iteración')
         self.ax1.set_ylabel('Costo')
         self.ax1.set_xlabel('Iteraciones\n\n')
         
@@ -136,7 +136,7 @@ class Graph(Frame):
         plt.tight_layout()
 
     def generateMap(self, i: int) -> None:
-        """Genera la visualizacion uniendo los puntos con las coordenadas en cada tour de la trayectoria"""
+        """Genera la visualización uniendo los puntos con las coordenadas en cada tour de la trayectoria"""
         
         if i >= len(self.trajectory):
             return
@@ -199,7 +199,7 @@ class Graph(Frame):
         self.ax1.cla()
         
         self.ax1.grid(color='black', linestyle='-', linewidth=0.1)
-        self.ax1.set_title('Variacion por iteracion')
+        self.ax1.set_title('Variacion por iteración')
         self.ax1.set_ylabel('Costo')
         self.ax1.set_xlabel('Iteraciones')
         #x_data = [tra.iterations for tra in trajectory]
