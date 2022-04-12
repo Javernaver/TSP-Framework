@@ -1030,7 +1030,7 @@ class MenuBar:
         
         
     def loadConfig(self) -> None:
-        """ Carga la configuración y texto de feedback a traves de un archivo de guardado """
+        """ Carga la configuración y texto de feedback a través de un archivo de guardado """
         
         load = filedialog.askopenfilename(title='Cargar configuración desde archivo TSP-Framework', 
                                                     initialdir=os.getcwd(),

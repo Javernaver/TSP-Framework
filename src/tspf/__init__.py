@@ -10,6 +10,7 @@ import sys
 import time
 from enum import Enum
 from decimal import Decimal
+import numpy as np
 
 from src.tspf.TSPlibReader import TSPlibReader
 from src.tspf.AlgorithmsOptions import AlgorithmsOptions, InitialSolution, CoolingType, MHType, SelectionStrategy, SelectionType, CrossoverType, TSPMove, PerturbationType

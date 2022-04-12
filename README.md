@@ -1,5 +1,5 @@
 # Framework de algoritmos para resolver el Problema del Vendedor Viajero
-Framework para resolver el problema del vendedor viajero aplicando algoritmos de búsqueda  como el Simulated Annealing, Algoritmo Genético, Local Search e Iterated Local Search.
+Framework para resolver el problema del vendedor viajero aplicando algoritmos de búsqueda como Simulated Annealing, Algoritmo Genético, Local Search e Iterated Local Search.
 
 **Visualización**:
 <p align="center">
@@ -12,9 +12,9 @@ Framework para resolver el problema del vendedor viajero aplicando algoritmos de
 </p>
 
 ## Contenido
-* **código fuente:** código en lenguaje Python en la carpeta tspf/ para ser preparado y distribuido como paquete Python
+* **Código fuente:** código en lenguaje Python en la carpeta tspf/ para ser preparado y distribuido como paquete Python
 
-* **instancias:** instancias en formato TSPlib en la carpeta instances/
+* **Instancias:** instancias en formato TSPlib en la carpeta instances/
 
 ## Uso sin instalación (Recomendado)
 
